@@ -2,12 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Artículos</title>
+    <title>Lista de ArtÃ­culos</title>
 </head>
 <body>
-    <h1>Lista de Artículos</h1>
+    <h1>Lista de ArtÃ­culos</h1>
 
-    <a href="{% url 'agregar_articulo' %}">? Agregar nuevo artículo</a>
+    <a href="{% url 'agregar_articulo' %}">? Agregar nuevo artÃ­culo</a>
 
     <ul>
         {% for articulo in articulos %}
@@ -17,7 +17,7 @@
                 <a href="{% url 'eliminar_articulo' articulo.id %}">??? Eliminar</a>
             </li>
         {% empty %}
-            <li>No hay artículos cargados.</li>
+            <li>No hay artÃ­culos cargados.</li>
         {% endfor %}
     </ul>
 </body>
