@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Artículos</title>
+</head>
+<body>
+    <h1>Lista de Artículos</h1>
+
+    <a href="{% url 'agregar_articulo' %}">? Agregar nuevo artículo</a>
+
+    <ul>
+        {% for articulo in articulos %}
+            <li>
+                <strong>{{ articulo.codart }}</strong> - {{ articulo.descripArt }}
+                <a href="{% url 'modificar_articulo' articulo.id %}">?? Editar</a>
+                <a href="{% url 'eliminar_articulo' articulo.id %}">??? Eliminar</a>
+            </li>
+        {% empty %}
+            <li>No hay artículos cargados.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
