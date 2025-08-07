@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-v7)5yj9-r^#@o@9+@6sv-7gq7w0k+l&mo9eriiumqk4z&3ruwq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['saf-erp.onrender.com']
 
 # Application definition
 
