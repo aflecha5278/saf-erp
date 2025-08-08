@@ -2,23 +2,29 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Artículos</title>
+    <title>Lista de artículos</title>
 </head>
 <body>
-    <h1>Lista de Artículos</h1>
+    <h1>Lista de artículos</h1>
 
-    <a href="{% url 'agregar_articulo' %}">? Agregar nuevo artículo</a>
-
-    <ul>
+    <a href="{% url 'agregar_articulo' %}">➕ Agregar artículo</a>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
         {% for articulo in articulos %}
-            <li>
-                <strong>{{ articulo.codart }}</strong> - {{ articulo.descripArt }}
-                <a href="{% url 'modificar_articulo' articulo.id %}">?? Editar</a>
-                <a href="{% url 'eliminar_articulo' articulo.id %}">??? Eliminar</a>
-            </li>
-        {% empty %}
-            <li>No hay artículos cargados.</li>
+        <tr>
+            <td>{{ articulo.id }}</td>
+            <td>{{ articulo.Descrip }}</td>
+            <td>{{ articulo.Precio }}</td>
+            <td>
+                <a href="{% url 'modificar_articulo' articulo.id %}">✏️ Editar</a>
+            </td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 </body>
 </html>

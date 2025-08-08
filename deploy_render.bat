@@ -1,3 +1,7 @@
+@echo off
+cd /d C:\_Tmp\Python\saf
+
 git add .
-git commit -m "Fix Unicade Error en templates"
+git commit -m "Agrego función para modificar artículos"
 git push
+pause
