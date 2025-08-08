@@ -14,7 +14,7 @@ def login_view(request):
         else:
             error = "Usuario o clave incorrectos"
 
-    return render(request, "login.html", {"error": error})
+    return render(request, "articulos/login.html", {"error": error})
 
 
 def logout_view(request):
