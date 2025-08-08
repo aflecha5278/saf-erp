@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de artículos</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #afeeee; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; }
+        th, td { padding: 10px; border: 1px solid #ccc; }
+        th { background-color: #e0ffff; }
+        a.boton { background: #afeeee; padding: 5px 8px; border-radius: 4px; text-decoration: none; }
+    </style>
 </head>
 <body>
     <h1>Lista de artículos</h1>
 
-    <a href="{% url 'agregar_articulo' %}">➕ Agregar artículo</a>
-    <table border="1">
+    <p>
+        <a href="{% url 'agregar_articulo' %}" class="boton">➕ Agregar artículo</a>
+        <a href="{% url 'logout' %}" class="boton">🚪 Cerrar sesión</a>
+    </p>
+
+    <table>
         <tr>
             <th>ID</th>
+            <th>Código</th>
             <th>Descripción</th>
             <th>Precio</th>
             <th>Acciones</th>
@@ -18,11 +30,16 @@
         {% for articulo in articulos %}
         <tr>
             <td>{{ articulo.id }}</td>
-            <td>{{ articulo.Descrip }}</td>
-            <td>{{ articulo.Precio }}</td>
+            <td>{{ articulo.codart }}</td>
+            <td>{{ articulo.descrip }}</td>
+            <td>{{ articulo.precosto }}</td>
             <td>
-                <a href="{% url 'modificar_articulo' articulo.id %}">✏️ Editar</a>
+                <a href="{% url 'modificar_articulo' articulo.id %}" class="boton">✏ Editar</a>
             </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No hay artículos</td>
         </tr>
         {% endfor %}
     </table>

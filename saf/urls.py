@@ -20,8 +20,9 @@ from articulos import views  # para el login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.login_view, name='login'),  
-    path('', include('articulos.urls')),  # todas las rutas de articulos
+    path('login/', views.login_view, name='login'),
+    path('', include('articulos.urls')),
 ]
+
 
 
