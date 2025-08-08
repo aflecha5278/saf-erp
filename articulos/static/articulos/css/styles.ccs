@@ -1,0 +1,87 @@
+/* styles.css - articulos/static/articulos/css/styles.css */
+
+/* Layout general */
+body {
+  font-family: Arial, sans-serif;
+  background-color: rgb(175,238,238); /* color marca de fondo */
+  margin: 0;
+  padding: 20px;
+}
+
+/* Contenedores */
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  background: #f0f0f0; /* formulario gris */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Inputs / cajas de texto */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  background-color: rgb(255,227,215); /* color de las cajas */
+  border: 1px solid #ccc;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+/* Botones: gris oscuro */
+button,
+a.btn {
+  background-color: #333333; /* gris oscuro */
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+button:hover,
+a.btn:hover {
+  background-color: #555555;
+}
+
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+th {
+  background: #e9ffff;
+}
+
+/* Botones pequeños */
+.btn-small {
+  padding: 6px 10px;
+  font-size: 0.9em;
+}
+
+/* Header/menu */
+nav {
+  background-color: rgb(175,238,238);
+  padding: 12px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+}
+nav a {
+  color: #333;
+  font-weight: bold;
+  margin-right: 12px;
+  text-decoration: none;
+}

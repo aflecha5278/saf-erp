@@ -1,15 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>{{ titulo }}</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #afeeee; padding: 20px; }
-        h1 { color: #333; }
-        form { background: #fff; padding: 20px; border-radius: 8px; }
-        button { background-color: #afeeee; border: none; padding: 8px 12px; cursor: pointer; }
-        a { display: inline-block; margin-top: 10px; }
-    </style>
+	<link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
+	<style>
+	  button {
+		background-color: #333333;  /* gris oscuro */
+		color: white;               /* texto blanco */
+		border: none;
+		padding: 8px 16px;
+		cursor: pointer;
+		border-radius: 4px;
+	  }
+	  button:hover {
+		background-color: #555555;  /* gris un poco más claro */
+	  }
+	</style>
 </head>
 <body>
     <h1>{{ titulo }}</h1>
@@ -23,3 +31,5 @@
     <a href="{% url 'lista_articulos' %}">⬅ Volver a la lista</a>
 </body>
 </html>
+
+
