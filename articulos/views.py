@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Articulo
 from .forms import ArticuloForm
+
 
 def login_view(request):
     error = None
@@ -14,10 +15,12 @@ def login_view(request):
             error = "Usuario o clave incorrectos"
     return render(request, "login.html", {"error": error})
 
+
 def menu_principal(request):
     if not request.session.get("usuario_autenticado"):
         return redirect("login")
     return render(request, "menu.html")
+
 
 def lista_articulos(request):
     if not request.session.get("usuario_autenticado"):
@@ -25,6 +28,7 @@ def lista_articulos(request):
     articulos = Articulo.objects.all()
     return render(request, "articulos/lista.html", {"articulos": articulos})
     
+
 def agregar_articulo(request):
     if request.method == 'POST':
         form = ArticuloForm(request.POST)
@@ -45,5 +49,19 @@ def modificar_articulo(request, pk):
     else:
         form = ArticuloForm(instance=articulo)
     return render(request, 'articulos/formulario.html', {'form': form, 'titulo': 'Editar artículo'})
+
+
+def logout_view(request):
+    request.session.flush()  # borra la sesión completa
+    return redirect('login')
+
+
+def eliminar_articulo(request, pk):
+    articulo = get_object_or_404(Articulo, pk=pk)
+    articulo.delete()
+    return redirect('lista_articulos')
+    
+    
+    
     
     
