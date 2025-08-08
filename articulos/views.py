@@ -7,35 +7,25 @@ def login_view(request):
     if request.method == "POST":
         usuario = request.POST.get("usuario")
         clave = request.POST.get("clave")
-
         if usuario == "ADMIN" and clave == "5278":
             request.session["usuario_autenticado"] = True
-            return redirect("lista_articulos")
+            return redirect("menu_principal")
         else:
             error = "Usuario o clave incorrectos"
+    return render(request, "login.html", {"error": error})
 
-    return render(request, "articulos/login.html", {"error": error})
-
-
-def logout_view(request):
-    # Cierra sesión
-    request.session.flush()
-    return redirect("login")
-
+def menu_principal(request):
+    if not request.session.get("usuario_autenticado"):
+        return redirect("login")
+    return render(request, "menu.html")
 
 def lista_articulos(request):
-    # Protegemos la vista
     if not request.session.get("usuario_autenticado"):
         return redirect("login")
-
     articulos = Articulo.objects.all()
-    return render(request, 'articulos/lista.html', {'articulos': articulos})
-
-
+    return render(request, "articulos/lista.html", {"articulos": articulos})
+    
 def agregar_articulo(request):
-    if not request.session.get("usuario_autenticado"):
-        return redirect("login")
-
     if request.method == 'POST':
         form = ArticuloForm(request.POST)
         if form.is_valid():
@@ -43,13 +33,9 @@ def agregar_articulo(request):
             return redirect('lista_articulos')
     else:
         form = ArticuloForm()
-    return render(request, 'articulos/formulario.html', {'form': form, 'titulo': 'Agregar artículo'})
-
-
+    return render(request, 'articulos/formulario.html', {'form': form})
+    
 def modificar_articulo(request, pk):
-    if not request.session.get("usuario_autenticado"):
-        return redirect("login")
-
     articulo = get_object_or_404(Articulo, pk=pk)
     if request.method == 'POST':
         form = ArticuloForm(request.POST, instance=articulo)

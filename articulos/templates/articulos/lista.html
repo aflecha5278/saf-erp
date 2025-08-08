@@ -1,47 +1,28 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de artículos</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #afeeee; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; background: #fff; }
-        th, td { padding: 10px; border: 1px solid #ccc; }
-        th { background-color: #e0ffff; }
-        a.boton { background: #afeeee; padding: 5px 8px; border-radius: 4px; text-decoration: none; }
-    </style>
-</head>
-<body>
-    <h1>Lista de artículos</h1>
+<h1>Listado de Artículos</h1>
 
-    <p>
-        <a href="{% url 'agregar_articulo' %}" class="boton">➕ Agregar artículo</a>
-        <a href="{% url 'logout' %}" class="boton">🚪 Cerrar sesión</a>
-    </p>
+<a href="{% url 'agregar_articulo' %}" class="btn btn-primary">Nuevo Artículo</a>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Código</th>
-            <th>Descripción</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-        </tr>
-        {% for articulo in articulos %}
-        <tr>
-            <td>{{ articulo.id }}</td>
-            <td>{{ articulo.codart }}</td>
-            <td>{{ articulo.descrip }}</td>
-            <td>{{ articulo.precosto }}</td>
-            <td>
-                <a href="{% url 'modificar_articulo' articulo.id %}" class="boton">✏ Editar</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5">No hay artículos</td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+<table>
+    <tr>
+        <th>Código</th>
+        <th>Descripción</th>
+        <th>Marca</th>
+        <th>Rubro</th>
+        <th>Acciones</th>
+    </tr>
+    {% for art in articulos %}
+    <tr>
+        <td>{{ art.codart }}</td>
+        <td>{{ art.descrip }}</td>
+        <td>{{ art.marca }}</td>
+        <td>{{ art.rubro }}</td>
+        <td>
+            <a href="{% url 'modificar_articulo' art.pk %}">Editar</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No hay artículos.</td>
+    </tr>
+    {% endfor %}
+</table>
