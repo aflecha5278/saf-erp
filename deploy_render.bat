@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 cd /d C:\_Tmp\Python\saf
 
 git add .
