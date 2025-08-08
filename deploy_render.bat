@@ -2,6 +2,6 @@
 cd /d C:\_Tmp\Python\saf
 
 git add .
-git commit -m "Agrego función para modificar artículos"
+git commit -m "Agrego funciÃ³n para modificar artÃ­culos"
 git push
 pause
