@@ -3,33 +3,36 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{{ titulo }}</title>
-	<link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
-	<style>
-	  button {
-		background-color: #333333;  /* gris oscuro */
-		color: white;               /* texto blanco */
-		border: none;
-		padding: 8px 16px;
-		cursor: pointer;
-		border-radius: 4px;
-	  }
-	  button:hover {
-		background-color: #555555;  /* gris un poco más claro */
-	  }
-	</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo|default:'Agregar Artículo' }} - SAF ERP</title>
+    <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
 </head>
 <body>
-    <h1>{{ titulo }}</h1>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">💾 Guardar</button>
-    </form>
-
-    <a href="{% url 'lista_articulos' %}">⬅ Volver a la lista</a>
+    <div class="list-container">
+        <div class="list-card">
+            <h1>{{ titulo|default:'Agregar Artículo' }}</h1>
+            <form method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="error-message">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <span class="error-message">{{ field.errors }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="{% url 'lista_articulos' %}" class="btn-back">Volver a la Lista</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
-
-

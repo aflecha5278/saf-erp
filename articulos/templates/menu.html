@@ -2,18 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Menú Principal</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}" />
 </head>
 <body>
-    <h1>Menú Principal</h1>
-
-    <nav class="menu">
-        <ul style="list-style-type:none; padding:0;">
-            <li><a href="{% url 'lista_articulos' %}" class="btn">Artículos</a></li>
-            <!-- Más opciones acá -->
-        </ul>
-    </nav>
+    <div class="menu-container">
+        <div class="menu-card">
+            <h1>Menú Principal</h1>
+            <nav class="menu">
+                <ul class="menu-list">
+                    <li><a href="{% url 'lista_articulos' %}" class="btn btn-menu">Artículos</a></li>
+                    <!-- Más opciones se pueden agregar aquí -->
+                </ul>
+            </nav>
+        </div>
+    </div>
 </body>
 </html>
