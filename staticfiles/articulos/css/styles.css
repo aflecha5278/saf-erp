@@ -1,18 +1,25 @@
+/* styles.css */
+
+/* Fuente y fondo general */
 body {
-    font-family: Arial, sans-serif;
+    font-family: Segoe, sans-serif;
     background-color: #f0f0f0;
+    margin: 20px;
 }
 
+/* Títulos */
 h1 {
     text-align: center;
     margin-bottom: 20px;
 }
 
+/* Menú principal */
 .menu {
     margin-bottom: 20px;
     text-align: center;
 }
 
+/* Tablas */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -25,25 +32,55 @@ th, td {
     text-align: left;
 }
 
-.btn {
+/* Botones (links y botones) */
+.btn, button {
     display: inline-block;
-    padding: 8px 12px;
-    background-color: #444; /* gris oscuro */
+    padding: 10px 16px;
+    background-color: rgb(192, 192, 192); /* gris no tan oscuro */
     color: white;
     text-decoration: none;
+    border: none;
     border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.btn:hover {
-    background-color: #333;
+.btn:hover, button:hover {
+    background-color: rgb(80, 80, 80); /* un poco más oscuro al hover */
 }
 
+/* Botones de acción peligroso */
 .btn-danger {
     background-color: darkred;
 }
 
-input[type="text"], input[type="number"], select {
+.btn-danger:hover {
+    background-color: #8B0000;
+}
+
+/* Cajas de texto, select y textarea */
+input[type="text"], input[type="number"], select, textarea {
     background-color: rgb(255, 227, 215);
-    border: 1px solid #ccc;
-    padding: 5px;
+    border: 2px solid rgb(128, 64, 64);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+    border-color: rgb(175, 238, 238);
+    outline: none;
+}
+
+/* Enlaces para navegación */
+a {
+    color: rgb(175, 238, 238);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }

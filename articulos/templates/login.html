@@ -1,60 +1,28 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="es">
+{% load static %}
 <head>
-	<meta charset="UTF-8">
-    <title>Iniciar sesión</title>
-	<link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: rgb(175,238,238);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-box {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px gray;
-            width: 300px;
-        }
-        input {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-        }
-        button {
-            background: black;
-            color: white;
-            padding: 10px;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #333;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}" />
 </head>
 <body>
-    <div class="login-box">
-        <h2>Login</h2>
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            <input type="text" name="usuario" placeholder="Usuario" required>
-            <input type="password" name="clave" placeholder="Clave" required>
-            <button type="submit">Ingresar</button>
-        </form>
-    </div>
+    <h1>Iniciar sesión</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="usuario">Usuario:</label><br/>
+        <input type="text" id="usuario" name="usuario" required /><br/><br/>
+
+        <label for="clave">Clave:</label><br/>
+        <input type="password" id="clave" name="clave" required /><br/><br/>
+
+        <button type="submit" class="btn">Ingresar</button>
+    </form>
 </body>
 </html>
+

@@ -1,57 +1,19 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Menú Principal</title>
-	<link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: rgb(175,238,238);
-            margin: 0;
-            padding: 0;
-        }
-        .menu-container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px gray;
-        }
-        h1 {
-            text-align: center;
-        }
-        .menu-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        a {
-            text-decoration: none;
-        }
-        .btn {
-            background: black;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            border-radius: 5px;
-            font-size: 18px;
-            display: block;
-        }
-        .btn:hover {
-            background: #333;
-        }
-    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}" />
 </head>
 <body>
-    <div class="menu-container">
-        <h1>Menú Principal</h1>
-        <div class="menu-buttons">
-            <a href="{% url 'lista_articulos' %}" class="btn">📦 Artículos</a>
-            <!-- Más botones irán aquí -->
-        </div>
-    </div>
+    <h1>Menú Principal</h1>
+
+    <nav class="menu">
+        <ul style="list-style-type:none; padding:0;">
+            <li><a href="{% url 'lista_articulos' %}" class="btn">Artículos</a></li>
+            <!-- Más opciones acá -->
+        </ul>
+    </nav>
 </body>
 </html>
