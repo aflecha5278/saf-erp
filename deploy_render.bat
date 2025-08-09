@@ -1,20 +1,22 @@
 ﻿@echo off
-echo ==========================
-echo Preparando para RENDER...
-echo ==========================
+echo =======================================
+echo Preparando proyecto para Render
+echo =======================================
 REM Activar entorno virtual
-call C:\_Tmp\Python\saf\env\Scripts\activate.bat
+call env\Scripts\activate
 
-REM Migraciones
-python manage.py makemigrations
-python manage.py migrate
+REM Instalar dependencias (aseguramos que whitenoise esté)
+pip install -r requirements.txt
 
-REM Generar archivos estáticos para WhiteNoise
+REM Recolectar archivos estáticos
 python manage.py collectstatic --noinput
 
-REM Confirmar en git y pushear
+echo.
+echo Proyecto listo para subir a Render.
+echo No olvides hacer git add / commit / push
 git add .
 git commit -m "Deploy a Render"
 git push origin main
+
 pause
 

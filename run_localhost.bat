@@ -1,14 +1,14 @@
 @echo off
-echo ==========================
-echo Ejecutando en LOCALHOST...
-echo ==========================
+echo ================================
+echo Iniciando servidor LOCAL Django
+echo ================================
 REM Activar entorno virtual
-call C:\_Tmp\Python\saf\env\Scripts\activate.bat
+call env\Scripts\activate
 
-REM Migraciones
-python manage.py makemigrations
+REM Correr migraciones
 python manage.py migrate
 
-REM Ejecutar servidor local
+REM Levantar servidor local
 python manage.py runserver
+
 
