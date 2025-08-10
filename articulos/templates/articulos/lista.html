@@ -1,46 +1,40 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Artículos - SAF ERP</title>
-    <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
-</head>
-<body>
-    <div class="list-container">
-        <div class="list-card">
-            <h1>Lista de Artículos</h1>
-            <div class="actions">
-                <a href="{% url 'agregar_articulo' %}" class="btn btn-primary">Agregar Artículo</a>
-                <a href="{% url 'logout' %}" class="btn btn-primary">Cerrar Sesión</a>
-            </div>
-            <table class="articles-table">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Descripción</th>
-                        <th>Precio Costo</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for articulo in articulos %}
-                    <tr>
-                        <td>{{ articulo.codart }}</td>
-                        <td>{{ articulo.descrip }}</td>
-                        <td>{{ articulo.precosto }}</td>
-                        <td>
-                            <a href="{% url 'modificar_articulo' articulo.pk %}" class="btn btn-action">Editar</a>
-                            <a href="{% url 'eliminar_articulo' articulo.pk %}" class="btn btn-danger">Eliminar</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="4" class="no-data">No hay artículos cargados.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Lista de Artículos{% endblock %}
+
+{% block content %}
+<h2>Lista de Artículos</h2>
+<a class="btn" href="{% url 'agregar_articulo' %}">Agregar Artículo</a>
+<table>
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Descripción</th>
+            <th>Precio Costo</th>
+            <th>% Alícuota</th>
+            <th>Costo con IVA</th>
+            <th>Precio Venta</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for articulo in articulos %}
+        <tr>
+            <td>{{ articulo.codart }}</td>
+            <td>{{ articulo.descrip }}</td>
+            <td>{{ articulo.precosto }}</td>
+            <td>{{ articulo.alic }}</td>
+            <td>{{ articulo.costoiva }}</td>
+            <td>{{ articulo.preventa }}</td>
+            <td>
+                <a href="{% url 'modificar_articulo' articulo.id %}">Editar</a>
+                <a href="{% url 'eliminar_articulo' articulo.id %}">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No hay artículos cargados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

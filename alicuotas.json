@@ -1,0 +1,10 @@
+[
+  {"model": "articulos.alicuota", "pk": 1, "fields": {"descrip": "No gravado", "nporc": "0.00"}},
+  {"model": "articulos.alicuota", "pk": 2, "fields": {"descrip": "Exento", "nporc": "0.00"}},
+  {"model": "articulos.alicuota", "pk": 3, "fields": {"descrip": "0%", "nporc": "0.00"}},
+  {"model": "articulos.alicuota", "pk": 4, "fields": {"descrip": "10,5%", "nporc": "10.50"}},
+  {"model": "articulos.alicuota", "pk": 5, "fields": {"descrip": "21%", "nporc": "21.00"}},
+  {"model": "articulos.alicuota", "pk": 6, "fields": {"descrip": "27%", "nporc": "27.00"}},
+  {"model": "articulos.alicuota", "pk": 8, "fields": {"descrip": "5%", "nporc": "5.00"}},
+  {"model": "articulos.alicuota", "pk": 9, "fields": {"descrip": "2,5%", "nporc": "2.50"}}
+]

@@ -1,14 +1,12 @@
 @echo off
-echo ================================
-echo Iniciando servidor LOCAL Django
-echo ================================
-REM Activar entorno virtual
-call env\Scripts\activate
-
-REM Correr migraciones
+echo ======================================
+echo  Ejecutando migraciones de Django
+echo ======================================
+python manage.py makemigrations
 python manage.py migrate
-
-REM Levantar servidor local
+python manage.py collectstatic	
+echo ======================================
+echo  Levantando servidor local Django...
+echo ======================================
 python manage.py runserver
-
-
+pause

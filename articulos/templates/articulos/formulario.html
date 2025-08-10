@@ -1,38 +1,11 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ titulo|default:'Agregar Artículo' }} - SAF ERP</title>
-    <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
-</head>
-<body>
-    <div class="list-container">
-        <div class="list-card">
-            <h1>{{ titulo|default:'Agregar Artículo' }}</h1>
-            <form method="post">
-                {% csrf_token %}
-                {% if form.non_field_errors %}
-                    <div class="error-message">
-                        {{ form.non_field_errors }}
-                    </div>
-                {% endif %}
-                {% for field in form %}
-                    <div class="form-group">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <span class="error-message">{{ field.errors }}</span>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <div class="actions">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a href="{% url 'lista_articulos' %}" class="btn-back">Volver a la Lista</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Formulario Artículo{% endblock %}
+
+{% block content %}
+<h2>Formulario de Artículo</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Guardar</button>
+</form>
+{% endblock %}
