@@ -5,7 +5,7 @@ class Alicuota(models.Model):
     ncodalic = models.IntegerField(primary_key=True)
     descrip = models.CharField("Descripción", max_length=50)
     nporc = models.DecimalField("Porcentaje", max_digits=5, decimal_places=2)
-    
+
     class Meta:
         verbose_name = "Alícuota IVA"
         ordering = ['ncodalic']
@@ -13,8 +13,6 @@ class Alicuota(models.Model):
     def __str__(self):
         return f"{self.descrip} ({self.nporc}%)"
 
-from django.db import models
-from django.core.validators import MinValueValidator
 
 class Articulo(models.Model):
     # Campos editables
@@ -26,19 +24,19 @@ class Articulo(models.Model):
         decimal_places=2,
         validators=[MinValueValidator(0)]
     )
-    ncodalic = models.ForeignKey(
-        'Alicuota',
-        verbose_name="Código Alícuota",
-        on_delete=models.PROTECT
-    )
     margen = models.DecimalField(
         "Margen %",
         max_digits=6,
         decimal_places=2,
         default=0
     )
-    
-    # Campos calculados (NO editables)
+    ncodalic = models.ForeignKey(
+        'Alicuota',
+        verbose_name="Código Alícuota",
+        on_delete=models.PROTECT
+    )
+
+    # Campos calculados
     alic = models.DecimalField(
         "% Alícuota",
         max_digits=5,
@@ -56,7 +54,15 @@ class Articulo(models.Model):
         default=0
     )
     preventa = models.DecimalField(
-        "Precio Venta",
+        "Precio Venta (sin IVA)",
+        max_digits=12,
+        decimal_places=2,
+        editable=False,
+        null=True,
+        default=0
+    )
+    prefinal = models.DecimalField(
+        "Precio Final (con IVA)",
         max_digits=12,
         decimal_places=2,
         editable=False,
@@ -65,9 +71,13 @@ class Articulo(models.Model):
     )
     
     def save(self, *args, **kwargs):
-        """Cálculos automáticos al guardar"""
         self.alic = self.ncodalic.nporc
-        self.costoiva = self.precosto * (1 + self.alic/100)
-        self.preventa = self.costoiva * (1 + self.margen/100)
+        self.costoiva = self.precosto * (1 + self.alic / 100)
+        self.preventa = self.precosto * (1 + self.margen / 100)
+        self.prefinal = self.preventa * (1 + self.alic / 100)
         super().save(*args, **kwargs)
-        
+
+    def __str__(self):
+        return f"{self.codart} - {self.descrip}"
+
+    

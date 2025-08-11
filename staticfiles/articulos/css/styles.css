@@ -1,297 +1,83 @@
-/* styles.css */
-
-/* Fuente y fondo general */
 body {
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Prioridad a Segoe UI y Segoe, con fallback a sans-serif */
-    background-color: #f0f0f0;
+    background: #f8f8f8;
+	color:black;
+	font-family: "Segoe UI", "Segoe", sans-serif;
     margin: 0;
     padding: 0;
+}
+
+header {
+    background: #add8e6;
+    color: black;
+    padding: 10px 20px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    gap: 15px;
 }
 
-/* Títulos */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+nav a {
+    color: black;
+    text-decoration: none;
 }
 
-/* Menú principal */
-.menu {
-    text-align: center;
+main {
+    padding: 20px;
 }
 
-/* Tablas */
+h2 {
+    margin-top: 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn:hover {
+    background: #2980b9;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: white;
+    margin-top: 15px;
 }
 
-/* Botones (links y botones generales) */
-.btn, button {
-    display: inline-block;
-    padding: 10px 16px;
-    background-color: rgb(128, 128, 128); /* Gris más oscuro */
-    color: white;
-    text-decoration: none;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Asegurar fuente en botones generales */
-}
-
-.btn:hover, button:hover {
-    background-color: rgb(64, 64, 64); /* Gris aún más oscuro al hover */
-}
-
-/* Botones de acción peligroso */
-.btn-danger {
-    background-color: darkred;
-}
-
-.btn-danger:hover {
-    background-color: #8B0000;
-}
-
-/* Cajas de texto, select y textarea */
-input[type="text"], input[type="number"], input[type="password"], select, textarea {
-    background-color: rgb(255, 227, 215);
-    border: 2px solid rgb(128, 64, 64);
-    border-radius: 4px;
-    padding: 8px;
-    font-size: 1rem;
-    color: #333;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-    text-transform: uppercase; /* Mostrar texto en mayúsculas */
-}
-
-input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
-    border-color: rgb(175, 238, 238); /* Turquesa de la marca */
-    outline: none;
-}
-
-/* Enlaces para navegación */
-a {
-    color: rgb(175, 238, 238); /* Turquesa de la marca */
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Estilos específicos para la página de login */
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
-}
-
-.login-card {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.form-group label {
-    font-weight: bold;
-    color: #333;
-}
-
-.btn-login {
-    background-color: rgb(175, 238, 238); /* Turquesa de la marca */
-    color: #333;
-    font-weight: bold;
-    padding: 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Asegurar fuente en el botón de login */
-}
-
-.btn-login:hover {
-    background-color: rgb(135, 206, 235); /* Turquesa más oscuro al hover */
-}
-
-.error-message {
-    color: #dc3545;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-/* Estilos específicos para la página de menú */
-.menu-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
-}
-
-.menu-card {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-}
-
-.menu-list {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.btn-menu {
-    background-color: rgb(175, 238, 238); /* Turquesa de la marca */
-    color: #333;
-    padding: 12px;
-    text-align: center;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Asegurar fuente en el menú */
-}
-
-.btn-menu:hover {
-    background-color: rgb(135, 206, 235); /* Turquesa más oscuro al hover */
-}
-
-/* Estilos específicos para la página de lista de artículos */
-.list-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
-    padding: 20px;
-}
-
-.list-card {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px;
-}
-
-.actions {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: flex-end;
-}
-
-.articles-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-}
-
-.articles-table th {
-    background-color: rgb(175, 238, 238); /* Turquesa de la marca */
-    color: #333;
-    padding: 12px;
-    font-weight: bold;
-}
-
-.articles-table td {
-    padding: 12px;
+table th, table td {
     border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
 }
 
-.articles-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Gris claro para filas pares */
+.error {
+    color: red;
 }
 
-.articles-table tr:hover {
-    background-color: rgb(240, 248, 255); /* Fondo claro al pasar el ratón */
+.menu-principal li {
+    margin-bottom: 10px;
 }
 
-.btn-primary {
-    background-color: rgb(175, 238, 238); /* Turquesa de la marca */
-    color: #333;
-    padding: 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Asegurar fuente en botones primarios */
+.input-codart {
+    max-width: 150px;
 }
 
-.btn-primary:hover {
-    background-color: rgb(135, 206, 235); /* Turquesa más oscuro al hover */
+.input-descrip {
+    max-width: 400px;
 }
 
-.btn-secondary {
-    background-color: rgb(128, 128, 128); /* Gris más oscuro */
-    color: white;
-    padding: 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Asegurar fuente en botones secundarios */
-}
-
-.btn-secondary:hover {
-    background-color: rgb(64, 64, 64); /* Gris aún más oscuro al hover */
-}
-
-.btn-action {
-    background-color: rgb(175, 238, 238); /* Turquesa de la marca */
-    color: #333;
-    padding: 8px 12px;
-    margin-right: 5px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Asegurar fuente en botones de acción */
-}
-
-.btn-action:hover {
-    background-color: rgb(135, 206, 235); /* Turquesa más oscuro al hover */
-}
-
-.btn-back {
-    background-color: rgb(0, 0, 0); /* Negro */
-    color: white;
-    padding: 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-    font-family: 'Segoe UI', 'Segoe', sans-serif; /* Asegurar fuente en el enlace de volver */
-}
-
-.btn-back:hover {
-    background-color: rgb(50, 50, 50); /* Gris oscuro al hover */
-}
-
-.no-data {
-    text-align: center;
-    color: #666;
-    padding: 20px;
+.input-importe {
+    max-width: 120px;
+    text-align: right;
 }

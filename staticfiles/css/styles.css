@@ -68,3 +68,16 @@ table th, table td {
 .menu-principal li {
     margin-bottom: 10px;
 }
+
+.input-codart {
+    max-width: 150px;
+}
+
+.input-descrip {
+    max-width: 400px;
+}
+
+.input-importe {
+    max-width: 120px;
+    text-align: right;
+}

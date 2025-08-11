@@ -40,7 +40,9 @@ def agregar_articulo(request):
             return redirect('lista_articulos')
     else:
         form = ArticuloForm()
-    return render(request, 'articulos/formulario.html', {'form': form})
+    return render(request, 'articulos/formulario.html', {
+        'form': form,
+        'titulo': 'Agregar artículo'})
 
 def modificar_articulo(request, pk):
     if not request.session.get('usuario_autenticado'):

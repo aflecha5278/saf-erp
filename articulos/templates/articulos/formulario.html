@@ -1,11 +1,61 @@
-{% extends "base.html" %}
-{% block title %}Formulario Artículo{% endblock %}
+{% extends "articulos/base.html" %}
+
+{% block title %}
+{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} - SAF ERP
+{% endblock %}
 
 {% block content %}
-<h2>Formulario de Artículo</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn">Guardar</button>
-</form>
+<div class="form-container">
+    <h1>{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.codart.label_tag }} {{ form.codart }}
+        <br/>
+        {{ form.descrip.label_tag }} {{ form.descrip }}
+        <br/>
+        {{ form.precosto.label_tag }} {{ form.precosto }}
+        <br/>
+        {{ form.margen.label_tag }} {{ form.margen }}
+        <br/>
+        {{ form.ncodalic.label_tag }} {{ form.ncodalic }}
+        <br/><br/>
+
+        <label>Costo con IVA:</label>
+        <input type="text" id="costoiva" readonly style="width:150px;" />
+        <br/>
+
+        <label>Precio Venta (sin IVA):</label>
+        <input type="text" id="preventa" readonly style="width:150px;" />
+        <br/>
+
+        <label>Precio Final (con IVA):</label>
+        <input type="text" id="prefinal" readonly style="width:150px;" />
+        <br/><br/>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'lista_articulos' %}" class="btn btn-danger">Volver a la lista</a>
+    </form>
+</div>
+
+<script>
+document.addEventListener("input", function() {
+    const costo = parseFloat(document.querySelector("#id_precosto").value) || 0;
+    const margen = parseFloat(document.querySelector("#id_margen").value) || 0;
+    const selectAlicuota = document.querySelector("#id_ncodalic");
+    let iva = 0;
+    if (selectAlicuota) {
+        const texto = selectAlicuota.options[selectAlicuota.selectedIndex].text;
+        const match = texto.match(/\d+(\.\d+)?/);
+        iva = match ? parseFloat(match[0]) : 0;
+    }
+
+    const costoiva = costo * (1 + iva / 100);
+    const preventa = costo * (1 + margen / 100);
+    const prefinal = preventa * (1 + iva / 100);
+
+    document.querySelector("#costoiva").value = costoiva.toLocaleString('es-AR', {minimumFractionDigits: 2});
+    document.querySelector("#preventa").value = preventa.toLocaleString('es-AR', {minimumFractionDigits: 2});
+    document.querySelector("#prefinal").value = prefinal.toLocaleString('es-AR', {minimumFractionDigits: 2});
+});
+</script>
 {% endblock %}
