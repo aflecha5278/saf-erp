@@ -27,8 +27,12 @@
             <td>{{ articulo.preventa }}</td>
             <td>
                 <a href="{% url 'modificar_articulo' articulo.id %}">Editar</a>
-                <a href="{% url 'eliminar_articulo' articulo.id %}">Eliminar</a>
-            </td>
+                <a href="{% url 'eliminar_articulo' articulo.id %}" 
+				   class="btn btn-danger"
+				   onclick="return confirm('¿Está seguro que desea eliminar el artículo {{ articulo.descrip }}?');">
+			       Eliminar
+				</a>
+			</td>
         </tr>
         {% empty %}
         <tr>
