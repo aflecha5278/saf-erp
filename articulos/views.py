@@ -13,7 +13,7 @@ def login_view(request):
         
         if username == 'ADMIN' and password == '5278':
             request.session['usuario_autenticado'] = True  # Marcamos sesión activa
-            return redirect('lista_articulos')
+            return redirect('menu_principal')
         else:
             error = 'Usuario o contraseña incorrectos.'
     else:
@@ -25,12 +25,11 @@ def login_view(request):
 def logout_view(request):
     request.session.flush()  # Limpiamos la sesión
     return redirect('login')
-    
 
 def menu_principal(request):
     if not request.session.get('usuario_autenticado'):
         return redirect('login')
-    return render(request, 'articulos/menu.html')
+    return render(request, 'articulos/menu.html')    
     
 def lista_articulos(request):
 
