@@ -4,6 +4,14 @@
 {% block content %}
 <h2>Lista de Artículos</h2>
 <a class="btn" href="{% url 'agregar_articulo' %}">Agregar Artículo</a>
+<form method="get" class="mb-3">
+  <label>Buscar:</label>
+  <input type="text" name="q" value="{{ query }}" placeholder="Código o descripción">
+  <button type="submit" class="btn btn-sm btn-primary">Buscar</button>
+  {% if query %}
+    <a href="{% url 'lista_articulos' %}" class="btn btn-sm btn-secondary">Limpiar</a>
+  {% endif %}
+</form>
 <table>
     <thead>
         <tr>

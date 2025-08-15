@@ -1,3 +1,29 @@
+/* Fuente global Segoe */
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&display=swap');
+
+body,
+input,
+button,
+label,
+textarea,
+select,
+table,
+td,
+th,
+header,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+li,
+div {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important;
+}
 /* ===========================================
    ESTILOS GENERALES
    =========================================== */
@@ -11,8 +37,8 @@ body {
 
 /* Header */
 header {
-    background-color: #0d6efd;
-    color: #fff;
+    background-color: RGB(175,238,238);
+    color: #212529;
     padding: 1rem 1.5rem;
     text-align: center;
 }

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
 from .models import Articulo
 from .forms import ArticuloForm
 from django.contrib import messages
@@ -20,6 +21,7 @@ def login_view(request):
     
     return render( request, 'articulos/login.html', {'form': form} )
 
+
 def logout_view(request):
     request.session.flush()  # Limpiamos la sesión
     return redirect('login')
@@ -31,7 +33,16 @@ def menu_principal(request):
     return render(request, 'articulos/menu.html')
     
 def lista_articulos(request):
+
     articulos = Articulo.objects.all().order_by('codart')
+
+    q = request.GET.get('q', '')
+    if q:
+        articulos = articulos.filter(
+            Q(codart__icontains=q) |
+            Q(descrip__icontains=q)
+        )
+
     return render(request, 'articulos/lista.html', {'articulos': articulos})
 
 def agregar_articulo(request):
