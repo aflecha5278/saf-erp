@@ -23,8 +23,18 @@
         {% csrf_token %}
         {{ form.codart.label_tag }} {{ form.codart }}<br>
 		{{ form.descrip.label_tag }} {{ form.descrip }}<br>
-		{{ form.marca.label_tag }} {{ form.marca }}<br>
-		{{ form.rubro.label_tag }} {{ form.rubro }}<br>
+		<!-- MARCA -->
+		<div style="display: flex; gap: 0.5rem; align-items: center;">
+			{{ form.marca.label_tag }} {{ form.marca }}
+			<span style="align-self: center;">ó</span>
+			{{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
+		</div>
+		<!-- RUBRO -->
+		<div style="display: flex; gap: 0.5rem; align-items: center;">
+			{{ form.rubro.label_tag }} {{ form.rubro }}
+			<span style="align-self: center;">ó</span>
+			{{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
+		</div>
 		{{ form.precosto.label_tag }} {{ form.precosto }}<br>
 		{{ form.margen.label_tag }} {{ form.margen }}<br>
 		{{ form.ncodalic.label_tag }} {{ form.ncodalic }}<br>

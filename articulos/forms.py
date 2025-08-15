@@ -54,14 +54,14 @@ class RubroForm(UpperCaseMixin, forms.ModelForm):
 
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
 
-    marca_nombre = forms.CharField(
-        label="Marca",
+    marca_nueva = forms.CharField(
+        label='Marca nueva (opcional)',
         max_length=14,
         required=False,
         widget=forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
     )
-    rubro_nombre = forms.CharField(
-        label="Rubro",
+    rubro_nueva = forms.CharField(
+        label='Rubro nuevo (opcional)',
         max_length=14,
         required=False,
         widget=forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
@@ -109,18 +109,16 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         return codart
     
     def save(self, commit=True):
-        # Autocrear Marca
-        marca_nombre = self.cleaned_data.get('marca_nombre', '').upper()
-        if marca_nombre:
-            marca, _ = Marca.objects.get_or_create(nombre=marca_nombre)
+        # Si escribieron texto en "marca_nueva" y no eligieron select
+        marca_nueva = self.cleaned_data.get('marca_nueva', '').upper()
+        if marca_nueva:
+            marca, _ = Marca.objects.get_or_create(nombre=marca_nueva)
             self.instance.marca = marca
 
-        # Autocrear Rubro
-        rubro_nombre = self.cleaned_data.get('rubro_nombre', '').upper()
-        if rubro_nombre:
-            rubro, _ = Rubro.objects.get_or_create(nombre=rubro_nombre)
+        rubro_nueva = self.cleaned_data.get('rubro_nueva', '').upper()
+        if rubro_nueva:
+            rubro, _ = Rubro.objects.get_or_create(nombre=rubro_nueva)
             self.instance.rubro = rubro
 
-        return super().save(commit=commit)    
-
+        return super().save(commit=commit)
     
