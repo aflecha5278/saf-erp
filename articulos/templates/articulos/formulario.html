@@ -7,18 +7,34 @@
 {% block content %}
 <div class="form-container">
     <h1>{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}</h1>
+	<!-- Mensajes de error -->
+	  {% if form.errors %}
+		<div class="alert alert-danger">
+		  <ul>
+			{% for field, errors in form.errors.items %}
+			  {% for error in errors %}
+				<li><strong>{{ field|title }}:</strong> {{ error }}</li>
+			  {% endfor %}
+			{% endfor %}
+		  </ul>
+		</div>
+	  {% endif %}
     <form method="post">
         {% csrf_token %}
-        {{ form.codart.label_tag }} {{ form.codart }}
-        <br/>
-        {{ form.descrip.label_tag }} {{ form.descrip }}
-        <br/>
-        {{ form.precosto.label_tag }} {{ form.precosto }}
-        <br/>
-        {{ form.margen.label_tag }} {{ form.margen }}
-        <br/>
-        {{ form.ncodalic.label_tag }} {{ form.ncodalic }}
-        <br/><br/>
+        {{ form.codart.label_tag }} {{ form.codart }}<br>
+		{{ form.descrip.label_tag }} {{ form.descrip }}<br>
+
+		<!-- Caja de texto para MARCA -->
+		<label>Marca:</label>
+		<input type="text" name="marca_nombre" maxlength="14" style="text-transform: uppercase;"><br>
+
+		<!-- Caja de texto para RUBRO -->
+		<label>Rubro:</label>
+		<input type="text" name="rubro_nombre" maxlength="14" style="text-transform: uppercase;"><br>
+
+		{{ form.precosto.label_tag }} {{ form.precosto }}<br>
+		{{ form.margen.label_tag }} {{ form.margen }}<br>
+		{{ form.ncodalic.label_tag }} {{ form.ncodalic }}<br>
 
         <label>Costo con IVA:</label>
         <input type="text" id="costoiva" readonly style="width:150px;" />

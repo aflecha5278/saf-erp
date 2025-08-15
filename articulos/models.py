@@ -1,5 +1,13 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator 
+
+class UpperCaseMixin:
+    def save(self, *args, **kwargs):
+        for field in self._meta.fields:
+            if isinstance(field, models.CharField) and getattr(self, field.name):
+                setattr(self, field.name, getattr(self, field.name).upper())
+        super().save(*args, **kwargs)
+
 
 class Alicuota(models.Model):
     ncodalic = models.IntegerField(primary_key=True)
@@ -9,18 +17,29 @@ class Alicuota(models.Model):
     class Meta:
         verbose_name = "Alícuota IVA"
         ordering = ['ncodalic']
-    
+
     def __str__(self):
         return f"{self.descrip} ({self.nporc}%)"
 
-
-class Articulo(models.Model):
-    # Campos editables
-    codart = models.CharField("Código", max_length=14, unique=True)
+class Articulo(UpperCaseMixin,models.Model):
+    codart = models.CharField(
+        "Código",
+        max_length=14,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=r'^[A-Z0-9]+$',
+                message='Solo se permiten letras mayúsculas y números.'
+            )
+        ],
+        help_text='14 caracteres, se completa con ceros a la izquierda.'
+    )
     descrip = models.CharField("Descripción", max_length=80)
+    marca = models.ForeignKey('Marca', on_delete=models.PROTECT, blank=True, null=True)
+    rubro = models.ForeignKey('Rubro', on_delete=models.PROTECT, blank=True, null=True)
     precosto = models.DecimalField(
-        "Precio Costo", 
-        max_digits=12, 
+        "Precio Costo",
+        max_digits=12,
         decimal_places=2,
         validators=[MinValueValidator(0)]
     )
@@ -49,7 +68,6 @@ class Articulo(models.Model):
         "Costo con IVA",
         max_digits=12,
         decimal_places=2,
-        editable=False,
         null=True,
         default=0
     )
@@ -57,7 +75,6 @@ class Articulo(models.Model):
         "Precio Venta (sin IVA)",
         max_digits=12,
         decimal_places=2,
-        editable=False,
         null=True,
         default=0
     )
@@ -65,12 +82,19 @@ class Articulo(models.Model):
         "Precio Final (con IVA)",
         max_digits=12,
         decimal_places=2,
-        editable=False,
         null=True,
         default=0
     )
     
     def save(self, *args, **kwargs):
+        # Rellena con ceros a la izquierda hasta 14 caracteres
+        self.codart = self.codart.upper().zfill(14)
+        
+        # Valores seguros
+        alic   = float(self.ncodalic.nporc or 0)
+        margen = float(self.margen or 0)
+        precosto = float(self.precosto or 0)
+        
         self.alic = self.ncodalic.nporc
         self.costoiva = self.precosto * (1 + self.alic / 100)
         self.preventa = self.precosto * (1 + self.margen / 100)
@@ -80,4 +104,24 @@ class Articulo(models.Model):
     def __str__(self):
         return f"{self.codart} - {self.descrip}"
 
-    
+
+class Marca(UpperCaseMixin, models.Model):
+    nombre = models.CharField(max_length=14, unique=True)
+
+    class Meta:
+        verbose_name_plural = "Marcas"
+        ordering = ['nombre']
+
+    def __str__(self):
+        return self.nombre
+
+
+class Rubro(UpperCaseMixin, models.Model):
+    nombre = models.CharField(max_length=14, unique=True)
+
+    class Meta:
+        verbose_name_plural = "Rubros"
+        ordering = ['nombre']
+
+    def __str__(self):
+        return self.nombre        

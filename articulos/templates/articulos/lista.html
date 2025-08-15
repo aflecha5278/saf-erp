@@ -10,9 +10,11 @@
             <th>Código</th>
             <th>Descripción</th>
             <th>Precio Costo</th>
-            <th>% Alícuota</th>
+            <th>Margen</th>
+			<th>Precio Venta</th>
+			<th>% Alícuota</th>
             <th>Costo con IVA</th>
-            <th>Precio Venta</th>
+            <th>Precio Final</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -21,10 +23,18 @@
         <tr>
             <td>{{ articulo.codart }}</td>
             <td>{{ articulo.descrip }}</td>
-            <td>{{ articulo.precosto }}</td>
-            <td>{{ articulo.alic }}</td>
+            <td>{{ articulo.precosto|floatformat:2 }}</td>
+			<td>{{ articulo.margen|floatformat:2 }}%</td>
+			<td>{{ articulo.preventa }}</td>
+			<td>{{ articulo.alic }}</td>
             <td>{{ articulo.costoiva }}</td>
-            <td>{{ articulo.preventa }}</td>
+            <td>
+				{% if articulo.prefinal %}
+					{{ articulo.prefinal|floatformat:2 }}
+				{% else %}
+					-
+				{% endif %}
+			</td>
             <td>
                 <a href="{% url 'modificar_articulo' articulo.id %}">Editar</a>
                 <a href="{% url 'eliminar_articulo' articulo.id %}" 

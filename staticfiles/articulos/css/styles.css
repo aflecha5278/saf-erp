@@ -1,83 +1,82 @@
+/* ===========================================
+   ESTILOS GENERALES
+   =========================================== */
 body {
-    background: #f8f8f8;
-	color:black;
-	font-family: "Segoe UI", "Segoe", sans-serif;
+    font-family: Segoe UI, Helvetica, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
     margin: 0;
     padding: 0;
 }
 
+/* Header */
 header {
-    background: #add8e6;
-    color: black;
-    padding: 10px 20px;
+    background-color: #0d6efd;
+    color: #fff;
+    padding: 1rem 1.5rem;
+    text-align: center;
 }
 
-header h1 {
-    margin: 0;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    gap: 15px;
-}
-
-nav a {
-    color: black;
-    text-decoration: none;
-}
-
+/* Contenedor principal */
 main {
-    padding: 20px;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-h2 {
-    margin-top: 0;
-}
-
-.btn {
-    display: inline-block;
-    padding: 8px 12px;
-    background: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-.btn:hover {
-    background: #2980b9;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-table th, table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-}
-
-.error {
-    color: red;
-}
-
-.menu-principal li {
-    margin-bottom: 10px;
-}
-
-.input-codart {
-    max-width: 150px;
-}
-
-.input-descrip {
+/* ===========================================
+   LOGIN
+   =========================================== */
+.login-wrapper {
     max-width: 400px;
+    margin: 4rem auto;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.input-importe {
-    max-width: 120px;
-    text-align: right;
+.login-wrapper h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+/* Inputs del login */
+.login-wrapper input[type="text"],
+.login-wrapper input[type="password"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+}
+
+.login-wrapper button {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+/* Mensaje de error */
+.error {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+/* ===========================================
+   FORMULARIOS (opcional si lo querés reutilizar)
+   =========================================== */
+form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+form input[type="submit"],
+form button {
+    margin-top: 1.5rem;
 }

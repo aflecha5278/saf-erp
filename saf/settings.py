@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v7)5yj9-r^#@o@9+@6sv-7gq7w0k+l&mo9eriiumqk4z&3ruwq'
 
 # DEBUG dinámico: True local, False en Render si seteas DJANGO_DEBUG=False
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = True
 
 ALLOWED_HOSTS = ['saf-erp.onrender.com', '127.0.0.1', 'localhost']
 
