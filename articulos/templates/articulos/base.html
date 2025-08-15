@@ -2,20 +2,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
+	<meta charset="UTF-8" />
     <title>{% block title %}SAF ERP{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
 </head>
 <body>
     <header>
-        <h1>SAF Gestión ERP</h1>
-    </header>
-
-    <main>
+    <h1>SAF Gestión ERP</h1>
+		<nav>
+			<a href="{% url 'menu_principal' %}" class="btn btn-light btn-sm">
+				<i class="bi bi-house-door"></i> Menú Principal
+			</a>
+		</nav>
+	</header>
+	<main>
         {% block content %}
         {% endblock %}
     </main>
 </body>
 </html>
+
+
 
 
