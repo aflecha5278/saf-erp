@@ -60,7 +60,11 @@ def modificar_articulo(request, pk):
             return redirect('lista_articulos')
     else:
         form = ArticuloForm(instance=articulo)
-    return render(request, 'articulos/formulario.html', {'form': form, 'titulo': 'Editar artículo'})
+    return render(request, 'articulos/formulario.html', {
+        'form': form,
+        'titulo': 'Editar artículo',
+        'es_edicion': True  # <-- nuevo flag
+    })
 
 def eliminar_articulo(request, pk):
     if not request.session.get('usuario_autenticado'):

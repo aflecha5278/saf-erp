@@ -69,7 +69,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
 
     class Meta:
         model = Articulo
-        fields = ['codart', 'descrip', 'precosto', 'margen', 'ncodalic']
+        fields = ['codart', 'descrip', 'marca', 'rubro', 'precosto', 'margen', 'ncodalic']
         widgets = {
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
