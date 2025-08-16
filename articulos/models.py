@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator 
+from decimal import Decimal
 
 class UpperCaseMixin:
     def save(self, *args, **kwargs):
@@ -7,7 +8,6 @@ class UpperCaseMixin:
             if isinstance(field, models.CharField) and getattr(self, field.name):
                 setattr(self, field.name, getattr(self, field.name).upper())
         super().save(*args, **kwargs)
-
 
 class Alicuota(models.Model):
     ncodalic = models.IntegerField(primary_key=True)
@@ -21,7 +21,7 @@ class Alicuota(models.Model):
     def __str__(self):
         return f"{self.descrip} ({self.nporc}%)"
 
-class Articulo(UpperCaseMixin,models.Model):
+class Articulo(UpperCaseMixin, models.Model):
     codart = models.CharField(
         "Código",
         max_length=14,
@@ -83,27 +83,43 @@ class Articulo(UpperCaseMixin,models.Model):
         max_digits=12,
         decimal_places=2,
         null=True,
-        default=0
+        default=0,
+        blank=True,
+        validators=[MinValueValidator(0)]
     )
-    
+    modo_calculo = models.CharField(
+        max_length=1,
+        choices=[('C', 'Costo → Final'), ('F', 'Final → Costo')],
+        default='C'
+    )
     def save(self, *args, **kwargs):
         # Rellena con ceros a la izquierda hasta 14 caracteres
         self.codart = self.codart.upper().zfill(14)
         
-        # Valores seguros
-        alic   = float(self.ncodalic.nporc or 0)
-        margen = float(self.margen or 0)
-        precosto = float(self.precosto or 0)
-        
+        # Convertir a Decimal para evitar problemas con float
+        alic = Decimal(str(self.ncodalic.nporc or 0))
+        margen = Decimal(str(self.margen or 0))
+        precosto = Decimal(str(self.precosto or 0))
         self.alic = self.ncodalic.nporc
-        self.costoiva = self.precosto * (1 + self.alic / 100)
-        self.preventa = self.precosto * (1 + self.margen / 100)
-        self.prefinal = self.preventa * (1 + self.alic / 100)
+        
+        # Calcular costoiva
+        self.costoiva = precosto * (Decimal('1') + alic / Decimal('100'))
+        
+        if self.modo_calculo == 'C':  # Costo → Final
+            self.preventa = precosto * (Decimal('1') + margen / Decimal('100'))
+            self.prefinal = self.preventa * (Decimal('1') + alic / Decimal('100'))
+        elif self.modo_calculo == 'F':  # Final → Costo
+            if self.prefinal is not None and self.prefinal != 0:  # Respeta el valor manual si se proporciona
+                self.preventa = self.prefinal / (Decimal('1') + alic / Decimal('100'))
+                self.precosto = self.preventa / (Decimal('1') + margen / Decimal('100'))
+            else:  # Calcula desde precosto si no hay prefinal manual
+                self.preventa = precosto * (Decimal('1') + margen / Decimal('100'))
+                self.prefinal = self.preventa * (Decimal('1') + alic / Decimal('100'))
+        
         super().save(*args, **kwargs)
-
+        
     def __str__(self):
         return f"{self.codart} - {self.descrip}"
-
 
 class Marca(UpperCaseMixin, models.Model):
     nombre = models.CharField(max_length=14, unique=True)
@@ -115,7 +131,6 @@ class Marca(UpperCaseMixin, models.Model):
     def __str__(self):
         return self.nombre
 
-
 class Rubro(UpperCaseMixin, models.Model):
     nombre = models.CharField(max_length=14, unique=True)
 
@@ -124,4 +139,4 @@ class Rubro(UpperCaseMixin, models.Model):
         ordering = ['nombre']
 
     def __str__(self):
-        return self.nombre        
+        return self.nombre

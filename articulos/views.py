@@ -69,6 +69,8 @@ def modificar_articulo(request, pk):
             form.save()
             return redirect('lista_articulos')
     else:
+        # Forzar que antes de mostrar el form se recalculen los campos
+        articulo.save()  
         form = ArticuloForm(instance=articulo)
     return render(request, 'articulos/formulario.html', {
         'form': form,

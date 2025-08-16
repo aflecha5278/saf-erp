@@ -1,79 +1,171 @@
 {% extends "articulos/base.html" %}
 
+{% load widget_tweaks %}
+
 {% block title %}
 {% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} - SAF ERP
 {% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <h1>{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}</h1>
-	<!-- Mensajes de error -->
-	  {% if form.errors %}
-		<div class="alert alert-danger">
-		  <ul>
-			{% for field, errors in form.errors.items %}
-			  {% for error in errors %}
-				<li><strong>{{ field|title }}:</strong> {{ error }}</li>
-			  {% endfor %}
-			{% endfor %}
-		  </ul>
-		</div>
-	  {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.codart.label_tag }} {{ form.codart }}<br>
-		{{ form.descrip.label_tag }} {{ form.descrip }}<br>
-		<!-- MARCA -->
-		<div style="display: flex; gap: 0.5rem; align-items: center;">
-			{{ form.marca.label_tag }} {{ form.marca }}
-			<span style="align-self: center;">ó</span>
-			{{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
-		</div>
-		<!-- RUBRO -->
-		<div style="display: flex; gap: 0.5rem; align-items: center;">
-			{{ form.rubro.label_tag }} {{ form.rubro }}
-			<span style="align-self: center;">ó</span>
-			{{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
-		</div>
-		{{ form.precosto.label_tag }} {{ form.precosto }}<br>
-		{{ form.margen.label_tag }} {{ form.margen }}<br>
-		{{ form.ncodalic.label_tag }} {{ form.ncodalic }}<br>
-        <label>Costo con IVA:</label>
-        <input type="text" id="costoiva" readonly style="width:150px;" />
-        <br/>
+    <div class="list-container">
+        <div class="list-card">
+            <h1>{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}</h1>
 
-        <label>Precio Venta (sin IVA):</label>
-        <input type="text" id="preventa" readonly style="width:150px;" />
-        <br/>
+            {% if form.errors %}
+                <div class="error-message">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            {{ field|title }}: {{ error }}<br>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-        <label>Precio Final (con IVA):</label>
-        <input type="text" id="prefinal" readonly style="width:150px;" />
-        <br/><br/>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.codart.label_tag }} {{ form.codart }}
+                </div>
+                <div class="form-group">
+                    {{ form.descrip.label_tag }} {{ form.descrip }}
+                </div>
+                <div class="form-group">
+                    {{ form.marca.label_tag }} {{ form.marca }} ó
+                    {{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
+                </div>
+                <div class="form-group">
+                    {{ form.rubro.label_tag }} {{ form.rubro }} ó
+                    {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
+                </div>
+                <div class="form-group">
+                    {{ form.modo_calculo.label_tag }} {{ form.modo_calculo }}
+                </div>
+                <div class="form-group">
+                    {{ form.precosto.label_tag }} {{ form.precosto }}
+                </div>
+                <div class="form-group">
+                    {{ form.margen.label_tag }} {{ form.margen }}
+                </div>
+                <div class="form-group">
+                    {{ form.ncodalic.label_tag }} {{ form.ncodalic }}
+                </div>
+                <div class="form-group">
+                    Costo con IVA: <span id="costoiva">{{ form.instance.costoiva|default:"0.00" }}</span>
+                </div>
+                <div class="form-group">
+                    Precio Venta (sin IVA): <span id="preventa">{{ form.instance.preventa|default:"0.00" }}</span>
+                </div>
+                <div class="form-group">
+                    Precio Final (con IVA): 
+                    {% if form.instance.modo_calculo == 'C' %}
+                        <span id="prefinal-display">{{ form.instance.prefinal|default:"0.00" }}</span>
+                        {% render_field form.prefinal style="display:none;" step="0.01" %}
+                    {% else %}
+                        {% render_field form.prefinal step="0.01" %}
+                    {% endif %}
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="{% url 'lista_articulos' %}" class="btn-back">Volver a la Lista</a>
+                </div>
+            </form>
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="{% url 'lista_articulos' %}" class="btn btn-danger">Volver a la lista</a>
-    </form>
-</div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const modoCalculo = document.querySelector('#id_modo_calculo');
+                    const precostoInput = document.querySelector('#id_precosto');
+                    const margenInput = document.querySelector('#id_margen');
+                    const ncodalicSelect = document.querySelector('#id_ncodalic');
+                    const prefinalInput = document.querySelector('#id_prefinal');
+                    const prefinalDisplay = document.querySelector('#prefinal-display');
+                    const costoivaSpan = document.querySelector('#costoiva');
+                    const preventaSpan = document.querySelector('#preventa');
 
-<script>
-document.addEventListener("input", function() {
-    const costo = parseFloat(document.querySelector("#id_precosto").value) || 0;
-    const margen = parseFloat(document.querySelector("#id_margen").value) || 0;
-    const selectAlicuota = document.querySelector("#id_ncodalic");
-    let iva = 0;
-    if (selectAlicuota) {
-        const texto = selectAlicuota.options[selectAlicuota.selectedIndex].text;
-        const match = texto.match(/\d+(\.\d+)?/);
-        iva = match ? parseFloat(match[0]) : 0;
-    }
+                    let debounceTimeout;
 
-    const costoiva = costo * (1 + iva / 100);
-    const preventa = costo * (1 + margen / 100);
-    const prefinal = preventa * (1 + iva / 100);
+                    function calculateValues() {
+                        if (!precostoInput || !margenInput || !ncodalicSelect || !prefinalInput || !prefinalDisplay) {
+                            console.error('Faltan elementos en el DOM:', {
+                                precostoInput, margenInput, ncodalicSelect, prefinalInput, prefinalDisplay
+                            });
+                            return;
+                        }
 
-    document.querySelector("#costoiva").value = costoiva.toLocaleString('es-AR', {minimumFractionDigits: 2});
-    document.querySelector("#preventa").value = preventa.toLocaleString('es-AR', {minimumFractionDigits: 2});
-    document.querySelector("#prefinal").value = prefinal.toLocaleString('es-AR', {minimumFractionDigits: 2});
-});
-</script>
+                        const precosto = parseFloat(precostoInput.value) || 0;
+                        const margen = parseFloat(margenInput.value) || 0;
+                        const selectedOption = ncodalicSelect.options[ncodalicSelect.selectedIndex];
+                        const alicMatch = selectedOption.textContent.match(/\((\d+\.?\d*)%\)/);
+                        const alic = alicMatch ? parseFloat(alicMatch[1]) || 0 : 0;
+                        const modo = modoCalculo.value;
+
+                        console.log('Valores de entrada:', { precosto, margen, alic, modo });
+
+                        const costoiva = precosto * (1 + alic / 100);
+                        costoivaSpan.textContent = isNaN(costoiva) ? '0.00' : costoiva.toFixed(2);
+
+                        const preventa = precosto * (1 + margen / 100);
+                        preventaSpan.textContent = isNaN(preventa) ? '0.00' : preventa.toFixed(2);
+
+                        if (modo === 'C') {
+                            const prefinal = preventa * (1 + alic / 100);
+                            if (!isNaN(prefinal)) {
+                                prefinalDisplay.textContent = prefinal.toFixed(2);
+                                prefinalInput.value = prefinal.toFixed(2);
+                            } else {
+                                prefinalDisplay.textContent = '0.00';
+                                prefinalInput.value = '0.00';
+                                console.error('Cálculo de prefinal falló:', { preventa, alic });
+                            }
+                            prefinalInput.style.display = 'none';
+                            prefinalDisplay.style.display = 'inline';
+                        } else {
+                            const prefinal = parseFloat(prefinalInput.value) || 0;
+                            if (!isNaN(prefinal)) {
+                                const calculatedPreventa = prefinal / (1 + alic / 100);
+                                preventaSpan.textContent = isNaN(calculatedPreventa) ? '0.00' : calculatedPreventa.toFixed(2);
+                                const calculatedPrecosto = calculatedPreventa / (1 + margen / 100);
+                                precostoInput.value = isNaN(calculatedPrecosto) ? '0.00' : calculatedPrecosto.toFixed(2);
+                            } else {
+                                preventaSpan.textContent = '0.00';
+                                precostoInput.value = '0.00';
+                                console.error('Cálculo falló en modo F:', { prefinal, alic });
+                            }
+                            prefinalInput.style.display = 'inline';
+                            prefinalDisplay.style.display = 'none';
+                        }
+                    }
+
+                    // Función de debounce
+                    function debounce(func, delay) {
+                        return function (...args) {
+                            clearTimeout(debounceTimeout);
+                            debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+                        };
+                    }
+
+                    // Verificar existencia de elementos
+                    if (!ncodalicSelect) {
+                        console.error('ncodalicSelect no encontrado');
+                        return;
+                    }
+                    ncodalicSelect.addEventListener('change', calculateValues);
+
+                    [precostoInput, margenInput].forEach(element => {
+                        if (element) {
+                            element.addEventListener('input', debounce(calculateValues, 300));
+                        }
+                    });
+
+                    prefinalInput.addEventListener('input', debounce(calculateValues, 300));
+                    modoCalculo.addEventListener('change', calculateValues);
+                    calculateValues(); // Llamada inicial para establecer los valores
+
+                    // Depuración adicional
+                    prefinalInput.addEventListener('input', () => {
+                        console.log('Editando prefinal manualmente:', prefinalInput.value);
+                    });
+                });
+            </script>
+        </div>
+    </div>
 {% endblock %}

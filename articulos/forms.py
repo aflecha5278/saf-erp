@@ -24,7 +24,6 @@ class LoginForm(forms.Form):
         username = self.cleaned_data.get('username', '').strip().upper()
         return username    
 
-
 class UpperCaseMixin:
     """Mixin para convertir automáticamente todos los campos de texto a mayúsculas"""
     def clean(self):
@@ -42,7 +41,6 @@ class MarcaForm(UpperCaseMixin, forms.ModelForm):
             'nombre': forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
         }
 
-
 class RubroForm(UpperCaseMixin, forms.ModelForm):
     class Meta:
         model = Rubro
@@ -50,10 +48,8 @@ class RubroForm(UpperCaseMixin, forms.ModelForm):
         widgets = {
             'nombre': forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
         }        
-        
 
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
-
     marca_nueva = forms.CharField(
         label='Marca nueva (opcional)',
         max_length=14,
@@ -69,7 +65,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
 
     class Meta:
         model = Articulo
-        fields = ['codart', 'descrip', 'marca', 'rubro', 'precosto', 'margen', 'ncodalic']
+        fields = ['codart', 'descrip', 'marca', 'rubro', 'precosto', 'margen', 'prefinal', 'modo_calculo', 'ncodalic']
         widgets = {
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
@@ -96,6 +92,13 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             'ncodalic': forms.Select(attrs={
                 'style': 'width: 250px;',
                 'class': 'form-control'
+            }),
+            'prefinal': forms.NumberInput(attrs={
+                'step': '0.01',
+                'min': '0',
+                'style': 'width:150px;',
+                'class': 'form-control',
+                'pattern': '[0-9]+(\.[0-9]{0,2})?'  # Limitar a 2 decimales en el cliente
             })
         }
 
@@ -122,3 +125,16 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
 
         return super().save(commit=commit)
     
+    def clean_prefinal(self):
+        prefinal = self.cleaned_data.get('prefinal')
+        if prefinal is None or prefinal == '':
+            return None  # Permitimos vacío para que lo calcule el modelo
+        try:
+            prefinal_float = float(prefinal)
+            # Limitar a 2 decimales
+            prefinal_decimal = round(prefinal_float, 2)
+            if prefinal_float != prefinal_decimal:
+                raise forms.ValidationError("El valor debe tener como máximo 2 decimales.")
+            return prefinal_decimal
+        except ValueError:
+            raise forms.ValidationError("Ingrese un número válido.")
