@@ -21,7 +21,7 @@
                 </div>
             {% endif %}
 
-            <form method="post">
+            <form method="post" id="articuloForm">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ form.codart.label_tag }} {{ form.codart }}
@@ -36,6 +36,10 @@
                 <div class="form-group">
                     {{ form.rubro.label_tag }} {{ form.rubro }} ó
                     {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
+                </div>
+                <div class="form-group">
+                    {{ form.subrubro.label_tag }} {{ form.subrubro }} ó
+                    {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
                 </div>
                 <div class="form-group">
                     {{ form.modo_calculo.label_tag }} {{ form.modo_calculo }}
@@ -59,9 +63,9 @@
                     Precio Final (con IVA): 
                     {% if form.instance.modo_calculo == 'C' %}
                         <span id="prefinal-display">{{ form.instance.prefinal|default:"0.00" }}</span>
-                        {% render_field form.prefinal style="display:none;" step="0.01" %}
+                        {% render_field form.prefinal style="display:none;" step="0.01" id="prefinal-input" %}
                     {% else %}
-                        {% render_field form.prefinal step="0.01" %}
+                        {% render_field form.prefinal step="0.01" id="prefinal-input" %}
                     {% endif %}
                 </div>
                 <div class="actions">
@@ -76,10 +80,11 @@
                     const precostoInput = document.querySelector('#id_precosto');
                     const margenInput = document.querySelector('#id_margen');
                     const ncodalicSelect = document.querySelector('#id_ncodalic');
-                    const prefinalInput = document.querySelector('#id_prefinal');
+                    const prefinalInput = document.querySelector('#prefinal-input');
                     const prefinalDisplay = document.querySelector('#prefinal-display');
                     const costoivaSpan = document.querySelector('#costoiva');
                     const preventaSpan = document.querySelector('#preventa');
+                    const form = document.querySelector('#articuloForm');
 
                     let debounceTimeout;
 
@@ -98,19 +103,18 @@
                         const alic = alicMatch ? parseFloat(alicMatch[1]) || 0 : 0;
                         const modo = modoCalculo.value;
 
-                        console.log('Valores de entrada:', { precosto, margen, alic, modo });
-
                         const costoiva = precosto * (1 + alic / 100);
-                        costoivaSpan.textContent = isNaN(costoiva) ? '0.00' : costoiva.toFixed(2);
+                        costoivaSpan.textContent = Math.round(costoiva * 100) / 100;
 
                         const preventa = precosto * (1 + margen / 100);
-                        preventaSpan.textContent = isNaN(preventa) ? '0.00' : preventa.toFixed(2);
+                        preventaSpan.textContent = Math.round(preventa * 100) / 100;
 
                         if (modo === 'C') {
                             const prefinal = preventa * (1 + alic / 100);
                             if (!isNaN(prefinal)) {
-                                prefinalDisplay.textContent = prefinal.toFixed(2);
-                                prefinalInput.value = prefinal.toFixed(2);
+                                const roundedPrefinal = Math.round(prefinal * 100) / 100;
+                                prefinalDisplay.textContent = roundedPrefinal.toFixed(2);
+                                prefinalInput.value = roundedPrefinal.toFixed(2);
                             } else {
                                 prefinalDisplay.textContent = '0.00';
                                 prefinalInput.value = '0.00';
@@ -119,12 +123,16 @@
                             prefinalInput.style.display = 'none';
                             prefinalDisplay.style.display = 'inline';
                         } else {
-                            const prefinal = parseFloat(prefinalInput.value) || 0;
+                            let prefinal = parseFloat(prefinalInput.value) || 0;
+                            if (String(prefinal).split('.')[1]?.length > 2) {
+                                prefinal = Math.round(prefinal * 100) / 100;
+                                prefinalInput.value = prefinal.toFixed(2);
+                            }
                             if (!isNaN(prefinal)) {
                                 const calculatedPreventa = prefinal / (1 + alic / 100);
-                                preventaSpan.textContent = isNaN(calculatedPreventa) ? '0.00' : calculatedPreventa.toFixed(2);
+                                preventaSpan.textContent = Math.round(calculatedPreventa * 100) / 100;
                                 const calculatedPrecosto = calculatedPreventa / (1 + margen / 100);
-                                precostoInput.value = isNaN(calculatedPrecosto) ? '0.00' : calculatedPrecosto.toFixed(2);
+                                precostoInput.value = Math.round(calculatedPrecosto * 100) / 100;
                             } else {
                                 preventaSpan.textContent = '0.00';
                                 precostoInput.value = '0.00';
@@ -159,6 +167,25 @@
                     prefinalInput.addEventListener('input', debounce(calculateValues, 300));
                     modoCalculo.addEventListener('change', calculateValues);
                     calculateValues(); // Llamada inicial para establecer los valores
+
+                    // Asegurar límite de 2 decimales antes de enviar
+                    form.addEventListener('submit', function(e) {
+                        if (precostoInput && precostoInput.value) {
+                            precostoInput.value = (Math.round(parseFloat(precostoInput.value) * 100) / 100).toFixed(2);
+                        }
+                        if (margenInput && margenInput.value) {
+                            margenInput.value = (Math.round(parseFloat(margenInput.value) * 100) / 100).toFixed(2);
+                        }
+                        if (prefinalInput && prefinalInput.value) {
+							let prefinal = parseFloat(prefinalInput.value.replace(",", "."));
+							prefinalInput.value = (Math.round(prefinal * 100) / 100).toFixed(2);
+						}
+						console.log('Valores enviados:', {
+                            precosto: precostoInput.value,
+                            margen: margenInput.value,
+                            prefinal: prefinalInput.value
+                        });
+                    });
 
                     // Depuración adicional
                     prefinalInput.addEventListener('input', () => {

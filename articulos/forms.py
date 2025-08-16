@@ -1,5 +1,7 @@
 from django import forms
-from .models import Articulo, Marca, Rubro, UpperCaseMixin  
+from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin  
+from decimal import Decimal, ROUND_HALF_UP
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -47,7 +49,7 @@ class RubroForm(UpperCaseMixin, forms.ModelForm):
         fields = ['nombre']
         widgets = {
             'nombre': forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
-        }        
+        }
 
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
     marca_nueva = forms.CharField(
@@ -62,10 +64,26 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
     )
+    subrubro_nueva = forms.CharField(
+        label='Sub-rubro nuevo (opcional)',
+        max_length=14,
+        required=False,
+        widget=forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
+    )
 
     class Meta:
         model = Articulo
-        fields = ['codart', 'descrip', 'marca', 'rubro', 'precosto', 'margen', 'prefinal', 'modo_calculo', 'ncodalic']
+        fields = ['codart', 'descrip', 'marca', 'rubro', 'subrubro', 'subrubro_nueva', 'precosto', 'margen', 'prefinal', 'modo_calculo', 'ncodalic']
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            if 'rubro' in self.data and self.data['rubro']:
+                self.fields['subrubro'].queryset = Subrubro.objects.filter(rubro_id=self.data['rubro'])
+            elif self.instance.pk and self.instance.rubro_id:
+                self.fields['subrubro'].queryset = Subrubro.objects.filter(rubro_id=self.instance.rubro_id)
+            else:
+                self.fields['subrubro'].queryset = Subrubro.objects.none()
+
         widgets = {
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
@@ -93,6 +111,10 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
                 'style': 'width: 250px;',
                 'class': 'form-control'
             }),
+            'subrubro': forms.Select(attrs={
+                'style': 'width: 250px;',
+                'class': 'form-control'
+            }),
             'prefinal': forms.NumberInput(attrs={
                 'step': '0.01',
                 'min': '0',
@@ -102,14 +124,28 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             })
         }
 
-    def clean_codart(self):
-        codart = self.cleaned_data.get('codart', '').strip().upper()
-        # Rellenar siempre con ceros a la izquierda hasta 14 caracteres
-        codart = codart.rjust(14, '0')
-        # Validar que no sea todo ceros
-        if codart == "0" * 14:
-            raise forms.ValidationError("El código no puede ser todo ceros.")
-        return codart
+    def clean_precosto(self):
+        precosto = self.cleaned_data.get('precosto')
+        if precosto is not None:
+            precosto = Decimal(precosto).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        return precosto
+
+    def clean_margen(self):
+        margen = self.cleaned_data.get('margen')
+        if margen is not None:
+            return round(float(margen), 2)
+        return margen
+
+    def clean_prefinal(self):
+        prefinal = self.cleaned_data.get('prefinal')
+        if prefinal is None or prefinal == '':
+            raise forms.ValidationError("Este campo no puede estar vacío.")
+        try:
+            prefinal = Decimal(prefinal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        except:
+            raise forms.ValidationError("Ingrese un número válido.")
+        return prefinal
+
     
     def save(self, commit=True):
         # Si escribieron texto en "marca_nueva" y no eligieron select
@@ -122,19 +158,14 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         if rubro_nueva:
             rubro, _ = Rubro.objects.get_or_create(nombre=rubro_nueva)
             self.instance.rubro = rubro
+        
+        # Auto-crear sub-rubro si se escribió
+        subrubro_nueva = self.cleaned_data.get('subrubro_nueva', '').upper()
+        if subrubro_nueva and self.cleaned_data.get('rubro'):
+            subrubro, _ = Subrubro.objects.get_or_create(
+                rubro_id=self.cleaned_data['rubro'].id,
+                nombre=subrubro_nueva
+            )
+            self.instance.subrubro = subrubro
 
         return super().save(commit=commit)
-    
-    def clean_prefinal(self):
-        prefinal = self.cleaned_data.get('prefinal')
-        if prefinal is None or prefinal == '':
-            return None  # Permitimos vacío para que lo calcule el modelo
-        try:
-            prefinal_float = float(prefinal)
-            # Limitar a 2 decimales
-            prefinal_decimal = round(prefinal_float, 2)
-            if prefinal_float != prefinal_decimal:
-                raise forms.ValidationError("El valor debe tener como máximo 2 decimales.")
-            return prefinal_decimal
-        except ValueError:
-            raise forms.ValidationError("Ingrese un número válido.")

@@ -19,8 +19,7 @@ def login_view(request):
     else:
         form = LoginForm()
     
-    return render( request, 'articulos/login.html', {'form': form} )
-
+    return render(request, 'articulos/login.html', {'form': form})
 
 def logout_view(request):
     request.session.flush()  # Limpiamos la sesión
@@ -32,7 +31,6 @@ def menu_principal(request):
     return render(request, 'articulos/menu.html')    
     
 def lista_articulos(request):
-
     articulos = Articulo.objects.all().order_by('codart')
 
     q = request.GET.get('q', '')
@@ -49,7 +47,25 @@ def agregar_articulo(request):
         form = ArticuloForm(request.POST)
         if form.is_valid():
             print("✅ Formulario válido → guardando...")
-            form.save()
+            # Crear instancia sin guardar aún
+            articulo = Articulo()
+            # Asignar campos directamente desde cleaned_data con redondeo
+            articulo.codart = form.cleaned_data['codart']
+            articulo.descrip = form.cleaned_data['descrip']
+            articulo.precosto = round(float(form.cleaned_data['precosto']), 2)
+            articulo.margen = round(float(form.cleaned_data['margen']), 2)
+            articulo.prefinal = round(float(form.cleaned_data['prefinal'] or 0), 2) if form.cleaned_data['prefinal'] else None
+            articulo.modo_calculo = form.cleaned_data['modo_calculo']
+            articulo.ncodalic = form.cleaned_data['ncodalic']
+            # Asignar IDs de ForeignKey
+            if form.cleaned_data['marca']:
+                articulo.marca_id = form.cleaned_data['marca'].id
+            if form.cleaned_data['rubro']:
+                articulo.rubro_id = form.cleaned_data['rubro'].id
+            if form.cleaned_data['subrubro']:
+                articulo.subrubro_id = form.cleaned_data['subrubro'].id
+            # Guardar el articulo
+            articulo.save()
             messages.success(request, 'Artículo guardado.')
             return redirect('lista_articulos')
         else:
@@ -66,7 +82,11 @@ def modificar_articulo(request, pk):
     if request.method == 'POST':
         form = ArticuloForm(request.POST, instance=articulo)
         if form.is_valid():
-            form.save()
+            articulo = form.save(commit=False)
+            articulo.precosto = round(float(articulo.precosto), 2)
+            articulo.margen = round(float(articulo.margen), 2)
+            articulo.prefinal = round(float(articulo.prefinal or 0), 2) if articulo.prefinal else None
+            articulo.save()
             return redirect('lista_articulos')
     else:
         # Forzar que antes de mostrar el form se recalculen los campos

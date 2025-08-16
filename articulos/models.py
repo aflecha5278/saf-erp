@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator 
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 class UpperCaseMixin:
     def save(self, *args, **kwargs):
@@ -21,6 +21,18 @@ class Alicuota(models.Model):
     def __str__(self):
         return f"{self.descrip} ({self.nporc}%)"
 
+class Subrubro(UpperCaseMixin, models.Model):
+    rubro = models.ForeignKey('Rubro', on_delete=models.CASCADE, related_name='subrubros')
+    nombre = models.CharField(max_length=14)
+
+    class Meta:
+        db_table = 'subrubro'          # ← nombre de tabla exacto
+        unique_together = ('rubro', 'nombre')
+        ordering = ['nombre']
+
+    def __str__(self):
+        return f"{self.rubro.nombre} - {self.nombre}"
+
 class Articulo(UpperCaseMixin, models.Model):
     codart = models.CharField(
         "Código",
@@ -37,6 +49,7 @@ class Articulo(UpperCaseMixin, models.Model):
     descrip = models.CharField("Descripción", max_length=80)
     marca = models.ForeignKey('Marca', on_delete=models.PROTECT, blank=True, null=True)
     rubro = models.ForeignKey('Rubro', on_delete=models.PROTECT, blank=True, null=True)
+    subrubro = models.ForeignKey('Subrubro', on_delete=models.PROTECT, blank=True, null=True)
     precosto = models.DecimalField(
         "Precio Costo",
         max_digits=12,
@@ -92,32 +105,35 @@ class Articulo(UpperCaseMixin, models.Model):
         choices=[('C', 'Costo → Final'), ('F', 'Final → Costo')],
         default='C'
     )
+    from decimal import Decimal, ROUND_HALF_UP
+
     def save(self, *args, **kwargs):
-        # Rellena con ceros a la izquierda hasta 14 caracteres
         self.codart = self.codart.upper().zfill(14)
-        
-        # Convertir a Decimal para evitar problemas con float
-        alic = Decimal(str(self.ncodalic.nporc or 0))
-        margen = Decimal(str(self.margen or 0))
-        precosto = Decimal(str(self.precosto or 0))
-        self.alic = self.ncodalic.nporc
-        
-        # Calcular costoiva
-        self.costoiva = precosto * (Decimal('1') + alic / Decimal('100'))
-        
+
+        # Usar Decimal siempre
+        alic = Decimal(self.ncodalic.nporc or 0)
+        margen = Decimal(self.margen or 0)
+        precosto = Decimal(self.precosto or 0)
+
+        self.alic = alic
+        self.costoiva = precosto * (Decimal("1") + alic / Decimal("100"))
+
         if self.modo_calculo == 'C':  # Costo → Final
-            self.preventa = precosto * (Decimal('1') + margen / Decimal('100'))
-            self.prefinal = self.preventa * (Decimal('1') + alic / Decimal('100'))
-        elif self.modo_calculo == 'F':  # Final → Costo
-            if self.prefinal is not None and self.prefinal != 0:  # Respeta el valor manual si se proporciona
-                self.preventa = self.prefinal / (Decimal('1') + alic / Decimal('100'))
-                self.precosto = self.preventa / (Decimal('1') + margen / Decimal('100'))
-            else:  # Calcula desde precosto si no hay prefinal manual
-                self.preventa = precosto * (Decimal('1') + margen / Decimal('100'))
-                self.prefinal = self.preventa * (Decimal('1') + alic / Decimal('100'))
-        
+            self.preventa = precosto * (Decimal("1") + margen / Decimal("100"))
+            self.prefinal = self.preventa * (Decimal("1") + alic / Decimal("100"))
+        else:  # Final → Costo
+            self.prefinal = Decimal(self.prefinal or 0)
+            self.preventa = self.prefinal / (Decimal("1") + alic / Decimal("100"))
+            self.precosto = self.preventa / (Decimal("1") + margen / Decimal("100"))
+
+        # Redondear a 2 decimales
+        self.precosto = Decimal(self.precosto).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.preventa = Decimal(self.preventa).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.costoiva = Decimal(self.costoiva).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.prefinal = Decimal(self.prefinal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
         super().save(*args, **kwargs)
-        
+
     def __str__(self):
         return f"{self.codart} - {self.descrip}"
 
