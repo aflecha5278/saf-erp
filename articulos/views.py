@@ -18,7 +18,6 @@ def login_view(request):
             error = 'Usuario o contraseña incorrectos.'
     else:
         form = LoginForm()
-    
     return render(request, 'articulos/login.html', {'form': form})
 
 def logout_view(request):
@@ -39,7 +38,6 @@ def lista_articulos(request):
             Q(codart__icontains=q) |
             Q(descrip__icontains=q)
         )
-
     return render(request, 'articulos/lista.html', {'articulos': articulos})
 
 def agregar_articulo(request):

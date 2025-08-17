@@ -1,0 +1,28 @@
+<div class="form-group">
+	{{ form.modo_calculo.label_tag }} {{ form.modo_calculo }}
+</div>
+<div class="form-group">
+	{{ form.precosto.label_tag }} {{ form.precosto }}
+</div>
+<div class="form-group">
+	{{ form.margen.label_tag }} {{ form.margen }}
+</div>
+<div class="form-group">
+	{{ form.ncodalic.label_tag }} {{ form.ncodalic }}
+</div>
+<div class="form-group">
+	Costo con IVA: <span id="costoiva">{{ form.instance.costoiva|default:"0.00" }}</span>
+</div>
+<div class="form-group">
+	Precio Venta (sin IVA): <span id="preventa">{{ form.instance.preventa|default:"0.00" }}</span>
+</div>
+<div class="form-group">
+	Precio Final (con IVA): 
+	{% if form.instance.modo_calculo == 'C' %}
+		<span id="prefinal-display">{{ form.instance.prefinal|default:"0.00" }}</span>
+		<input type="text" name="{{ form.prefinal.name }}" id="prefinal-input" value="{{ form.prefinal.value|default_if_none:'' }}" style="display:none;" step="0.01" />
+	{% else %}
+		<input type="text" name="{{ form.prefinal.name }}" id="prefinal-input" value="{{ form.prefinal.value|default_if_none:'' }}" step="0.01" />
+	{% endif %}
+</div>
+

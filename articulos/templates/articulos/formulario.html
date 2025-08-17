@@ -41,37 +41,45 @@
                     {{ form.subrubro.label_tag }} {{ form.subrubro }} ó
                     {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
                 </div>
-                <div class="form-group">
-                    {{ form.modo_calculo.label_tag }} {{ form.modo_calculo }}
-                </div>
-                <div class="form-group">
-                    {{ form.precosto.label_tag }} {{ form.precosto }}
-                </div>
-                <div class="form-group">
-                    {{ form.margen.label_tag }} {{ form.margen }}
-                </div>
-                <div class="form-group">
-                    {{ form.ncodalic.label_tag }} {{ form.ncodalic }}
-                </div>
-                <div class="form-group">
-                    Costo con IVA: <span id="costoiva">{{ form.instance.costoiva|default:"0.00" }}</span>
-                </div>
-                <div class="form-group">
-                    Precio Venta (sin IVA): <span id="preventa">{{ form.instance.preventa|default:"0.00" }}</span>
-                </div>
-                <div class="form-group">
-                    Precio Final (con IVA): 
-                    {% if form.instance.modo_calculo == 'C' %}
-                        <span id="prefinal-display">{{ form.instance.prefinal|default:"0.00" }}</span>
-                        {% render_field form.prefinal style="display:none;" step="0.01" id="prefinal-input" %}
-                    {% else %}
-                        {% render_field form.prefinal step="0.01" id="prefinal-input" %}
-                    {% endif %}
-                </div>
-                <div class="actions">
+				
+				<div class="container mt-4">
+				<!--<h2>{% if form.instance.pk %}Editar{% else %}Agregar{% endif %} Artículo</h2> -->
+
+				<form method="post">
+				{% csrf_token %}
+				
+				<!-- Tabs -->
+				<ul class="nav nav-tabs" id="articuloTabs" role="tablist">
+					<li class="nav-item" role="presentation">
+						<button class="nav-link active" id="page1-tab" data-bs-toggle="tab" data-bs-target="#page1" type="button" role="tab">Al público</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="page2-tab" data-bs-toggle="tab" data-bs-target="#page2" type="button" role="tab">Moneda extranj.</button>
+					</li>
+					<!-- seguí agregando Page3, Page4 … hasta Page10 -->
+				</ul>
+
+				<!-- Contenido de las páginas -->
+				<div class="tab-content" id="articuloTabsContent">
+					<!-- PAGE 1 -->
+					<div class="tab-pane fade show active p-3" id="page1" role="tabpanel">
+						{% include "articulos/_form_precio.html" %}
+					</div>
+
+					<!-- PAGE 2 -->
+					<div class="tab-pane fade p-3" id="page2" role="tabpanel">
+						<p>Aquí van los campos de la página 2 (otros datos del artículo)</p>
+					</div>
+					<!-- ... hasta PAGE 10 -->
+				</div>
+				</form>
+				</div>
+				<div class="actions">
                     <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a href="{% url 'lista_articulos' %}" class="btn-back">Volver a la Lista</a>
-                </div>
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'lista_articulos' %}'">
+						Volver a la lista
+					</button>
+				</div>
             </form>
 
             <script>
