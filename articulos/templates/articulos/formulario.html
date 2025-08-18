@@ -1,5 +1,4 @@
 {% extends "articulos/base.html" %}
-
 {% load widget_tweaks %}
 
 {% block title %}
@@ -7,201 +6,74 @@
 {% endblock %}
 
 {% block content %}
-    <div class="list-container">
-        <div class="list-card">
-            <h1>{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}</h1>
+<div class="list-container">
+    <div class="list-card">
+        <h1>{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}</h1>
 
-            {% if form.errors %}
-                <div class="error-message">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            {{ field|title }}: {{ error }}<br>
-                        {% endfor %}
+        {% if form.errors %}
+            <div class="error-message">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        {{ field|title }}: {{ error }}<br>
                     {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- ✅ FORMULARIO ÚNICO -->
+        <form method="post" id="articuloForm">
+            {% csrf_token %}
+
+            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                {{ form.codart.label_tag }} {{ form.codart }}
+                {{ form.deposito.label_tag }} {{ form.deposito }}
+            </div>
+            <div class="form-group">
+                {{ form.descrip.label_tag }} {{ form.descrip }}
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                {{ form.marca.label_tag }} {{ form.marca }} ó
+                {{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                {{ form.rubro.label_tag }} {{ form.rubro }} ó
+                {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                {{ form.subrubro.label_tag }} {{ form.subrubro }} ó
+                {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
+            </div>
+
+            <!-- ✅ TABS -->
+            <div class="container mt-4">
+                <ul class="nav nav-tabs" id="articuloTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="page1-tab" data-bs-toggle="tab" data-bs-target="#page1" type="button" role="tab">Al público</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="page2-tab" data-bs-toggle="tab" data-bs-target="#page2" type="button" role="tab">Moneda extranj.</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="articuloTabsContent">
+                    <div class="tab-pane fade show active p-3" id="page1" role="tabpanel">
+                        {% include "articulos/_form_precio.html" %}
+                    </div>
+                    <div class="tab-pane fade p-3" id="page2" role="tabpanel">
+                        <p>Aquí van los campos de la página 2 (otros datos del artículo)</p>
+                    </div>
                 </div>
-            {% endif %}
+            </div>
 
-            <form method="post" id="articuloForm">
-                {% csrf_token %}
-                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                    {{ form.codart.label_tag }} {{ form.codart }}
-					{{ form.deposito.label_tag }} {{ form.deposito }}
-                </div>
-                <div class="form-group">
-                    {{ form.descrip.label_tag }} {{ form.descrip }}
-                </div>
-                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                    {{ form.marca.label_tag }} {{ form.marca }} ó
-                    {{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
-                </div>
-                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                    {{ form.rubro.label_tag }} {{ form.rubro }} ó
-                    {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
-                </div>
-                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                    {{ form.subrubro.label_tag }} {{ form.subrubro }} ó
-                    {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
-                </div>
-				
-				<div class="container mt-4">
-				<!--<h2>{% if form.instance.pk %}Editar{% else %}Agregar{% endif %} Artículo</h2> -->
-
-				<form method="post">
-				{% csrf_token %}
-				
-				<!-- Tabs -->
-				<ul class="nav nav-tabs" id="articuloTabs" role="tablist">
-					<li class="nav-item" role="presentation">
-						<button class="nav-link active" id="page1-tab" data-bs-toggle="tab" data-bs-target="#page1" type="button" role="tab">Al público</button>
-					</li>
-					<li class="nav-item" role="presentation">
-						<button class="nav-link" id="page2-tab" data-bs-toggle="tab" data-bs-target="#page2" type="button" role="tab">Moneda extranj.</button>
-					</li>
-					<!-- seguí agregando Page3, Page4 … hasta Page10 -->
-				</ul>
-
-				<!-- Contenido de las páginas -->
-				<div class="tab-content" id="articuloTabsContent">
-					<!-- PAGE 1 -->
-					<div class="tab-pane fade show active p-3" id="page1" role="tabpanel">
-						{% include "articulos/_form_precio.html" %}
-					</div>
-
-					<!-- PAGE 2 -->
-					<div class="tab-pane fade p-3" id="page2" role="tabpanel">
-						<p>Aquí van los campos de la página 2 (otros datos del artículo)</p>
-					</div>
-					<!-- ... hasta PAGE 10 -->
-				</div>
-				</form>
-				</div>
-				<div class="actions">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'lista_articulos' %}'">
-						Volver a la lista
-					</button>
-				</div>
-            </form>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const modoCalculo = document.querySelector('#id_modo_calculo');
-                    const precostoInput = document.querySelector('#id_precosto');
-                    const margenInput = document.querySelector('#id_margen');
-                    const ncodalicSelect = document.querySelector('#id_ncodalic');
-                    const prefinalInput = document.querySelector('#prefinal-input');
-                    const prefinalDisplay = document.querySelector('#prefinal-display');
-                    const costoivaSpan = document.querySelector('#costoiva');
-                    const preventaSpan = document.querySelector('#preventa');
-                    const form = document.querySelector('#articuloForm');
-
-                    let debounceTimeout;
-
-                    function calculateValues() {
-                        if (!precostoInput || !margenInput || !ncodalicSelect || !prefinalInput || !prefinalDisplay) {
-                            console.error('Faltan elementos en el DOM:', {
-                                precostoInput, margenInput, ncodalicSelect, prefinalInput, prefinalDisplay
-                            });
-                            return;
-                        }
-
-                        const precosto = parseFloat(precostoInput.value) || 0;
-                        const margen = parseFloat(margenInput.value) || 0;
-                        const selectedOption = ncodalicSelect.options[ncodalicSelect.selectedIndex];
-                        const alicMatch = selectedOption.textContent.match(/\((\d+\.?\d*)%\)/);
-                        const alic = alicMatch ? parseFloat(alicMatch[1]) || 0 : 0;
-                        const modo = modoCalculo.value;
-
-                        const costoiva = precosto * (1 + alic / 100);
-                        costoivaSpan.textContent = Math.round(costoiva * 100) / 100;
-
-                        const preventa = precosto * (1 + margen / 100);
-                        preventaSpan.textContent = Math.round(preventa * 100) / 100;
-
-                        if (modo === 'C') {
-                            const prefinal = preventa * (1 + alic / 100);
-                            if (!isNaN(prefinal)) {
-                                const roundedPrefinal = Math.round(prefinal * 100) / 100;
-                                prefinalDisplay.textContent = roundedPrefinal.toFixed(2);
-                                prefinalInput.value = roundedPrefinal.toFixed(2);
-                            } else {
-                                prefinalDisplay.textContent = '0.00';
-                                prefinalInput.value = '0.00';
-                                console.error('Cálculo de prefinal falló:', { preventa, alic });
-                            }
-                            prefinalInput.style.display = 'none';
-                            prefinalDisplay.style.display = 'inline';
-                        } else {
-                            let prefinal = parseFloat(prefinalInput.value) || 0;
-                            if (String(prefinal).split('.')[1]?.length > 2) {
-                                prefinal = Math.round(prefinal * 100) / 100;
-                                prefinalInput.value = prefinal.toFixed(2);
-                            }
-                            if (!isNaN(prefinal)) {
-                                const calculatedPreventa = prefinal / (1 + alic / 100);
-                                preventaSpan.textContent = Math.round(calculatedPreventa * 100) / 100;
-                                const calculatedPrecosto = calculatedPreventa / (1 + margen / 100);
-                                precostoInput.value = Math.round(calculatedPrecosto * 100) / 100;
-                            } else {
-                                preventaSpan.textContent = '0.00';
-                                precostoInput.value = '0.00';
-                                console.error('Cálculo falló en modo F:', { prefinal, alic });
-                            }
-                            prefinalInput.style.display = 'inline';
-                            prefinalDisplay.style.display = 'none';
-                        }
-                    }
-
-                    // Función de debounce
-                    function debounce(func, delay) {
-                        return function (...args) {
-                            clearTimeout(debounceTimeout);
-                            debounceTimeout = setTimeout(() => func.apply(this, args), delay);
-                        };
-                    }
-
-                    // Verificar existencia de elementos
-                    if (!ncodalicSelect) {
-                        console.error('ncodalicSelect no encontrado');
-                        return;
-                    }
-                    ncodalicSelect.addEventListener('change', calculateValues);
-
-                    [precostoInput, margenInput].forEach(element => {
-                        if (element) {
-                            element.addEventListener('input', debounce(calculateValues, 300));
-                        }
-                    });
-
-                    prefinalInput.addEventListener('input', debounce(calculateValues, 300));
-                    modoCalculo.addEventListener('change', calculateValues);
-                    calculateValues(); // Llamada inicial para establecer los valores
-
-                    // Asegurar límite de 2 decimales antes de enviar
-                    form.addEventListener('submit', function(e) {
-                        if (precostoInput && precostoInput.value) {
-                            precostoInput.value = (Math.round(parseFloat(precostoInput.value) * 100) / 100).toFixed(2);
-                        }
-                        if (margenInput && margenInput.value) {
-                            margenInput.value = (Math.round(parseFloat(margenInput.value) * 100) / 100).toFixed(2);
-                        }
-                        if (prefinalInput && prefinalInput.value) {
-							let prefinal = parseFloat(prefinalInput.value.replace(",", "."));
-							prefinalInput.value = (Math.round(prefinal * 100) / 100).toFixed(2);
-						}
-						console.log('Valores enviados:', {
-                            precosto: precostoInput.value,
-                            margen: margenInput.value,
-                            prefinal: prefinalInput.value
-                        });
-                    });
-
-                    // Depuración adicional
-                    prefinalInput.addEventListener('input', () => {
-                        console.log('Editando prefinal manualmente:', prefinalInput.value);
-                    });
-                });
-            </script>
-        </div>
+            <!-- ✅ BOTONES -->
+            <div class="actions mt-3">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'lista_articulos' %}'">
+                    Volver a la lista
+                </button>
+            </div>
+        </form>
+        <!-- 🚫 YA NO HAY FORM ANIDADO -->
     </div>
+</div>
 {% endblock %}

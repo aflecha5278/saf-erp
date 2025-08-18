@@ -1,8 +1,14 @@
 /* ===========================================
+   FUENTE GLOBAL
+   =========================================== */
+body, input, button, label, textarea, select {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important;
+}
+
+/* ===========================================
    ESTILOS GENERALES
    =========================================== */
 body {
-    font-family: Segoe UI, Helvetica, sans-serif;
     background-color: #f8f9fa;
     color: #212529;
     margin: 0;
@@ -11,7 +17,7 @@ body {
 
 /* Header */
 header {
-    background-color: RGB(175,238,238);
+    background-color: rgb(175, 238, 238);
     color: #212529;
     padding: 1rem 1.5rem;
     text-align: center;
@@ -50,9 +56,16 @@ main {
     font-size: 1rem;
     text-transform: uppercase;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
     margin-bottom: 1rem;
     box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+.login-wrapper input:focus {
+    border-color: #0078D7;
+    box-shadow: 0 0 4px #0078D7;
+    outline: none;
 }
 
 .login-wrapper button {
@@ -68,7 +81,7 @@ main {
 }
 
 /* ===========================================
-   FORMULARIOS (opcional si lo querés reutilizar)
+   FORMULARIOS GENERALES
    =========================================== */
 form label {
     display: block;
@@ -76,32 +89,47 @@ form label {
     font-weight: bold;
 }
 
+form input[type="text"],
+form input[type="number"],
+form input[type="password"],
+form select,
+form textarea {
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease-in-out;
+    width: auto;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    border-color: #0078D7;
+    box-shadow: 0 0 4px #0078D7;
+    outline: none;
+}
+
 form input[type="submit"],
 form button {
     margin-top: 1.5rem;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    background-color: #0078D7;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
+form input[type="submit"]:hover,
+form button:hover {
+    background-color: #005fa3;
+}
+
+/* Campo de búsqueda */
 #buscar {
     text-transform: uppercase;
-}
-
-/* Fuente global Segoe */
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&display=swap');
-body, input, button, label, textarea, select { font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important; }
-
-/* Responsive: móviles */
-@media (max-width: 576px) {
-    .form-control, input[type=text], input[type=number], select {
-        font-size: 1.1rem;
-        padding: .75rem;
-        width: 100% !important;
-    }
-    .btn {
-        font-size: 1.1rem;
-        padding: .75rem 1rem;
-        width: 100%;
-        margin-bottom: .5rem;
-    }
 }
 
 /* Contenedor flexible */
@@ -111,15 +139,27 @@ body, input, button, label, textarea, select { font-family: 'Segoe UI', Arial, H
     padding: 1rem;
 }
 
-/* Labels y todo el texto */
-label, h1, h2, h3, h4, h5, h6, p, span, li, div {
-    font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important;
-}
-
-/* Tamaño de labels en móvil */
+/* ===========================================
+   RESPONSIVE (MÓVILES)
+   =========================================== */
 @media (max-width: 576px) {
+    .form-control,
+    input[type=text],
+    input[type=number],
+    select,
+    textarea {
+        font-size: 1.1rem;
+        padding: 0.75rem;
+        width: 100% !important;
+    }
+    .btn {
+        font-size: 1.1rem;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
     label {
         font-size: 1.1rem;
-        margin-bottom: .25rem;
+        margin-bottom: 0.25rem;
     }
 }

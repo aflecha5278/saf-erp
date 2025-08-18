@@ -58,7 +58,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         initial='INTERNO',
         required=False,
         widget=forms.Select(attrs={
-            'style': 'width: 180px;',
+            'style': 'width: 200px;',
             'class': 'form-control'
         })
     )
@@ -66,19 +66,23 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         label='Marca nueva (opcional)',
         max_length=14,
         required=False,
-        widget=forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
+        widget=forms.TextInput(attrs={'style': 'width: 200px ; text-transform: uppercase;',
+        'class': 'form-control'})
     )
+    
     rubro_nueva = forms.CharField(
         label='Rubro nuevo (opcional)',
         max_length=14,
         required=False,
-        widget=forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
+        widget=forms.TextInput(attrs={'style': 'width: 200px ; text-transform: uppercase;',
+        'class': 'form-control'})    
     )
     subrubro_nueva = forms.CharField(
         label='Sub-rubro nuevo (opcional)',
         max_length=14,
         required=False,
-        widget=forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
+        widget=forms.TextInput(attrs={'style': 'width: 200px ; text-transform: uppercase;',
+        'class': 'form-control'})  
     )
 
     class Meta:
@@ -102,7 +106,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             }),
             'descrip': forms.TextInput(attrs={
                 'maxlength': 80,
-                'style': 'width:400px; text-transform: uppercase;',
+                'style': 'width:600px; text-transform: uppercase;',
                 'class': 'form-control input-descrip'
             }),
             'precosto': forms.NumberInput(attrs={
@@ -118,11 +122,11 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             }),
             'preventa': forms.TextInput(attrs={'readonly': 'readonly'}),
             'ncodalic': forms.Select(attrs={
-                'style': 'width: 250px;',
+                'style': 'width: 150px;',
                 'class': 'form-control'
             }),
             'subrubro': forms.Select(attrs={
-                'style': 'width: 250px;',
+                'style': 'width: 150px;',
                 'class': 'form-control'
             }),
             'prefinal': forms.NumberInput(attrs={
@@ -158,19 +162,20 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
 
     
     def save(self, commit=True):
-        # Si escribieron texto en "marca_nueva" y no eligieron select
-        marca_nueva = self.cleaned_data.get('marca_nueva', '').upper()
+        
+        # Normalizamos a mayúsculas los campos "nuevos"
+        marca_nueva = self.cleaned_data.get('marca_nueva', '').strip().upper()
         if marca_nueva:
             marca, _ = Marca.objects.get_or_create(nombre=marca_nueva)
             self.instance.marca = marca
 
-        rubro_nueva = self.cleaned_data.get('rubro_nueva', '').upper()
+        rubro_nueva = self.cleaned_data.get('rubro_nueva', '').strip().upper()
         if rubro_nueva:
             rubro, _ = Rubro.objects.get_or_create(nombre=rubro_nueva)
             self.instance.rubro = rubro
-        
+
         # Auto-crear sub-rubro si se escribió
-        subrubro_nueva = self.cleaned_data.get('subrubro_nueva', '').upper()
+        subrubro_nueva = self.cleaned_data.get('subrubro_nueva', '').strip().upper()
         if subrubro_nueva and self.cleaned_data.get('rubro'):
             subrubro, _ = Subrubro.objects.get_or_create(
                 rubro_id=self.cleaned_data['rubro'].id,
@@ -179,3 +184,5 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             self.instance.subrubro = subrubro
 
         return super().save(commit=commit)
+
+    
