@@ -25,4 +25,9 @@
 		<input type="text" name="{{ form.prefinal.name }}" id="prefinal-input" value="{{ form.prefinal.value|default_if_none:'' }}" step="0.01" />
 	{% endif %}
 </div>
+<div class="form-group">
+    Fecha última modificación: 
+    <span id="fecultmod">{{ form.instance.fecultmod|date:"d/m/Y" }}</span>
+</div>
+
 

@@ -1,5 +1,6 @@
 from django.db import models
-from django.core.validators import MinValueValidator, RegexValidator 
+from django.core.validators import MinValueValidator, RegexValidator
+from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
 
 class UpperCaseMixin:
@@ -26,7 +27,7 @@ class Subrubro(UpperCaseMixin, models.Model):
     nombre = models.CharField(max_length=14)
 
     class Meta:
-        db_table = 'subrubro'          # ← nombre de tabla exacto
+        db_table = 'subrubro'
         unique_together = ('rubro', 'nombre')
         ordering = ['nombre']
 
@@ -50,47 +51,12 @@ class Articulo(UpperCaseMixin, models.Model):
     marca = models.ForeignKey('Marca', on_delete=models.PROTECT, blank=True, null=True)
     rubro = models.ForeignKey('Rubro', on_delete=models.PROTECT, blank=True, null=True)
     subrubro = models.ForeignKey('Subrubro', on_delete=models.PROTECT, blank=True, null=True)
-    precosto = models.DecimalField(
-        "Precio Costo",
-        max_digits=12,
-        decimal_places=2,
-        validators=[MinValueValidator(0)]
-    )
-    margen = models.DecimalField(
-        "Margen %",
-        max_digits=6,
-        decimal_places=2,
-        default=0
-    )
-    ncodalic = models.ForeignKey(
-        'Alicuota',
-        verbose_name="Código Alícuota",
-        on_delete=models.PROTECT
-    )
-
-    # Campos calculados
-    alic = models.DecimalField(
-        "% Alícuota",
-        max_digits=5,
-        decimal_places=2,
-        editable=False,
-        null=True,
-        default=0
-    )
-    costoiva = models.DecimalField(
-        "Costo con IVA",
-        max_digits=12,
-        decimal_places=2,
-        null=True,
-        default=0
-    )
-    preventa = models.DecimalField(
-        "Precio Venta (sin IVA)",
-        max_digits=12,
-        decimal_places=2,
-        null=True,
-        default=0
-    )
+    precosto = models.DecimalField("Precio Costo", max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
+    margen = models.DecimalField("Margen %", max_digits=6, decimal_places=2, default=0)
+    ncodalic = models.ForeignKey('Alicuota', verbose_name="Código Alícuota", on_delete=models.PROTECT)
+    alic = models.DecimalField("% Alícuota", max_digits=5, decimal_places=2, editable=False, null=True, default=0)
+    costoiva = models.DecimalField("Costo con IVA", max_digits=12, decimal_places=2, null=True, default=0)
+    preventa = models.DecimalField("Precio Venta (sin IVA)", max_digits=12, decimal_places=2, null=True, default=0)
     prefinal = models.DecimalField(
         "Precio Final (con IVA)",
         max_digits=12,
@@ -100,37 +66,46 @@ class Articulo(UpperCaseMixin, models.Model):
         blank=True,
         validators=[MinValueValidator(0)]
     )
+    fecultmod = models.DateField(null=True, blank=True)
     modo_calculo = models.CharField(
         max_length=1,
         choices=[('C', 'Costo → Final'), ('F', 'Final → Costo')],
         default='C'
     )
-    from decimal import Decimal, ROUND_HALF_UP
 
     def save(self, *args, **kwargs):
         self.codart = self.codart.upper().zfill(14)
 
-        # Usar Decimal siempre
-        alic = Decimal(self.ncodalic.nporc or 0)
-        margen = Decimal(self.margen or 0)
-        precosto = Decimal(self.precosto or 0)
+        alic = Decimal(str(self.ncodalic.nporc or "0"))
+        margen = Decimal(str(self.margen or "0"))
+        precosto = Decimal(str(self.precosto or "0"))
 
         self.alic = alic
         self.costoiva = precosto * (Decimal("1") + alic / Decimal("100"))
 
-        if self.modo_calculo == 'C':  # Costo → Final
+        if self.modo_calculo == 'C':
             self.preventa = precosto * (Decimal("1") + margen / Decimal("100"))
             self.prefinal = self.preventa * (Decimal("1") + alic / Decimal("100"))
-        else:  # Final → Costo
-            self.prefinal = Decimal(self.prefinal or 0)
-            self.preventa = self.prefinal / (Decimal("1") + alic / Decimal("100"))
+        else:
+            prefinal = Decimal(str(self.prefinal or "0"))
+            self.preventa = prefinal / (Decimal("1") + alic / Decimal("100"))
             self.precosto = self.preventa / (Decimal("1") + margen / Decimal("100"))
 
-        # Redondear a 2 decimales
-        self.precosto = Decimal(self.precosto).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        self.preventa = Decimal(self.preventa).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        self.costoiva = Decimal(self.costoiva).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        self.prefinal = Decimal(self.prefinal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.precosto = Decimal(str(self.precosto)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.preventa = Decimal(str(self.preventa)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.costoiva = Decimal(str(self.costoiva)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.prefinal = Decimal(str(self.prefinal)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+        if self.pk:
+            original = Articulo.objects.get(pk=self.pk)
+            if (
+                original.precosto != self.precosto or
+                original.margen != self.margen or
+                original.prefinal != self.prefinal
+            ):
+                self.fecultmod = timezone.now().date()
+        else:
+            self.fecultmod = timezone.now().date()
 
         super().save(*args, **kwargs)
 
