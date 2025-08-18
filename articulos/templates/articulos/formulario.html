@@ -23,21 +23,22 @@
 
             <form method="post" id="articuloForm">
                 {% csrf_token %}
-                <div class="form-group">
+                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
                     {{ form.codart.label_tag }} {{ form.codart }}
+					{{ form.deposito.label_tag }} {{ form.deposito }}
                 </div>
                 <div class="form-group">
                     {{ form.descrip.label_tag }} {{ form.descrip }}
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
                     {{ form.marca.label_tag }} {{ form.marca }} ó
                     {{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
                     {{ form.rubro.label_tag }} {{ form.rubro }} ó
                     {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
                     {{ form.subrubro.label_tag }} {{ form.subrubro }} ó
                     {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
                 </div>

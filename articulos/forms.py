@@ -52,6 +52,16 @@ class RubroForm(UpperCaseMixin, forms.ModelForm):
         }
 
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
+    deposito = forms.ChoiceField(
+        label="Depósito",
+        choices=[('INTERNO', 'INTERNO')],  # luego se cargará desde el modelo Deposito
+        initial='INTERNO',
+        required=False,
+        widget=forms.Select(attrs={
+            'style': 'width: 180px;',
+            'class': 'form-control'
+        })
+    )
     marca_nueva = forms.CharField(
         label='Marca nueva (opcional)',
         max_length=14,
