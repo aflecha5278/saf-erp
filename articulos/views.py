@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .models import Articulo
-from .forms import ArticuloForm
+from .models import Articulo, ParametroSistema
+from .forms import ArticuloForm, LoginForm, ParametroSistemaForm
 from django.contrib import messages
-from .forms import LoginForm  # <-- Importamos el nuevo formulario
 
 def login_view(request):
     error = None
@@ -103,3 +102,36 @@ def eliminar_articulo(request, pk):
     articulo = get_object_or_404(Articulo, pk=pk)
     articulo.delete()
     return redirect('lista_articulos')
+
+def agregar_parametro(request):
+    if request.method == 'POST':
+        form = ParametroSistemaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_parametros')
+    else:
+        form = ParametroSistemaForm()
+    return render(request, 'articulos/agregar_parametro.html', {'form': form})
+
+def editar_parametro(request, id):
+    parametro = get_object_or_404(ParametroSistema, pk=pk)
+    if request.method == 'POST':
+        form = ParametroSistemaForm(request.POST, instance=parametro)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_parametros')
+    else:
+        form = ParametroSistemaForm(instance=parametro)
+    return render(request, 'articulos/editar_parametro.html', {'form': form})
+    
+
+def eliminar_parametro(request, pk):
+    parametro = get_object_or_404(ParametroSistema, pk=pk)  # 👈 Usás un nombre distinto
+    parametro.delete()
+    return redirect('listar_parametros')
+    
+    
+def listar_parametros(request):
+    parametros = ParametroSistema.objects.all()
+    return render(request, 'articulos/listar_parametros.html', {'parametros': parametros})
+

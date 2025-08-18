@@ -1,7 +1,6 @@
 from django import forms
-from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin  
+from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema  
 from decimal import Decimal, ROUND_HALF_UP
-
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -185,4 +184,16 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
 
         return super().save(commit=commit)
 
-    
+class ParametroSistemaForm(forms.ModelForm):
+    class Meta:
+        model = ParametroSistema
+        fields = ['clave', 'descripcion', 'valor']
+        widgets = {
+            'valor': forms.Select(choices=[('S', 'Sí'), ('N', 'No')]),
+            'clave': forms.TextInput(attrs={'style': 'text-transform:uppercase;'}),
+            'descripcion': forms.TextInput(attrs={
+                'style': 'text-transform:uppercase;',
+                'class': 'form-control w-100',  # Bootstrap ancho completo
+                'placeholder': 'Ingrese descripción del parámetro'
+            }),
+        }

@@ -22,9 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("login/", views.login_view, name="login"),
     path("menu/", views.menu_principal, name="menu_principal"),
-    path('', include('articulos.urls')),
+    path('articulos/', include('articulos.urls')),
 ]
-
-
-
 

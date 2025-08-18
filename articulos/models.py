@@ -131,3 +131,17 @@ class Rubro(UpperCaseMixin, models.Model):
 
     def __str__(self):
         return self.nombre
+        
+class ParametroSistema(models.Model):
+    clave = models.CharField(max_length=14, unique=True)
+    descripcion = models.CharField(max_length=200)
+    valor = models.CharField(max_length=1, choices=[('S', 'Sí'), ('N', 'No')])
+    
+    @property
+    def activo(self):
+        return self.valor == 'S'
+    
+    def __str__(self):
+        return f"{self.descripcion} ({self.valor})"
+
+

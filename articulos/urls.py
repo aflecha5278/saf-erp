@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views import agregar_parametro, listar_parametros
+
 
 urlpatterns = [
     path('', views.login_view, name='login'),  # Página inicial es el login
@@ -9,4 +11,10 @@ urlpatterns = [
     path('modificar/<int:pk>/', views.modificar_articulo, name='modificar_articulo'),
     path('eliminar/<int:pk>/', views.eliminar_articulo, name='eliminar_articulo'),
     path('logout/', views.logout_view, name='logout'),
+    path('parametros/', views.listar_parametros, name='listar_parametros'),
+    path('parametros/nuevo/', views.agregar_parametro, name='agregar_parametro'),
+    path('parametros/<int:pk>/editar/', views.editar_parametro, name='editar_parametro'),
+    path('parametros/<int:pk>/eliminar/', views.eliminar_parametro, name='eliminar_parametro'),
 ]
+
+
