@@ -113,7 +113,7 @@ def agregar_parametro(request):
         form = ParametroSistemaForm()
     return render(request, 'articulos/agregar_parametro.html', {'form': form})
 
-def editar_parametro(request, id):
+def editar_parametro(request, pk):
     parametro = get_object_or_404(ParametroSistema, pk=pk)
     if request.method == 'POST':
         form = ParametroSistemaForm(request.POST, instance=parametro)

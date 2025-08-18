@@ -25,10 +25,13 @@
             <td>{{ parametro.descripcion }}</td>
             <td>{{ parametro.get_valor_display }}</td>
             <td>
-              <a href="{% url 'editar_parametro' parametro.id %}" class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-pencil-square"></i> Editar
-              </a>
-            </td>
+				<a href="{% url 'editar_parametro' parametro.id %}" class="btn btn-sm btn-outline-secondary">
+					<i class="bi bi-pencil-square"></i> Editar
+				</a>
+				<a href="{% url 'eliminar_parametro' parametro.id %}" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('¿Eliminar este parámetro?');">
+					<i class="bi bi-trash"></i> Eliminar
+				</a>	
+			</td>
           </tr>
         {% endfor %}
       </tbody>
