@@ -135,3 +135,5 @@ def listar_parametros(request):
     parametros = ParametroSistema.objects.all()
     return render(request, 'articulos/listar_parametros.html', {'parametros': parametros})
 
+def home_view(request):
+    return render(request, 'articulos/home.html')

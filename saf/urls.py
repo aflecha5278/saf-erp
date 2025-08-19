@@ -19,9 +19,11 @@ from django.urls import path, include
 from articulos import views
 
 urlpatterns = [
+    path('', views.home_view, name='home'),
     path('admin/', admin.site.urls),
     path("login/", views.login_view, name="login"),
     path("menu/", views.menu_principal, name="menu_principal"),
     path('articulos/', include('articulos.urls')),
 ]
+
 
