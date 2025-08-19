@@ -1,4 +1,4 @@
-{% extends "articulos/base.html" %}
+	{% extends "articulos/base.html" %}
 {% block content %}
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
@@ -7,8 +7,15 @@
       <i class="bi bi-plus-circle"></i> Nuevo parámetro
     </a>
   </div>
-
-  {% if parametros %}
+  
+	<form method="get" class="d-flex mb-3" role="search">
+		<input type="text" name="q" class="form-control me-2" placeholder="Buscar parámetro..." value="{{ request.GET.q }}">
+			<button type="submit" class="btn btn-sm btn-institucional d-inline-flex align-items-center gap-1">
+				<i class="bi bi-search"></i> Buscar
+			</button>
+	</form>
+	
+	{% if parametros %}
     <table class="table table-striped table-bordered">
       <thead class="table-light">
         <tr>
@@ -24,17 +31,19 @@
             <td>{{ parametro.clave }}</td>
             <td>{{ parametro.descripcion }}</td>
             <td>{{ parametro.get_valor_display }}</td>
-            <td>
-			  <div class="d-flex justify-content-start">
-				<a href="{% url 'editar_parametro' parametro.id %}" class="btn btn-sm btn-outline-primary me-2 d-inline-flex align-items-center gap-1">
-				  <i class="bi bi-pencil-square"></i> Editar
-				</a>
-				<a href="{% url 'eliminar_parametro' parametro.id %}" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1" onclick="return confirm('¿Eliminar este parámetro?');">
-				  <i class="bi bi-trash"></i> Eliminar
-				</a>
-			  </div>
+			<td>
+				<div class="btn-group" role="group">
+					<a href="{% url 'editar_parametro' parametro.id %}" class="btn btn-sm btn-institucional">
+						  <i class="bi bi-pencil-square"></i> Editar
+					</a>
+					<a href="{% url 'eliminar_parametro' parametro.id %}" 
+					   class="btn btn-sm btn-institucional-danger"
+					   onclick="return confirm('¿Está seguro que desea eliminar el parámetro {{ parametro.id }}?');">
+						<i class="bi bi-trash3"></i> Eliminar
+					</a>
+				</div>
 			</td>
-          </tr>
+		  </tr>
         {% endfor %}
       </tbody>
     </table>
@@ -43,5 +52,6 @@
   {% endif %}
 </div>
 {% endblock %}
+
 
 

@@ -169,11 +169,6 @@ form textarea:focus {
   font-weight: 500;
 }
 
-.btn-institucional:hover {
-  background-color: rgb(160, 220, 220);
-  color: #000;
-}
-
 /* Variante para eliminar (con tono más serio pero coherente) */
 .btn-institucional-danger {
   background-color: rgb(145, 210, 210);
@@ -184,6 +179,30 @@ form textarea:focus {
 .btn-institucional-danger:hover {
   background-color: rgb(130, 190, 190);
 }
+
+.table-institucional th {
+  background-color: rgb(175, 238, 238);
+  color: #003838;
+  text-align: center;
+}
+
+.btn-institucional {
+  background-color: rgb(175, 238, 238);
+  color: #004d4d;
+  border: 1px solid #b0e0e0;
+}
+
+.btn-institucional:hover {
+  background-color: rgb(160, 225, 225);
+  color: #003838;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 
 /* ===========================================
    OTROS ELEMENTOS
