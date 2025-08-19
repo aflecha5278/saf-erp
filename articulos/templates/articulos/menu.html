@@ -2,41 +2,26 @@
 {% block title %}Menú Principal – SAF ERP{% endblock %}
 {% block content %}
 
-<!-- Bootstrap 5 CDN -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-  body{background:#f8f9fa;font-family:'Segoe UI',Arial,Helvetica,sans-serif}
-  .menu-card{max-width:480px;margin:8% auto 0}
-  .card-header{background:rgb(175,238,238)}
-  .btn-outline-custom{border-color:rgb(175,238,238);color:rgb(0,123,255)}
-  .btn-outline-custom:hover{background:rgb(175,238,238);color:#fff}
-</style>
-
 <div class="container-fluid">
-  <div class="menu-card card shadow">
-    <div class="card-header text-center fw-bold fs-5">
-      Artículos
+  <div class="menu-card card shadow mt-5">
+    <div class="card-header text-center fw-bold fs-5 bg-marca text-dark">
+      Menú de Artículos
     </div>
-    <div class="card-body d-flex flex-column gap-2">
-		<a href="{% url 'agregar_articulo' %}" class="btn btn-outline-custom">
-			<i class="bi bi-plus-circle"></i> Agregar
-		</a>
-		<a href="{% url 'lista_articulos' %}" class="btn btn-outline-custom">
-			<i class="bi bi-pencil-square"></i> Modificar / Eliminar
-		</a>
-		<a href="{% url 'lista_articulos' %}?q=" class="btn btn-outline-custom">
-			<i class="bi bi-search"></i> Consultar
-		</a>
-		<a href="{% url 'listar_parametros' %}" class="btn btn-outline-custom">
-			<i class="bi bi-sliders"></i> Parámetros del Sistema
-		</a>
-	</div>
+    <div class="card-body d-flex flex-column gap-3">
+      <a href="{% url 'agregar_articulo' %}" class="btn-aceptar">
+        <i class="bi bi-plus-circle"></i> Agregar
+      </a>
+      <a href="{% url 'lista_articulos' %}" class="btn-aceptar">
+        <i class="bi bi-pencil-square"></i> Modificar / Eliminar
+      </a>
+      <a href="{% url 'lista_articulos' %}?q=" class="btn-cancelar">
+        <i class="bi bi-search"></i> Consultar
+      </a>
+      <a href="{% url 'listar_parametros' %}" class="btn-cancelar">
+        <i class="bi bi-sliders"></i> Parámetros del Sistema
+      </a>
+    </div>
   </div>
 </div>
 
-<!-- Íconos de Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
-
-
-

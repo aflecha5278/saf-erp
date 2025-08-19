@@ -6,6 +6,18 @@ body, input, button, label, textarea, select {
 }
 
 /* ===========================================
+   VARIABLES DE COLOR
+   =========================================== */
+:root {
+    --color-marca: rgb(175, 238, 238);
+    --color-marca-hover: rgb(150, 220, 220);
+    --color-cancelar: rgb(120, 180, 180);
+    --color-cancelar-hover: rgb(100, 160, 160);
+    --color-eliminar: rgb(100, 140, 140);
+    --color-eliminar-hover: rgb(80, 120, 120);
+}
+
+/* ===========================================
    ESTILOS GENERALES
    =========================================== */
 body {
@@ -15,15 +27,13 @@ body {
     padding: 0;
 }
 
-/* Header */
 header {
-    background-color: rgb(175, 238, 238);
+    background-color: var(--color-marca);
     color: #212529;
     padding: 1rem 1.5rem;
     text-align: center;
 }
 
-/* Contenedor principal */
 main {
     max-width: 800px;
     margin: 2rem auto;
@@ -48,7 +58,6 @@ main {
     text-align: center;
 }
 
-/* Inputs del login */
 .login-wrapper input[type="text"],
 .login-wrapper input[type="password"] {
     width: 100%;
@@ -63,21 +72,14 @@ main {
 }
 
 .login-wrapper input:focus {
-    border-color: #0078D7;
-    box-shadow: 0 0 4px #0078D7;
+    border-color: var(--color-marca);
+    box-shadow: 0 0 4px var(--color-marca);
     outline: none;
 }
 
 .login-wrapper button {
     width: 100%;
     padding: 0.5rem;
-}
-
-/* Mensaje de error */
-.error {
-    color: #dc3545;
-    margin-bottom: 1rem;
-    font-weight: bold;
 }
 
 /* ===========================================
@@ -105,34 +107,97 @@ form textarea {
 form input:focus,
 form select:focus,
 form textarea:focus {
-    border-color: #0078D7;
-    box-shadow: 0 0 4px #0078D7;
+    border-color: var(--color-marca);
+    box-shadow: 0 0 4px var(--color-marca);
     outline: none;
 }
 
-form input[type="submit"],
-form button {
-    margin-top: 1.5rem;
-    border: none;
+/* ===========================================
+   BOTONES PERSONALIZADOS
+   =========================================== */
+.bg-marca {
+  background-color: var(--color-marca);
+}
+
+.btn-aceptar {
+  background-color: var(--color-marca);
+  border: 1px solid var(--color-marca);
+  color: #000;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-aceptar:hover {
+  background-color: var(--color-marca-hover);
+}
+   
+.btn-cancelar {
+    background-color: var(--color-cancelar);
+    border: 1px solid var(--color-cancelar);
+    color: #fff;
+    font-weight: 500;
     border-radius: 6px;
     padding: 0.6rem 1rem;
-    background-color: #0078D7;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-cancelar:hover {
+    background-color: var(--color-cancelar-hover);
+}
+
+.btn-eliminar {
+    background-color: var(--color-eliminar);
+    border: 1px solid var(--color-eliminar);
     color: #fff;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    transition: background-color 0.2s ease-in-out;
 }
 
-form input[type="submit"]:hover,
-form button:hover {
-    background-color: #005fa3;
+.btn-eliminar:hover {
+    background-color: var(--color-eliminar-hover);
 }
 
-/* Campo de búsqueda */
+/* === Botones Institucionales === */
+.btn-institucional {
+  background-color: rgb(175, 238, 238);
+  color: #000;
+  border: none;
+  font-weight: 500;
+}
+
+.btn-institucional:hover {
+  background-color: rgb(160, 220, 220);
+  color: #000;
+}
+
+/* Variante para eliminar (con tono más serio pero coherente) */
+.btn-institucional-danger {
+  background-color: rgb(145, 210, 210);
+  color: #000;
+  border: none;
+}
+
+.btn-institucional-danger:hover {
+  background-color: rgb(130, 190, 190);
+}
+
+/* ===========================================
+   OTROS ELEMENTOS
+   =========================================== */
+.error {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
 #buscar {
     text-transform: uppercase;
 }
 
-/* Contenedor flexible */
 .form-container {
     max-width: 100%;
     margin: 0 auto;
@@ -163,3 +228,4 @@ form button:hover {
         margin-bottom: 0.25rem;
     }
 }
+

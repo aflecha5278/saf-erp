@@ -5,10 +5,15 @@
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-success">
-      <i class="bi bi-save"></i> Guardar
-    </button>
-    <a href="{% url 'listar_parametros' %}" class="btn btn-secondary">Cancelar</a>
+    <div class="d-flex gap-2 mt-3">
+      <button type="submit" class="btn btn-sm btn-institucional d-inline-flex align-items-center gap-1">
+        <i class="bi bi-save"></i> Guardar
+      </button>
+      <a href="{% url 'listar_parametros' %}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1">
+        <i class="bi bi-x-circle"></i> Cancelar
+      </a>
+    </div>
   </form>
 </div>
 {% endblock %}
+

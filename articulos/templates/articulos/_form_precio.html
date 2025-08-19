@@ -1,33 +1,52 @@
-<div class="form-group">
-	{{ form.modo_calculo.label_tag }} {{ form.modo_calculo }}
-</div>
-<div class="form-group">
-	{{ form.precosto.label_tag }} {{ form.precosto }}
-</div>
-<div class="form-group">
-	{{ form.margen.label_tag }} {{ form.margen }}
-</div>
-<div class="form-group">
-	{{ form.ncodalic.label_tag }} {{ form.ncodalic }}
-</div>
-<div class="form-group">
-	Costo con IVA: <span id="costoiva">{{ form.instance.costoiva|default:"0.00" }}</span>
-</div>
-<div class="form-group">
-	Precio Venta (sin IVA): <span id="preventa">{{ form.instance.preventa|default:"0.00" }}</span>
-</div>
-<div class="form-group">
-	Precio Final (con IVA): 
-	{% if form.instance.modo_calculo == 'C' %}
-		<span id="prefinal-display">{{ form.instance.prefinal|default:"0.00" }}</span>
-		<input type="text" name="{{ form.prefinal.name }}" id="prefinal-input" value="{{ form.prefinal.value|default_if_none:'' }}" style="display:none;" step="0.01" />
-	{% else %}
-		<input type="text" name="{{ form.prefinal.name }}" id="prefinal-input" value="{{ form.prefinal.value|default_if_none:'' }}" step="0.01" />
-	{% endif %}
-</div>
-<div class="form-group">
-    Fecha última modificación: 
-    <span id="fecultmod">{{ form.instance.fecultmod|date:"d/m/Y" }}</span>
+{% load widget_tweaks %}
+<div class="row mb-3">
+  <div class="col-md-6">
+    {{ form.modo_calculo.label_tag }}
+    {{ form.modo_calculo|add_class:"form-select" }}
+  </div>
 </div>
 
+<div class="row mb-3">
+  <div class="col-md-6">
+    {{ form.precosto.label_tag }}
+    {{ form.precosto|add_class:"form-control" }}
+  </div>
+  <div class="col-md-6">
+    {{ form.margen.label_tag }}
+    {{ form.margen|add_class:"form-control" }}
+  </div>
+</div>
 
+<div class="row mb-3">
+  <div class="col-md-6">
+    {{ form.ncodalic.label_tag }}
+    {{ form.ncodalic|add_class:"form-select" }}
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-md-6">
+    <label class="form-label">Costo con IVA:</label>
+    <span id="costoiva" class="form-control bg-light">{{ form.instance.costoiva|default:"0.00" }}</span>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Precio Venta (sin IVA):</label>
+    <span id="preventa" class="form-control bg-light">{{ form.instance.preventa|default:"0.00" }}</span>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-md-6">
+    <label class="form-label">Precio Final (con IVA):</label>
+    {% if form.instance.modo_calculo == 'C' %}
+      <span id="prefinal-display" class="form-control bg-light">{{ form.instance.prefinal|default:"0.00" }}</span>
+      {{ form.prefinal|add_class:"form-control"|attr:"id:prefinal-input"|attr:"step:0.01"|attr:"style:display:none;" }}
+    {% else %}
+      {{ form.prefinal|add_class:"form-control"|attr:"id:prefinal-input"|attr:"step:0.01" }}
+    {% endif %}
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Fecha última modificación:</label>
+    <span id="fecultmod" class="form-control bg-light">{{ form.instance.fecultmod|date:"d/m/Y" }}</span>
+  </div>
+</div>

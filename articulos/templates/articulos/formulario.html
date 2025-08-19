@@ -2,79 +2,100 @@
 {% load widget_tweaks %}
 
 {% block title %}
-{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} - SAF ERP
+{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – SAF ERP
 {% endblock %}
 
 {% block content %}
-<div class="list-container">
-    <div class="list-card">
-        <h1>{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}</h1>
-
-        {% if form.errors %}
-            <div class="error-message">
-                {% for field, errors in form.errors.items %}
-                    {% for error in errors %}
-                        {{ field|title }}: {{ error }}<br>
-                    {% endfor %}
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <!-- ✅ FORMULARIO ÚNICO -->
-        <form method="post" id="articuloForm">
-            {% csrf_token %}
-
-            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                {{ form.codart.label_tag }} {{ form.codart }}
-                {{ form.deposito.label_tag }} {{ form.deposito }}
-            </div>
-            <div class="form-group">
-                {{ form.descrip.label_tag }} {{ form.descrip }}
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                {{ form.marca.label_tag }} {{ form.marca }} ó
-                {{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                {{ form.rubro.label_tag }} {{ form.rubro }} ó
-                {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
-            </div>
-            <div class="form-group" style="display:flex; align-items:center; gap:10px;">
-                {{ form.subrubro.label_tag }} {{ form.subrubro }} ó
-                {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
-            </div>
-
-            <!-- ✅ TABS -->
-            <div class="container mt-4">
-                <ul class="nav nav-tabs" id="articuloTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="page1-tab" data-bs-toggle="tab" data-bs-target="#page1" type="button" role="tab">Al público</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="page2-tab" data-bs-toggle="tab" data-bs-target="#page2" type="button" role="tab">Moneda extranj.</button>
-                    </li>
-                </ul>
-
-                <div class="tab-content" id="articuloTabsContent">
-                    <div class="tab-pane fade show active p-3" id="page1" role="tabpanel">
-                        {% include "articulos/_form_precio.html" %}
-                    </div>
-                    <div class="tab-pane fade p-3" id="page2" role="tabpanel">
-                        <p>Aquí van los campos de la página 2 (otros datos del artículo)</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ✅ BOTONES -->
-            <div class="actions mt-3">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'lista_articulos' %}'">
-                    Volver a la lista
-                </button>
-            </div>
-        </form>
-        <!-- 🚫 YA NO HAY FORM ANIDADO -->
+<div class="container my-4">
+  <div class="card shadow">
+    <div class="card-header bg-marca text-dark fw-bold">
+      {% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}
     </div>
+    <div class="card-body">
+      {% if form.errors %}
+        <div class="alert alert-danger">
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <strong>{{ field|title }}:</strong> {{ error }}<br>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" id="articuloForm">
+        {% csrf_token %}
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            {{ form.codart.label_tag }} {{ form.codart }}
+          </div>
+          <div class="col-md-6">
+            {{ form.deposito.label_tag }} {{ form.deposito }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          {{ form.descrip.label_tag }} {{ form.descrip }}
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            {{ form.marca.label_tag }} {{ form.marca }}
+          </div>
+          <div class="col-md-6">
+            {{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            {{ form.rubro.label_tag }} {{ form.rubro }}
+          </div>
+          <div class="col-md-6">
+            {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            {{ form.subrubro.label_tag }} {{ form.subrubro }}
+          </div>
+          <div class="col-md-6">
+            {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
+          </div>
+        </div>
+
+        <!-- ✅ TABS -->
+        <ul class="nav nav-tabs mt-4" id="articuloTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="page1-tab" data-bs-toggle="tab" data-bs-target="#page1" type="button" role="tab">Al público</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="page2-tab" data-bs-toggle="tab" data-bs-target="#page2" type="button" role="tab">Moneda extranj.</button>
+          </li>
+        </ul>
+
+        <div class="tab-content border border-top-0 p-3" id="articuloTabsContent">
+          <div class="tab-pane fade show active" id="page1" role="tabpanel">
+            {% include "articulos/_form_precio.html" %}
+          </div>
+          <div class="tab-pane fade" id="page2" role="tabpanel">
+            <p>Aquí van los campos de la página 2 (otros datos del artículo)</p>
+          </div>
+        </div>
+
+        <!-- ✅ BOTONES -->
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button type="submit" class="btn-aceptar">
+            <i class="bi bi-check-circle"></i> Guardar
+          </button>
+          <a href="{% url 'lista_articulos' %}" class="btn-cancelar">
+            <i class="bi bi-arrow-left-circle"></i> Volver a la lista
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script>
