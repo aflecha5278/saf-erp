@@ -114,14 +114,10 @@ def eliminar_articulo(request, pk):
     return redirect('lista_articulos')
     
 def agregar_parametro(request):
-    print("📥 POST recibido:", request.POST)
     if request.method == 'POST':
         form = ParametroSistemaForm(request.POST)
-        print("🧪 Probando validación del formulario...")
         if form.is_valid():
-            print("✅ Guardando parámetro:", form.cleaned_data)
             form.save()
-            print("💾 Parámetro guardado correctamente.")
             messages.success(request, 'Parámetro guardado correctamente.')
             return redirect('listar_parametros')
         else:

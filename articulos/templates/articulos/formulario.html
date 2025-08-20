@@ -1,4 +1,4 @@
-	{% extends "articulos/base.html" %}
+{% extends "articulos/base.html" %}
 {% load widget_tweaks %}
 {% block title %}
 {% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – Cianova 360
@@ -46,33 +46,39 @@
         </div>
 
         <div class="row mb-3">
-          <div class="col-md-6">
-            {{ form.marca.label_tag }} {{ form.marca }}
-          </div>
-          <div class="col-md-6">
-            {{ form.marca_nueva.label_tag }} {{ form.marca_nueva }}
-          </div>
-        </div>
+			<div class="col-md-6">
+				{{ form.marca.label_tag }}
+				{% render_field form.marca class="form-select input-cianova w-100" %}
+			</div>
+			<div class="col-md-6">
+				{{ form.marca_nueva.label_tag }}
+				{% render_field form.marca_nueva class="form-control input-cianova w-100" %}
+			</div>
+		</div>
 
-        <div class="row mb-3">
-          <div class="col-md-6">
-            {{ form.rubro.label_tag }} {{ form.rubro }}
-          </div>
-          <div class="col-md-6">
-            {{ form.rubro_nueva.label_tag }} {{ form.rubro_nueva }}
-          </div>
-        </div>
+		<div class="row mb-3">
+			<div class="col-md-6">
+				{{ form.rubro.label_tag }}
+				{% render_field form.rubro class="form-select input-cianova w-100" %}
+			</div>
+			<div class="col-md-6">
+				{{ form.rubro_nueva.label_tag }}
+				{% render_field form.rubro_nueva class="form-control input-cianova w-100" %}
+			</div>
+		</div>
 
-        <div class="row mb-3">
-          <div class="col-md-6">
-            {{ form.subrubro.label_tag }} {{ form.subrubro }}
-          </div>
-          <div class="col-md-6">
-            {{ form.subrubro_nueva.label_tag }} {{ form.subrubro_nueva }}
-          </div>
-        </div>
+		<div class="row mb-3">
+			<div class="col-md-6">
+				{{ form.subrubro.label_tag }}
+				{% render_field form.subrubro class="form-select input-cianova w-100" %}
+			</div>
+			<div class="col-md-6">
+				{{ form.subrubro_nueva.label_tag }}
+				{% render_field form.subrubro_nueva class="form-control input-cianova w-100" %}
+			</div>
+		</div>
 
-        <!-- ✅ TABS -->
+		<!-- ✅ TABS -->
         <ul class="nav nav-tabs mt-4" id="articuloTabs" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="page1-tab" data-bs-toggle="tab" data-bs-target="#page1" type="button" role="tab">Al público</button>
