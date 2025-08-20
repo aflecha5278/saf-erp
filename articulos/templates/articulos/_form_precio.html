@@ -2,36 +2,36 @@
 <div class="row mb-3">
   <div class="col-md-6">
     {{ form.modo_calculo.label_tag }}
-    {{ form.modo_calculo|add_class:"form-select" }}
+    {{ form.modo_calculo|add_class:"form-control input-cianova w-100" }}
   </div>
 </div>
 
 <div class="row mb-3">
   <div class="col-md-6">
     {{ form.precosto.label_tag }}
-    {{ form.precosto|add_class:"form-control" }}
+    {{ form.precosto|add_class:"form-control input-cianova w-100" }}
   </div>
   <div class="col-md-6">
     {{ form.margen.label_tag }}
-    {{ form.margen|add_class:"form-control" }}
+    {{ form.margen|add_class:"form-control input-cianova w-100" }}
   </div>
 </div>
 
 <div class="row mb-3">
   <div class="col-md-6">
     {{ form.ncodalic.label_tag }}
-    {{ form.ncodalic|add_class:"form-select" }}
+    {{ form.ncodalic|add_class:"form-control input-cianova w-100" }}
   </div>
 </div>
 
 <div class="row mb-3">
   <div class="col-md-6">
     <label class="form-label">Costo con IVA:</label>
-    <span id="costoiva" class="form-control bg-light">{{ form.instance.costoiva|default:"0.00" }}</span>
+    <input type="text" id="costoiva" class="form-control input-cianova-readonly w-100" value="{{ form.instance.costoiva|default:"0.00" }}" readonly>
   </div>
   <div class="col-md-6">
     <label class="form-label">Precio Venta (sin IVA):</label>
-    <span id="preventa" class="form-control bg-light">{{ form.instance.preventa|default:"0.00" }}</span>
+    <input type="text" id="preventa" class="form-control input-cianova-readonly w-100" value="{{ form.instance.preventa|default:"0.00" }}" readonly>
   </div>
 </div>
 
@@ -39,14 +39,14 @@
   <div class="col-md-6">
     <label class="form-label">Precio Final (con IVA):</label>
     {% if form.instance.modo_calculo == 'C' %}
-      <span id="prefinal-display" class="form-control bg-light">{{ form.instance.prefinal|default:"0.00" }}</span>
-      {{ form.prefinal|add_class:"form-control"|attr:"id:prefinal-input"|attr:"step:0.01"|attr:"style:display:none;" }}
+      <input type="text" id="prefinal-display" class="form-control input-cianova-readonly w-100" value="{{ form.instance.prefinal|default:"0.00" }}" readonly>
+      {{ form.prefinal|add_class:"form-control input-cianova w-100"|attr:"id:prefinal-input"|attr:"step:0.01"|attr:"style:display:none;" }}
     {% else %}
-      {{ form.prefinal|add_class:"form-control"|attr:"id:prefinal-input"|attr:"step:0.01" }}
+      {{ form.prefinal|add_class:"form-control input-cianova w-100"|attr:"id:prefinal-input"|attr:"step:0.01" }}
     {% endif %}
   </div>
   <div class="col-md-6">
     <label class="form-label">Fecha última modificación:</label>
-    <span id="fecultmod" class="form-control bg-light">{{ form.instance.fecultmod|date:"d/m/Y" }}</span>
+    <input type="text" id="fecultmod" class="form-control input-cianova-readonly w-100" value="{{ form.instance.fecultmod|date:"d/m/Y" }}" readonly>
   </div>
 </div>
