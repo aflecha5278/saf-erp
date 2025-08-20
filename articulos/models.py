@@ -144,4 +144,6 @@ class ParametroSistema(models.Model):
     def __str__(self):
         return f"{self.descripcion} ({self.valor})"
 
-
+    def save(self, *args, **kwargs):
+        self.clave = self.clave.strip().upper()
+        super().save(*args, **kwargs)

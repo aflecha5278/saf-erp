@@ -248,3 +248,15 @@ form textarea:focus {
     }
 }
 
+.readonly-codart {
+    background-color: #f0f0f0; /* gris claro, sensación de deshabilitado */
+    color: #555;               /* texto más tenue */
+    font-weight: bold;
+    border: 1px solid #ccc;
+    width: 100%;               /* ocupa todo el ancho disponible */
+    padding: 6px 12px;
+    pointer-events: none;      /* evita interacción sin usar disabled */
+}
+
+
+

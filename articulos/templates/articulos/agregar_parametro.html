@@ -3,8 +3,24 @@
 <div class="container mt-4">
   <h2>{% if form.instance.pk %}Editar{% else %}Agregar{% endif %} Parámetro</h2>
   <form method="post">
+    <input type="hidden" name="debug" value="1">
     {% csrf_token %}
-    {{ form.as_p }}
+	{% if form.errors %}
+	  <div class="alert alert-danger">
+		<strong>⚠️ Error al guardar:</strong>
+		<ul class="mb-0">
+		  {% for field in form %}
+			{% for error in field.errors %}
+			  <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+			{% endfor %}
+		  {% endfor %}
+		  {% for error in form.non_field_errors %}
+			<li>{{ error }}</li>
+		  {% endfor %}
+		</ul>
+	  </div>
+	{% endif %}
+	{{ form.as_p }}
     <div class="d-flex gap-2 mt-3">
       <button type="submit" class="btn btn-sm btn-institucional d-inline-flex align-items-center gap-1">
         <i class="bi bi-save"></i> Guardar

@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 
 {% block title %}
-{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – SAF ERP
+{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – Cianova 360
 {% endblock %}
 
 {% block content %}
@@ -12,23 +12,32 @@
       {% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}
     </div>
     <div class="card-body">
-      {% if form.errors %}
-        <div class="alert alert-danger">
-          {% for field, errors in form.errors.items %}
-            {% for error in errors %}
-              <strong>{{ field|title }}:</strong> {{ error }}<br>
-            {% endfor %}
-          {% endfor %}
-        </div>
-      {% endif %}
-
       <form method="post" id="articuloForm">
         {% csrf_token %}
-
+		{% if form.errors %}
+		  <div class="alert alert-danger border-start border-4 border-danger-subtle p-3">
+			<strong>⚠️ Error al guardar el artículo:</strong>
+			<ul class="mb-0">
+			  {% for field in form %}
+				{% for error in field.errors %}
+				  <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+				{% endfor %}
+			  {% endfor %}
+			  {% for error in form.non_field_errors %}
+				<li>{{ error }}</li>
+			  {% endfor %}
+			</ul>
+		  </div>
+		{% endif %}
         <div class="row mb-3">
           <div class="col-md-6">
-            {{ form.codart.label_tag }} {{ form.codart }}
-          </div>
+		    {{ form.codart.label_tag }} 
+			{% if codart_auto %}
+				{% render_field form.codart readonly="readonly" class="form-control readonly-codart" %}
+			{% else %}
+				{% render_field form.codart class="form-control" %}
+			{% endif %}
+		  </div>
           <div class="col-md-6">
             {{ form.deposito.label_tag }} {{ form.deposito }}
           </div>

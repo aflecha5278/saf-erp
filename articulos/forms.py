@@ -1,6 +1,6 @@
 from django import forms
-from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema  
 from decimal import Decimal, ROUND_HALF_UP
+from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema  
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -26,7 +26,6 @@ class LoginForm(forms.Form):
         return username    
 
 class UpperCaseMixin:
-    """Mixin para convertir automáticamente todos los campos de texto a mayúsculas"""
     def clean(self):
         cleaned_data = super().clean()
         for field_name, value in cleaned_data.items():
@@ -53,7 +52,7 @@ class RubroForm(UpperCaseMixin, forms.ModelForm):
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
     deposito = forms.ChoiceField(
         label="Depósito",
-        choices=[('INTERNO', 'INTERNO')],  # luego se cargará desde el modelo Deposito
+        choices=[('INTERNO', 'INTERNO')],
         initial='INTERNO',
         required=False,
         widget=forms.Select(attrs={
@@ -65,42 +64,53 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         label='Marca nueva (opcional)',
         max_length=14,
         required=False,
-        widget=forms.TextInput(attrs={'style': 'width: 200px ; text-transform: uppercase;',
-        'class': 'form-control'})
+        widget=forms.TextInput(attrs={
+            'style': 'width: 200px ; text-transform: uppercase;',
+            'class': 'form-control'
+        })
     )
-    
     rubro_nueva = forms.CharField(
         label='Rubro nuevo (opcional)',
         max_length=14,
         required=False,
-        widget=forms.TextInput(attrs={'style': 'width: 200px ; text-transform: uppercase;',
-        'class': 'form-control'})    
+        widget=forms.TextInput(attrs={
+            'style': 'width: 200px ; text-transform: uppercase;',
+            'class': 'form-control'
+        })    
     )
     subrubro_nueva = forms.CharField(
         label='Sub-rubro nuevo (opcional)',
         max_length=14,
         required=False,
-        widget=forms.TextInput(attrs={'style': 'width: 200px ; text-transform: uppercase;',
-        'class': 'form-control'})  
+        widget=forms.TextInput(attrs={
+            'style': 'width: 200px ; text-transform: uppercase;',
+            'class': 'form-control'
+        })  
     )
+
+    def __init__(self, *args, codart_auto_activo=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        if codart_auto_activo:
+            self.fields['codart'].widget.attrs.update({
+                'readonly': True,
+                'class': 'form-control readonly-codart',
+                'title': 'Generado automáticamente por el Cianova 360'
+            })
+
+        if 'rubro' in self.data and self.data['rubro']:
+            self.fields['subrubro'].queryset = Subrubro.objects.filter(rubro_id=self.data['rubro'])
+        elif self.instance.pk and self.instance.rubro_id:
+            self.fields['subrubro'].queryset = Subrubro.objects.filter(rubro_id=self.instance.rubro_id)
+        else:
+            self.fields['subrubro'].queryset = Subrubro.objects.none()
 
     class Meta:
         model = Articulo
         fields = ['codart', 'descrip', 'marca', 'rubro', 'subrubro', 'subrubro_nueva', 'precosto', 'margen', 'prefinal', 'modo_calculo', 'ncodalic']
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            if 'rubro' in self.data and self.data['rubro']:
-                self.fields['subrubro'].queryset = Subrubro.objects.filter(rubro_id=self.data['rubro'])
-            elif self.instance.pk and self.instance.rubro_id:
-                self.fields['subrubro'].queryset = Subrubro.objects.filter(rubro_id=self.instance.rubro_id)
-            else:
-                self.fields['subrubro'].queryset = Subrubro.objects.none()
-
         widgets = {
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
-                'style': 'width:150px; text-transform: uppercase;',
+                'style': 'width:200px; text-transform: uppercase;',
                 'class': 'form-control input-codart'
             }),
             'descrip': forms.TextInput(attrs={
@@ -111,15 +121,14 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             'precosto': forms.NumberInput(attrs={
                 'step': '0.01',
                 'min': '0',
-                'style': 'width:120px;',
+                'style': 'width:150px;',
                 'class': 'form-control input-importe'
             }),
             'margen': forms.NumberInput(attrs={
                 'step': '0.01',
-                'style': 'width:120px;',
+                'style': 'width:150px;',
                 'class': 'form-control input-importe'
             }),
-            'preventa': forms.TextInput(attrs={'readonly': 'readonly'}),
             'ncodalic': forms.Select(attrs={
                 'style': 'width: 150px;',
                 'class': 'form-control'
@@ -133,7 +142,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
                 'min': '0',
                 'style': 'width:150px;',
                 'class': 'form-control',
-                'pattern': '[0-9]+(\.[0-9]{0,2})?'  # Limitar a 2 decimales en el cliente
+                'pattern': '[0-9]+(\.[0-9]{0,2})?'
             })
         }
 
@@ -159,10 +168,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             raise forms.ValidationError("Ingrese un número válido.")
         return prefinal
 
-    
     def save(self, commit=True):
-        
-        # Normalizamos a mayúsculas los campos "nuevos"
         marca_nueva = self.cleaned_data.get('marca_nueva', '').strip().upper()
         if marca_nueva:
             marca, _ = Marca.objects.get_or_create(nombre=marca_nueva)
@@ -173,7 +179,6 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             rubro, _ = Rubro.objects.get_or_create(nombre=rubro_nueva)
             self.instance.rubro = rubro
 
-        # Auto-crear sub-rubro si se escribió
         subrubro_nueva = self.cleaned_data.get('subrubro_nueva', '').strip().upper()
         if subrubro_nueva and self.cleaned_data.get('rubro'):
             subrubro, _ = Subrubro.objects.get_or_create(
@@ -193,7 +198,7 @@ class ParametroSistemaForm(forms.ModelForm):
             'clave': forms.TextInput(attrs={'style': 'text-transform:uppercase;'}),
             'descripcion': forms.TextInput(attrs={
                 'style': 'text-transform:uppercase;',
-                'class': 'form-control w-100',  # Bootstrap ancho completo
+                'class': 'form-control w-100',
                 'placeholder': 'Ingrese descripción del parámetro'
             }),
         }

@@ -1,39 +1,37 @@
 {% extends "articulos/base.html" %}
+{% load widget_tweaks %}
 {% block title %}Iniciar Sesión{% endblock %}
 {% block content %}
-<style>
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    max-width: 300px;
-    padding: 8px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    display: block;
-    margin-bottom: 1rem;
-  }
-</style>
-<div class="login-wrapper">
-  <h2>Iniciar Sesión</h2>
+
+<div class="login-wrapper card shadow-sm border-0 mx-auto mt-5 p-4" style="max-width: 400px;">
+  <h2 class="text-center mb-4">Iniciar Sesión</h2>
 
   {% if error %}
-    <p class="error">{{ error }}</p>
+    <div class="alert alert-danger text-center">{{ error }}</div>
   {% endif %}
 
   <form method="post">
     {% csrf_token %}
 
-    {{ form.username.label_tag }}
-    {{ form.username }}
+    <div class="mb-3">
+      {{ form.username.label_tag }}
+      {{ form.username|add_class:"form-control text-uppercase" }}
+    </div>
 
-    {{ form.password.label_tag }}
-    {{ form.password }}
+    <div class="mb-3">
+      {{ form.password.label_tag }}
+      {{ form.password|add_class:"form-control" }}
+    </div>
 
-    <button type="submit" style="width: 200px;">Ingresar</button>
+    <div class="d-grid mt-4">
+      <button type="submit" class="btn btn-institucional d-inline-flex align-items-center justify-content-center gap-2">
+        <i class="bi bi-box-arrow-in-right"></i> Ingresar
+      </button>
+    </div>
   </form>
 </div>
+
 <script>
-  // Fuerza mayúsculas mientras se escribe
   document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.querySelector('input[name="username"]');
     if (userInput) {
@@ -44,7 +42,3 @@
   });
 </script>
 {% endblock %}
-
-
-
-

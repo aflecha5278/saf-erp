@@ -40,36 +40,46 @@ def lista_articulos(request):
     return render(request, 'articulos/lista.html', {'articulos': articulos})
 
 def agregar_articulo(request):
+    
+    codart_auto = ParametroSistema.objects.filter(clave='CODART_AUTO').first()
+    codart_auto_activo = ParametroSistema.objects.filter(clave='CODART_AUTO', valor='S').exists()
+    codigo_sugerido = obtener_codigo_sugerido() if codart_auto_activo else ''
+    
     if request.method == 'POST':
-        form = ArticuloForm(request.POST)
+        form = ArticuloForm(request.POST, codart_auto_activo=codart_auto_activo)
         if form.is_valid():
             print("✅ Formulario válido → guardando...")
-            # Crear instancia sin guardar aún
             articulo = Articulo()
-            # Asignar campos directamente desde cleaned_data con redondeo
-            articulo.codart = form.cleaned_data['codart']
+            if codart_auto_activo:
+                articulo.codart = codigo_sugerido
+            else:
+                articulo.codart = form.cleaned_data['codart']
             articulo.descrip = form.cleaned_data['descrip']
             articulo.precosto = round(float(form.cleaned_data['precosto']), 2)
             articulo.margen = round(float(form.cleaned_data['margen']), 2)
             articulo.prefinal = round(float(form.cleaned_data['prefinal'] or 0), 2) if form.cleaned_data['prefinal'] else None
             articulo.modo_calculo = form.cleaned_data['modo_calculo']
             articulo.ncodalic = form.cleaned_data['ncodalic']
-            # Asignar IDs de ForeignKey
             if form.cleaned_data['marca']:
                 articulo.marca_id = form.cleaned_data['marca'].id
             if form.cleaned_data['rubro']:
                 articulo.rubro_id = form.cleaned_data['rubro'].id
             if form.cleaned_data['subrubro']:
                 articulo.subrubro_id = form.cleaned_data['subrubro'].id
-            # Guardar el articulo
             articulo.save()
             messages.success(request, 'Artículo guardado.')
             return redirect('lista_articulos')
         else:
             print("❌ Errores:", form.errors)  # <-- Muestra errores
     else:
-        form = ArticuloForm()
-    return render(request, 'articulos/formulario.html', {'form': form})    
+        form = ArticuloForm(initial={'codart': codigo_sugerido})
+    
+    contexto = {
+        'form': form,
+        'codart_auto': codart_auto_activo
+    }
+    return render(request, 'articulos/formulario.html', contexto)        
+
 
 def modificar_articulo(request, pk):
     if not request.session.get('usuario_autenticado'):
@@ -102,17 +112,25 @@ def eliminar_articulo(request, pk):
     articulo = get_object_or_404(Articulo, pk=pk)
     articulo.delete()
     return redirect('lista_articulos')
-
+    
 def agregar_parametro(request):
+    print("📥 POST recibido:", request.POST)
     if request.method == 'POST':
         form = ParametroSistemaForm(request.POST)
+        print("🧪 Probando validación del formulario...")
         if form.is_valid():
+            print("✅ Guardando parámetro:", form.cleaned_data)
             form.save()
+            print("💾 Parámetro guardado correctamente.")
+            messages.success(request, 'Parámetro guardado correctamente.')
             return redirect('listar_parametros')
+        else:
+            print("❌ Errores en el formulario:", form.errors)
     else:
         form = ParametroSistemaForm()
-    return render(request, 'articulos/agregar_parametro.html', {'form': form})
 
+    return render(request, 'articulos/agregar_parametro.html', {'form': form})
+    
 def editar_parametro(request, pk):
     parametro = get_object_or_404(ParametroSistema, pk=pk)
     if request.method == 'POST':
@@ -130,10 +148,37 @@ def eliminar_parametro(request, pk):
     parametro.delete()
     return redirect('listar_parametros')
     
-    
-def listar_parametros(request):
-    parametros = ParametroSistema.objects.all()
-    return render(request, 'articulos/listar_parametros.html', {'parametros': parametros})
-
 def home_view(request):
     return render(request, 'articulos/home.html')
+
+def listar_parametros(request):
+    query = request.GET.get('buscar_parametro', '').strip().upper()
+
+    if query:
+        filtros = (
+            Q(clave__icontains=query) |
+            Q(descripcion__icontains=query) |
+            Q(valor__icontains=query)
+        )
+        parametros = ParametroSistema.objects.filter(filtros)
+    else:
+        parametros = ParametroSistema.objects.all()
+
+    contexto = {
+        'parametros': parametros,
+        'query': query
+    }
+
+    return render(request, 'articulos/listar_parametros.html', contexto)
+
+from articulos.models import ParametroSistema, Articulo
+
+
+def obtener_codigo_sugerido():
+    ultimo = Articulo.objects.order_by('-codart').first()
+    if ultimo and ultimo.codart.isdigit():
+        siguiente = str(int(ultimo.codart) + 1).zfill(14)
+    else:
+        siguiente = "00000000000001"
+    return siguiente
+
