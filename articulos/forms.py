@@ -1,6 +1,7 @@
 from django import forms
 from decimal import Decimal, ROUND_HALF_UP
-from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema  
+from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema 
+from .choices import UNIDADES  
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -50,6 +51,7 @@ class RubroForm(UpperCaseMixin, forms.ModelForm):
         }
 
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
+    
     deposito = forms.ChoiceField(
         label="Depósito",
         choices=[('INTERNO', 'INTERNO')],
@@ -87,7 +89,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             'class': 'form-control'
         })  
     )
-
+    
     def __init__(self, *args, codart_auto_activo=False, **kwargs):
         super().__init__(*args, **kwargs)
         if codart_auto_activo:
@@ -104,9 +106,21 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         else:
             self.fields['subrubro'].queryset = Subrubro.objects.none()
 
+    unimed = forms.ChoiceField(
+        label="Unidad de medida",
+        choices=UNIDADES,
+        initial='UN',
+        required=False,
+        widget=forms.Select(attrs={
+            'style': 'width: 50px;',
+            'class': 'form-control'
+        })
+    )
+    
     class Meta:
         model = Articulo
-        fields = ['codart', 'descrip', 'marca', 'rubro', 'subrubro', 'subrubro_nueva', 'precosto', 'margen', 'prefinal', 'modo_calculo', 'ncodalic']
+        fields = ['codart', 'descrip', 'marca', 'rubro', 'subrubro', 'subrubro_nueva',
+          'precosto', 'margen', 'prefinal', 'modo_calculo', 'ncodalic', 'cantidad']
         widgets = {
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
@@ -143,7 +157,14 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
                 'style': 'width:150px;',
                 'class': 'form-control',
                 'pattern': '[0-9]+(\.[0-9]{0,2})?'
-            })
+            }),
+            'cantidad': forms.NumberInput(attrs={
+                'step': '0.0001',
+                'min': '0',
+                'style': 'width:150px;',
+                'class': 'form-control input-cantidad',
+                'pattern': r'^\d{1,9}(\.\d{1,4})?$',
+            }),
         }
 
     def clean_precosto(self):

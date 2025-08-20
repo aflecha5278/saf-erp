@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
+from .choices import UNIDADES
 
 class UpperCaseMixin:
     def save(self, *args, **kwargs):
@@ -72,6 +73,8 @@ class Articulo(UpperCaseMixin, models.Model):
         choices=[('C', 'Costo → Final'), ('F', 'Final → Costo')],
         default='C'
     )
+    cantidad = models.DecimalField(max_digits=14, decimal_places=4, default=0)
+    unimed = models.CharField(max_length=2, choices=UNIDADES, default='UN')
 
     def save(self, *args, **kwargs):
         self.codart = self.codart.upper().zfill(14)

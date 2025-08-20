@@ -2,25 +2,25 @@
 <div class="row mb-3">
   <div class="col-md-6">
     {{ form.modo_calculo.label_tag }}
-    {{ form.modo_calculo|add_class:"form-control input-cianova w-100" }}
+    {{ form.modo_calculo|add_class:"form-control input-cianova w-100"|attr:"id:id_modo_calculo" }}
   </div>
 </div>
 
 <div class="row mb-3">
   <div class="col-md-6">
     {{ form.precosto.label_tag }}
-    {{ form.precosto|add_class:"form-control input-cianova w-100" }}
+    {{ form.precosto|add_class:"form-control input-cianova w-100"|attr:"id:id_precosto" }}
   </div>
   <div class="col-md-6">
     {{ form.margen.label_tag }}
-    {{ form.margen|add_class:"form-control input-cianova w-100" }}
+    {{ form.margen|add_class:"form-control input-cianova w-100"|attr:"id:id_margen" }}
   </div>
 </div>
 
 <div class="row mb-3">
   <div class="col-md-6">
     {{ form.ncodalic.label_tag }}
-    {{ form.ncodalic|add_class:"form-control input-cianova w-100" }}
+    {{ form.ncodalic|add_class:"form-control input-cianova w-100"|attr:"id:id_ncodalic" }}
   </div>
 </div>
 
@@ -39,10 +39,11 @@
   <div class="col-md-6">
     <label class="form-label">Precio Final (con IVA):</label>
     {% if form.instance.modo_calculo == 'C' %}
-      <input type="text" id="prefinal-display" class="form-control input-cianova-readonly w-100" value="{{ form.instance.prefinal|default:"0.00" }}" readonly>
+      <span id="prefinal-display" class="form-control input-cianova-readonly w-100">{{ form.instance.prefinal|default:"0.00" }}</span>
       {{ form.prefinal|add_class:"form-control input-cianova w-100"|attr:"id:prefinal-input"|attr:"step:0.01"|attr:"style:display:none;" }}
     {% else %}
       {{ form.prefinal|add_class:"form-control input-cianova w-100"|attr:"id:prefinal-input"|attr:"step:0.01" }}
+      <span id="prefinal-display" class="form-control input-cianova-readonly w-100" style="display:none;"></span>
     {% endif %}
   </div>
   <div class="col-md-6">

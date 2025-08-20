@@ -1,6 +1,4 @@
 Iniciando proceso... 
-C:\_Tmp\Python\saf\articulos\forms.py:145: SyntaxWarning: invalid escape sequence '\.'
-  'pattern': '[0-9]+(\.[0-9]{0,2})?'
 Traceback (most recent call last):
   File "C:\_Tmp\Python\saf\manage.py", line 22, in <module>
     main()
@@ -59,12 +57,9 @@ Traceback (most recent call last):
     from articulos import views
   File "C:\_Tmp\Python\saf\articulos\views.py", line 4, in <module>
     from .forms import ArticuloForm, LoginForm, ParametroSistemaForm
-  File "C:\_Tmp\Python\saf\articulos\forms.py", line 166
-    prefinal = Decimal(prefinal).quantize(Decimal
-                                         ^
-SyntaxError: '(' was never closed
-C:\_Tmp\Python\saf\articulos\forms.py:145: SyntaxWarning: invalid escape sequence '\.'
-  'pattern': '[0-9]+(\.[0-9]{0,2})?'
+  File "C:\_Tmp\Python\saf\articulos\forms.py", line 4, in <module>
+    from choices import UNIDADES
+ModuleNotFoundError: No module named 'choices'
 Traceback (most recent call last):
   File "C:\_Tmp\Python\saf\manage.py", line 22, in <module>
     main()
@@ -127,15 +122,10 @@ Traceback (most recent call last):
     from articulos import views
   File "C:\_Tmp\Python\saf\articulos\views.py", line 4, in <module>
     from .forms import ArticuloForm, LoginForm, ParametroSistemaForm
-  File "C:\_Tmp\Python\saf\articulos\forms.py", line 166
-    prefinal = Decimal(prefinal).quantize(Decimal
-                                         ^
-SyntaxError: '(' was never closed
+  File "C:\_Tmp\Python\saf\articulos\forms.py", line 4, in <module>
+    from choices import UNIDADES
+ModuleNotFoundError: No module named 'choices'
 Watching for file changes with StatReloader
-C:\_Tmp\Python\saf\articulos\forms.py:145: SyntaxWarning: invalid escape sequence '\.'
-  'pattern': '[0-9]+(\.[0-9]{0,2})?'
-C:\_Tmp\Python\saf\articulos\forms.py:145: SyntaxWarning: invalid escape sequence '\.'
-  'pattern': '[0-9]+(\.[0-9]{0,2})?'
 Exception in thread django-main-thread:
 Traceback (most recent call last):
   File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1043, in _bootstrap_inner
@@ -189,95 +179,7 @@ Traceback (most recent call last):
     from articulos import views
   File "C:\_Tmp\Python\saf\articulos\views.py", line 4, in <module>
     from .forms import ArticuloForm, LoginForm, ParametroSistemaForm
-  File "C:\_Tmp\Python\saf\articulos\forms.py", line 166
-    prefinal = Decimal(prefinal).quantize(Decimal
-                                         ^
-SyntaxError: '(' was never closed
-C:\_Tmp\Python\saf\articulos\forms.py changed, reloading.
-Performing system checks...
-
-Watching for file changes with StatReloader
-C:\_Tmp\Python\saf\articulos\forms.py:145: SyntaxWarning: invalid escape sequence '\.'
-  'pattern': '[0-9]+(\.[0-9]{0,2})?'
-C:\_Tmp\Python\saf\articulos\forms.py:145: SyntaxWarning: invalid escape sequence '\.'
-  'pattern': '[0-9]+(\.[0-9]{0,2})?'
-Exception in thread django-main-thread:
-Traceback (most recent call last):
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1043, in _bootstrap_inner
-    self.run()
-    ~~~~~~~~^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 994, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\autoreload.py", line 64, in wrapper
-    fn(*args, **kwargs)
-    ~~^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\commands\runserver.py", line 134, in inner_run
-    self.check(display_num_errors=True)
-    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\base.py", line 486, in check
-    all_issues = checks.run_checks(
-        app_configs=app_configs,
-    ...<2 lines>...
-        databases=databases,
-    )
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\checks\registry.py", line 88, in run_checks
-    new_errors = check(app_configs=app_configs, databases=databases)
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\checks\urls.py", line 16, in check_url_config
-    return check_resolver(resolver)
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\checks\urls.py", line 26, in check_resolver
-    return check_method()
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 531, in check
-    for pattern in self.url_patterns:
-                   ^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\functional.py", line 47, in __get__
-    res = instance.__dict__[self.name] = self.func(instance)
-                                         ~~~~~~~~~^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 718, in url_patterns
-    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
-                       ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\functional.py", line 47, in __get__
-    res = instance.__dict__[self.name] = self.func(instance)
-                                         ~~~~~~~~~^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 711, in urlconf_module
-    return import_module(self.urlconf_name)
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
-  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  File "C:\_Tmp\Python\saf\saf\urls.py", line 19, in <module>
-    from articulos import views
-  File "C:\_Tmp\Python\saf\articulos\views.py", line 4, in <module>
-    from .forms import ArticuloForm, LoginForm, ParametroSistemaForm
-  File "C:\_Tmp\Python\saf\articulos\forms.py", line 166
-    prefinal = Decimal(prefinal).quantize(Decimal)
-                                                  ^
-SyntaxError: expected 'except' or 'finally' block
-C:\_Tmp\Python\saf\articulos\forms.py changed, reloading.
-Performing system checks...
-
-Watching for file changes with StatReloader
-C:\_Tmp\Python\saf\articulos\forms.py:145: SyntaxWarning: invalid escape sequence '\.'
-  'pattern': '[0-9]+(\.[0-9]{0,2})?'
-[19/Aug/2025 23:54:30] "GET /articulos/agregar/ HTTP/1.1" 200 11880
-[19/Aug/2025 23:54:30] "GET /static/articulos/css/styles.css HTTP/1.1" 304 0
-Internal Server Error: /articulos/agregar/
-Traceback (most recent call last):
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
-    response = get_response(request)
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "C:\_Tmp\Python\saf\articulos\views.py", line 73, in agregar_articulo
-    print("\u274c Errores:", form.errors)  # <-- Muestra errores
-    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
-    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
-           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>
-[19/Aug/2025 23:54:56] "POST /articulos/agregar/ HTTP/1.1" 500 71398
+  File "C:\_Tmp\Python\saf\articulos\forms.py", line 4, in <module>
+    from choices import UNIDADES
+ModuleNotFoundError: No module named 'choices'
 ^C

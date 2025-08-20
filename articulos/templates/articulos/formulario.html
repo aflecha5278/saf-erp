@@ -1,10 +1,8 @@
-{% extends "articulos/base.html" %}
+	{% extends "articulos/base.html" %}
 {% load widget_tweaks %}
-
 {% block title %}
 {% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – Cianova 360
 {% endblock %}
-
 {% block content %}
 <div class="container my-4">
   <div class="card shadow">
@@ -92,8 +90,19 @@
             <p>Aquí van los campos de la página 2 (otros datos del artículo)</p>
           </div>
         </div>
-
-        <!-- ✅ BOTONES -->
+		
+		<div class="row mb-3">
+		  <div class="col-md-6">
+			{{ form.cantidad.label_tag }}
+			{{ form.cantidad|add_class:"form-control input-cianova w-100"|attr:"step:0.0001" }}
+		  </div>
+		  <div class="col-md-6">
+			{{ form.unimed.label_tag }}
+			{{ form.unimed|add_class:"form-control input-cianova w-100" }}
+		  </div>
+		</div>
+		
+		<!-- ✅ BOTONES -->
         <div class="d-flex justify-content-end gap-2 mt-4">
           <button type="submit" class="btn-aceptar">
             <i class="bi bi-check-circle"></i> Guardar
@@ -106,7 +115,6 @@
     </div>
   </div>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modoCalculo   = document.querySelector('#id_modo_calculo');
@@ -129,15 +137,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const alicMatch = selectedOption ? selectedOption.textContent.match(/\((\d+\.?\d*)%\)/) : null;
         const alic = alicMatch ? parseFloat(alicMatch[1]) || 0 : 0;
 
-        const modo = modoCalculo?.value || 'C';
+        const modo = ['C', 'F'].includes(modoCalculo?.value) ? modoCalculo.value : 'C';
 
-        // Costo con IVA
+		// Costo con IVA
         const costoiva = precosto * (1 + alic / 100);
-        if (costoivaSpan) costoivaSpan.textContent = (Math.round(costoiva * 100) / 100).toFixed(2);
+        if (costoivaSpan) costoivaSpan.value = (Math.round(costoiva * 100) / 100).toFixed(2);
 
         // Precio venta sin IVA
         const preventa = precosto * (1 + margen / 100);
-        if (preventaSpan) preventaSpan.textContent = (Math.round(preventa * 100) / 100).toFixed(2);
+        if (preventaSpan) preventaSpan.value = (Math.round(preventa * 100) / 100).toFixed(2);
 
         if (modo === 'C') {
             // Costo → Final
@@ -200,5 +208,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 {% endblock %}
