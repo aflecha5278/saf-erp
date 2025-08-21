@@ -75,6 +75,9 @@ class Articulo(UpperCaseMixin, models.Model):
     )
     cantidad = models.DecimalField(max_digits=14, decimal_places=4, default=0)
     unimed = models.CharField(max_length=2, choices=UNIDADES, default='UN')
+    codprovee = models.CharField("Código de proveedor", max_length=14, blank=True, null=True)
+    bajostock = models.DecimalField("Stock mínimo para alerta", max_digits=11, decimal_places=4, default=0)
+
 
     def save(self, *args, **kwargs):
         self.codart = self.codart.upper().zfill(14)
