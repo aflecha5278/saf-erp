@@ -101,19 +101,23 @@
 		  </div>
 		  <div class="col-md-3">
 			{{ form.unimed.label_tag }}
-			{{ form.unimed|add_class:"form-control input-cianova w-100" }}
+			{{ form.unimed|add_class:"form-select input-cianova w-100" }}
 		  </div>
+		  <div class="col-md-3">
+			{{ form.codprovee.label_tag }}
+			{% render_field form.codprovee class="form-select input-cianova w-100" %}
+		  </div>
+		  <div class="col-md-3">
+			{{ form.bajostock.label_tag }}	
+			{{ form.bajostock|add_class:"form-control input-cianova w-100"|attr:"step:0.0001" }}
+		  </div>			
 		</div>
 		
-		<div class="row mt-3">
+		<div class="row mb-3">
 			<div class="col-md-3">
-				{{ form.codprovee.label_tag }}
-				{% render_field form.codprovee class="form-select input-cianova w-100" %}
+			{{ form.ubicacion.label_tag }}
+			{% render_field form.ubicacion class="form-select input-cianova w-100" %}
 			</div>
-			<div class="col-md-3">
-				{{ form.bajostock.label_tag }}	
-				{{ form.bajostock|add_class:"form-control input-cianova w-100"|attr:"step:0.0001" }}
-			</div>			
 		</div>
 
 		<!-- ✅ BOTONES -->

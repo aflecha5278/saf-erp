@@ -9,8 +9,15 @@
   {% if error %}
     <div class="alert alert-danger text-center">{{ error }}</div>
   {% endif %}
+  
+	<!-- Modo Beta -->
+	{% if mensaje_beta %}
+		<div class="alert alert-warning" role="alert">
+		{{ mensaje_beta }}
+		</div>
+	{% endif %}
 
-  <form method="post">
+	<form method="post">
     {% csrf_token %}
 
     <div class="mb-3">

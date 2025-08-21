@@ -35,13 +35,22 @@
     <tr>
       <th style="width: 120px;">Código</th>
       <th style="width: 35%;">Descripción</th>
-      <th class="text-end">Precio Costo</th>
+	  <th style="text-end">Depósito</th>
+	  <th style="text-end">Ubicación</th>
+	  <th class="text-end">Marca</th>
+	  <th class="text-end">Precio Costo</th>
       <th class="text-end">Margen</th>
       <th class="text-end">Precio Venta</th>
       <th class="text-end">% Alícuota</th>
       <th class="text-end">Costo con IVA</th>
       <th class="text-end">Precio Final</th>
-      <th style="width: 150px;">Acciones</th>
+	  <th class="text-end">Rubro</th>
+	  <th class="text-end">Subrubro</th>
+	  <th class="text-end">Cantidad</th>
+	  <th class="text-end">U.medida</th>
+	  <th class="text-end">Proveedor</th>
+	  <th class="text-end">Stock mínimo</th>
+	  <th style="width: 150px;">Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -49,18 +58,27 @@
     <tr>
       <td>{{ articulo.codart }}</td>
       <td>{{ articulo.descrip }}</td>
-      <td class="text-end">{{ articulo.precosto|floatformat:2 }}</td>
+	  <td>{{ articulo.deposito }}</td>
+	  <td>{{ articulo.ubicacion }}</td>
+	  <td>{{ articulo.marca }}</td>
+	  <td class="text-end">{{ articulo.precosto|floatformat:2 }}</td>
       <td class="text-end">{{ articulo.margen|floatformat:2 }}%</td>
       <td class="text-end">{{ articulo.preventa|floatformat:2 }}</td>
       <td class="text-end">{{ articulo.alic|floatformat:2 }}</td>
       <td class="text-end">{{ articulo.costoiva|floatformat:2 }}</td>
-      <td class="text-end">
+	  <td class="text-end">
         {% if articulo.prefinal %}
           {{ articulo.prefinal|floatformat:2 }}
         {% else %}
           -
         {% endif %}
-    </td>
+	  <td>{{ articulo.rubro }}</td>
+	  <td>{{ articulo.subrubro }}</td>
+	  <td class="text-end">{{ articulo.cantidad|floatformat:0 }}</td>
+	  <td>{{ articulo.unimedi }}</td>
+	  <td>{{ articulo.codprovee }}</td>
+	  <td class="text-end">{{ articulo.bajostock|floatformat:0 }}</td>
+	</td>
 	<td>
 	  <div class="btn-group" role="group">
 		<a href="{% url 'modificar_articulo' articulo.id %}" class="btn btn-sm btn-institucional">

@@ -6,10 +6,13 @@ from django.contrib import messages
 
 def login_view(request):
     error = None
+    mensaje_beta = "🔒 Modo Beta: Solo los administradores pueden ingresar."
+
     if request.method == 'POST':
         username = request.POST.get('username', '').strip().upper()
         password = request.POST.get('password', '').strip()
-        
+        form = LoginForm(request.POST)
+
         if username == 'ADMIN' and password == '5278':
             request.session['usuario_autenticado'] = True  # Marcamos sesión activa
             return redirect('menu_principal')
@@ -17,7 +20,12 @@ def login_view(request):
             error = 'Usuario o contraseña incorrectos.'
     else:
         form = LoginForm()
-    return render(request, 'articulos/login.html', {'form': form})
+
+    return render(request, 'articulos/login.html', {
+        'form': form,
+        'error': error,
+        'mensaje_beta': mensaje_beta
+    })
 
 def logout_view(request):
     request.session.flush()  # Limpiamos la sesión
@@ -66,6 +74,11 @@ def agregar_articulo(request):
                 articulo.rubro_id = form.cleaned_data['rubro'].id
             if form.cleaned_data['subrubro']:
                 articulo.subrubro_id = form.cleaned_data['subrubro'].id
+            articulo.cantidad = form.cleaned_data['cantidad']
+            articulo.unimed = form.cleaned_data['unimed']  
+            articulo.codprovee = form.cleaned_data['codprovee']
+            articulo.bajostock = form.cleaned_data['bajostock']
+            articulo.ubicacion = form.cleaned_data['ubicacion']
             articulo.save()
             messages.success(request, 'Artículo guardado.')
             return redirect('lista_articulos')
