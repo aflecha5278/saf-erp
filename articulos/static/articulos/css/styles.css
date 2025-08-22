@@ -283,4 +283,25 @@ form textarea:focus {
   pointer-events: none;
 }
 
+.form-control-obs {
+  background-color: #f0fafa;
+  border: 1px solid #aee;
+  border-radius: 4px;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 8px;
+  resize: vertical;
+}
+.form-control-obs:focus {
+  border-color: rgb(175,238,238);
+  outline: none;
+}
+
+input[name="ubicacion"],
+input[name="codprovee"] {
+  text-transform: uppercase;
+}
+
+.input-mayuscula {
+  text-transform: uppercase;
+}
 

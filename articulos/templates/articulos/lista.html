@@ -50,53 +50,58 @@
 	  <th class="text-end">U.medida</th>
 	  <th class="text-end">Proveedor</th>
 	  <th class="text-end">Stock mínimo</th>
+	  <th class="text-end">Observaciones</th>
 	  <th style="width: 150px;">Acciones</th>
     </tr>
   </thead>
   <tbody>
-    {% for articulo in articulos %}
-    <tr>
-      <td>{{ articulo.codart }}</td>
-      <td>{{ articulo.descrip }}</td>
-	  <td>{{ articulo.deposito }}</td>
-	  <td>{{ articulo.ubicacion }}</td>
-	  <td>{{ articulo.marca }}</td>
-	  <td class="text-end">{{ articulo.precosto|floatformat:2 }}</td>
-      <td class="text-end">{{ articulo.margen|floatformat:2 }}%</td>
-      <td class="text-end">{{ articulo.preventa|floatformat:2 }}</td>
-      <td class="text-end">{{ articulo.alic|floatformat:2 }}</td>
-      <td class="text-end">{{ articulo.costoiva|floatformat:2 }}</td>
-	  <td class="text-end">
-        {% if articulo.prefinal %}
-          {{ articulo.prefinal|floatformat:2 }}
-        {% else %}
-          -
-        {% endif %}
-	  <td>{{ articulo.rubro }}</td>
-	  <td>{{ articulo.subrubro }}</td>
-	  <td class="text-end">{{ articulo.cantidad|floatformat:0 }}</td>
-	  <td>{{ articulo.unimedi }}</td>
-	  <td>{{ articulo.codprovee }}</td>
-	  <td class="text-end">{{ articulo.bajostock|floatformat:0 }}</td>
+  {% for articulo in articulos %}
+  <tr>
+    <td>{{ articulo.codart }}</td>
+    <td>{{ articulo.descrip }}</td>
+    <td>{{ articulo.deposito }}</td>
+    <td>{{ articulo.ubicacion }}</td>
+    <td>{{ articulo.marca }}</td>
+    <td class="text-end">{{ articulo.precosto|floatformat:2 }}</td>
+    <td class="text-end">{{ articulo.margen|floatformat:2 }}%</td>
+    <td class="text-end">{{ articulo.preventa|floatformat:2 }}</td>
+    <td class="text-end">{{ articulo.alic|floatformat:2 }}</td>
+    <td class="text-end">{{ articulo.costoiva|floatformat:2 }}</td>
+    <td class="text-end">{{ articulo.prefinal|floatformat:2 }}</td>
+    <td>{{ articulo.rubro }}</td>
+    <td>{{ articulo.subrubro }}</td>
+    <td class="text-end">{{ articulo.cantidad|floatformat:0 }}</td>
+    <td>{{ articulo.unimedi }}</td>
+    <td>{{ articulo.codprovee }}</td>
+    <td class="text-end">{{ articulo.bajostock|floatformat:0 }}</td>
+	<td>
+    {% if articulo.obs %}
+		<details>
+		<summary>📝</summary>
+		<div class="texto-obs">{{ articulo.obs }}</div>
+		</details>
+	{% else %}
+		—
+	{% endif %}
 	</td>
 	<td>
-	  <div class="btn-group" role="group">
-		<a href="{% url 'modificar_articulo' articulo.id %}" class="btn btn-sm btn-institucional">
-		  <i class="bi bi-pencil-square"></i> Editar
-		</a>
-		<a href="{% url 'eliminar_articulo' articulo.id %}" 
-		   class="btn btn-sm btn-institucional-danger"
-		   onclick="return confirm('¿Está seguro que desea eliminar el artículo {{ articulo.descrip }}?');">
-		  <i class="bi bi-trash3"></i> Eliminar
-		</a>
-	  </div>
-	</td>
-	</tr>
-    {% empty %}
-    <tr>
-      <td colspan="9" class="text-center">No hay artículos cargados.</td>
-    </tr>
-    {% endfor %}
+      <div class="btn-group" role="group">
+        <a href="{% url 'modificar_articulo' articulo.id %}" class="btn btn-sm btn-institucional">
+          <i class="bi bi-pencil-square"></i> Editar
+        </a>
+        <a href="{% url 'eliminar_articulo' articulo.id %}" 
+           class="btn btn-sm btn-institucional-danger"
+           onclick="return confirm('¿Está seguro que desea eliminar el artículo {{ articulo.descrip }}?');">
+          <i class="bi bi-trash3"></i> Eliminar
+        </a>
+      </div>
+    </td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="19" class="text-center">No hay artículos cargados.</td>
+  </tr>
+  {% endfor %}
   </tbody>
 </table>
 {% endblock %}

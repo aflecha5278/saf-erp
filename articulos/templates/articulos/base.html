@@ -30,8 +30,15 @@
     {% block content %}
     {% endblock %}
   </main>
+  <script src="{% static 'js/institucional/helpers.js' %}"></script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+    CianovaHelpers.inputMayuscula('.input-mayuscula');
+   });
+  </script>
 </body>
 </html>
+
 
 
 

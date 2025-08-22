@@ -119,7 +119,12 @@
 			{% render_field form.ubicacion class="form-select input-cianova w-100" %}
 			</div>
 		</div>
-
+		
+		<div class="form-group">
+			{{ form.obs.label_tag }}
+			{% render_field form.obs class="form-control input-mayuscula" rows="4" placeholder="Notas internas, advertencias, detalles técnicos..." %}
+		</div>
+		
 		<!-- ✅ BOTONES -->
         <div class="d-flex justify-content-end gap-2 mt-4">
           <button type="submit" class="btn-aceptar">

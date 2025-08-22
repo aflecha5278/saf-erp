@@ -1,6 +1,40 @@
 Iniciando proceso... 
-It is impossible to add a non-nullable field 'ubicacion' to articulo without specifying a default. This is because the database needs something to populate existing rows.
-Please select a fix:
- 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
- 2) Quit and manually define a default value in models.py.
-Select an option: ^C
+SystemCheckError: System check identified some issues:
+
+ERRORS:
+articulos.Articulo.deposito: (fields.E300) Field defines a relation with model 'Deposito', which is either not installed, or is abstract.
+articulos.Articulo.deposito: (fields.E307) The field articulos.Articulo.deposito was declared with a lazy reference to 'articulos.deposito', but app 'articulos' doesn't provide model 'deposito'.
+SystemCheckError: System check identified some issues:
+
+ERRORS:
+articulos.Articulo.deposito: (fields.E300) Field defines a relation with model 'Deposito', which is either not installed, or is abstract.
+articulos.Articulo.deposito: (fields.E307) The field articulos.Articulo.deposito was declared with a lazy reference to 'articulos.deposito', but app 'articulos' doesn't provide model 'deposito'.
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1043, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 994, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+    ~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\commands\runserver.py", line 134, in inner_run
+    self.check(display_num_errors=True)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\base.py", line 563, in check
+    raise SystemCheckError(msg)
+django.core.management.base.SystemCheckError: SystemCheckError: System check identified some issues:
+
+ERRORS:
+articulos.Articulo.deposito: (fields.E300) Field defines a relation with model 'Deposito', which is either not installed, or is abstract.
+articulos.Articulo.deposito: (fields.E307) The field articulos.Articulo.deposito was declared with a lazy reference to 'articulos.deposito', but app 'articulos' doesn't provide model 'deposito'.
+
+System check identified 2 issues (0 silenced).
+C:\_Tmp\Python\saf\articulos\models.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+^C

@@ -78,7 +78,9 @@ def agregar_articulo(request):
             articulo.unimed = form.cleaned_data['unimed']  
             articulo.codprovee = form.cleaned_data['codprovee']
             articulo.bajostock = form.cleaned_data['bajostock']
+            articulo.deposito = form.cleaned_data['deposito']
             articulo.ubicacion = form.cleaned_data['ubicacion']
+            articulo.obs = form.cleaned_data['obs']
             articulo.save()
             messages.success(request, 'Artículo guardado.')
             return redirect('lista_articulos')

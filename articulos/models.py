@@ -52,6 +52,7 @@ class Articulo(UpperCaseMixin, models.Model):
     marca = models.ForeignKey('Marca', on_delete=models.PROTECT, blank=True, null=True)
     rubro = models.ForeignKey('Rubro', on_delete=models.PROTECT, blank=True, null=True)
     subrubro = models.ForeignKey('Subrubro', on_delete=models.PROTECT, blank=True, null=True)
+    deposito = models.CharField(max_length=14, blank=True, null=True, verbose_name="Depósito")
     precosto = models.DecimalField("Precio Costo", max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
     margen = models.DecimalField("Margen %", max_digits=6, decimal_places=2, default=0)
     ncodalic = models.ForeignKey('Alicuota', verbose_name="Código Alícuota", on_delete=models.PROTECT)
@@ -78,7 +79,8 @@ class Articulo(UpperCaseMixin, models.Model):
     codprovee = models.CharField("Código de proveedor", max_length=14, blank=True, null=True)
     bajostock = models.DecimalField("Stock mínimo para alerta", max_digits=11, decimal_places=4, default=0)
     ubicacion = models.CharField("Ubicación", max_length=14, blank=True, null=True)
-
+    obs = models.TextField("Observaciones", blank=True, null=True)
+    
     def save(self, *args, **kwargs):
         self.codart = self.codart.upper().zfill(14)
 
