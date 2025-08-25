@@ -3,6 +3,8 @@ from django.core.validators import MinValueValidator, RegexValidator
 from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
 from .choices import UNIDADES
+from .choices import ACTIVO_CHOICES
+
 
 class UpperCaseMixin:
     def save(self, *args, **kwargs):
@@ -80,7 +82,8 @@ class Articulo(UpperCaseMixin, models.Model):
     bajostock = models.DecimalField("Stock mínimo para alerta", max_digits=11, decimal_places=4, default=0)
     ubicacion = models.CharField("Ubicación", max_length=14, blank=True, null=True)
     obs = models.TextField("Observaciones", blank=True, null=True)
-    
+    activo = models.CharField(max_length=1, choices=ACTIVO_CHOICES, blank=False, default='S') 
+
     def save(self, *args, **kwargs):
         self.codart = self.codart.upper().zfill(14)
 

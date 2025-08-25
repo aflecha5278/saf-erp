@@ -81,6 +81,7 @@ def agregar_articulo(request):
             articulo.deposito = form.cleaned_data['deposito']
             articulo.ubicacion = form.cleaned_data['ubicacion']
             articulo.obs = form.cleaned_data['obs']
+            articulo.activo = form.cleaned_data['activo'] 
             articulo.save()
             messages.success(request, 'Artículo guardado.')
             return redirect('lista_articulos')

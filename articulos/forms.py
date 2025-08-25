@@ -1,8 +1,9 @@
 from django import forms
 from decimal import Decimal, ROUND_HALF_UP
 from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema 
-from .choices import UNIDADES  
-
+from .choices import UNIDADES 
+from .choices import ACTIVO_CHOICES
+ 
 class LoginForm(forms.Form):
     username = forms.CharField(
         label="Usuario",
@@ -120,7 +121,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
     class Meta:
         model = Articulo
         fields = ['codart', 'descrip', 'marca', 'rubro', 'subrubro', 'subrubro_nueva', 'precosto', 'margen', 'prefinal', 
-        'modo_calculo', 'ncodalic', 'cantidad', 'unimed', 'codprovee', 'bajostock', 'deposito', 'ubicacion', 'obs' ]
+        'modo_calculo', 'ncodalic', 'cantidad', 'unimed', 'codprovee', 'bajostock', 'deposito', 'ubicacion', 'obs', 'activo']
         widgets = {
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
@@ -165,6 +166,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
                 'class': 'form-control input-cantidad',
                 'pattern': r'^\d{1,9}(\.\d{1,4})?$',
             }),
+            'activo': forms.RadioSelect(choices=ACTIVO_CHOICES)
         }
 
     def clean_precosto(self):

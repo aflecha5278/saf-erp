@@ -5,3 +5,9 @@ UNIDADES = [
     ('MT', 'MT'),
     ('LT', 'LT'),
 ]
+
+ACTIVO_CHOICES = [
+  ('S', 'Sí'),
+  ('N', 'No')
+]
+

@@ -305,3 +305,186 @@ input[name="codprovee"] {
   text-transform: uppercase;
 }
 
+.toggle-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.toggle-option input[type="radio"] {
+  display: none;
+}
+
+.toggle-circle {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: #eee;
+  color: #333;
+  font-weight: 500;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.toggle-option input[type="radio"]:checked + .toggle-circle {
+  background-color: rgb(175, 238, 238); /* Cianova */
+  border-color: #00a;
+  color: #000;
+}
+
+.toggle-label {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.4s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+.toggle-switch input:checked + .slider {
+  background-color: rgb(175, 238, 238); /* institucional */
+}
+
+.toggle-switch input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+.switch-label {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: #333;
+  margin-right: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.4s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: rgb(175, 238, 238); /* color institucional */
+}
+
+input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round::before {
+  border-radius: 50%;
+}
+
+/* Contenedor del toggle */
+.toggle-switch {
+  width: 50px;
+  height: 24px;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Estado OFF */
+.toggle-switch.off {
+  background-color: #ccc;
+}
+
+/* Estado ON con color institucional */
+.toggle-switch.on {
+  background-color: rgb(175, 238, 238); /* Cianova */
+}
+
+/* Botón deslizante */
+.toggle-knob {
+  width: 22px;
+  height: 22px;
+  background-color: #333;
+  border-radius: 50%;
+  position: absolute;
+  top: 1px;
+  transition: left 0.3s ease;
+}
+
+/* Posición del knob según estado */
+.toggle-switch.off .toggle-knob {
+  left: 1px;
+}
+
+.toggle-switch.on .toggle-knob {
+  left: 27px;
+}
+
+
+
+
+

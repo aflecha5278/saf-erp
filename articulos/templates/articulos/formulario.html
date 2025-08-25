@@ -125,6 +125,11 @@
 			{% render_field form.obs class="form-control input-mayuscula" rows="4" placeholder="Notas internas, advertencias, detalles técnicos..." %}
 		</div>
 		
+		<div class="grupo-opciones">
+			<label class="grupo-label">Artículo activo:</label>
+			{{ form.activo }}
+		</div>
+
 		<!-- ✅ BOTONES -->
         <div class="d-flex justify-content-end gap-2 mt-4">
           <button type="submit" class="btn-aceptar">

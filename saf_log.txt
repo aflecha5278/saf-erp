@@ -1,14 +1,82 @@
 Iniciando proceso... 
-SystemCheckError: System check identified some issues:
-
-ERRORS:
-articulos.Articulo.deposito: (fields.E300) Field defines a relation with model 'Deposito', which is either not installed, or is abstract.
-articulos.Articulo.deposito: (fields.E307) The field articulos.Articulo.deposito was declared with a lazy reference to 'articulos.deposito', but app 'articulos' doesn't provide model 'deposito'.
-SystemCheckError: System check identified some issues:
-
-ERRORS:
-articulos.Articulo.deposito: (fields.E300) Field defines a relation with model 'Deposito', which is either not installed, or is abstract.
-articulos.Articulo.deposito: (fields.E307) The field articulos.Articulo.deposito was declared with a lazy reference to 'articulos.deposito', but app 'articulos' doesn't provide model 'deposito'.
+Traceback (most recent call last):
+  File "C:\_Tmp\Python\saf\manage.py", line 22, in <module>
+    main()
+    ~~~~^^
+  File "C:\_Tmp\Python\saf\manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\__init__.py", line 416, in execute
+    django.setup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\apps\registry.py", line 116, in populate
+    app_config.import_models()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\apps\config.py", line 269, in import_models
+    self.models_module = import_module(models_module_name)
+                         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\_Tmp\Python\saf\articulos\models.py", line 38, in <module>
+    class Articulo(UpperCaseMixin, models.Model):
+    ...<83 lines>...
+            return f"{self.codart} - {self.descrip}"
+  File "C:\_Tmp\Python\saf\articulos\models.py", line 83, in Articulo
+    activo = models.CharField(max_length=5, choices=ACTIVO_CHOICES)
+                                                    ^^^^^^^^^^^^^^
+NameError: name 'ACTIVO_CHOICES' is not defined
+Traceback (most recent call last):
+  File "C:\_Tmp\Python\saf\manage.py", line 22, in <module>
+    main()
+    ~~~~^^
+  File "C:\_Tmp\Python\saf\manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\__init__.py", line 416, in execute
+    django.setup()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\apps\registry.py", line 116, in populate
+    app_config.import_models()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\apps\config.py", line 269, in import_models
+    self.models_module = import_module(models_module_name)
+                         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\_Tmp\Python\saf\articulos\models.py", line 38, in <module>
+    class Articulo(UpperCaseMixin, models.Model):
+    ...<83 lines>...
+            return f"{self.codart} - {self.descrip}"
+  File "C:\_Tmp\Python\saf\articulos\models.py", line 83, in Articulo
+    activo = models.CharField(max_length=5, choices=ACTIVO_CHOICES)
+                                                    ^^^^^^^^^^^^^^
+NameError: name 'ACTIVO_CHOICES' is not defined
 Watching for file changes with StatReloader
 Exception in thread django-main-thread:
 Traceback (most recent call last):
@@ -21,20 +89,43 @@ Traceback (most recent call last):
   File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\autoreload.py", line 64, in wrapper
     fn(*args, **kwargs)
     ~~^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\commands\runserver.py", line 134, in inner_run
-    self.check(display_num_errors=True)
-    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\base.py", line 563, in check
-    raise SystemCheckError(msg)
-django.core.management.base.SystemCheckError: SystemCheckError: System check identified some issues:
-
-ERRORS:
-articulos.Articulo.deposito: (fields.E300) Field defines a relation with model 'Deposito', which is either not installed, or is abstract.
-articulos.Articulo.deposito: (fields.E307) The field articulos.Articulo.deposito was declared with a lazy reference to 'articulos.deposito', but app 'articulos' doesn't provide model 'deposito'.
-
-System check identified 2 issues (0 silenced).
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\commands\runserver.py", line 126, in inner_run
+    autoreload.raise_last_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\autoreload.py", line 87, in raise_last_exception
+    raise _exception[1]
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\management\__init__.py", line 394, in execute
+    autoreload.check_errors(django.setup)()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+    ~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\apps\registry.py", line 116, in populate
+    app_config.import_models()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\apps\config.py", line 269, in import_models
+    self.models_module = import_module(models_module_name)
+                         ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrador\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\_Tmp\Python\saf\articulos\models.py", line 38, in <module>
+    class Articulo(UpperCaseMixin, models.Model):
+    ...<83 lines>...
+            return f"{self.codart} - {self.descrip}"
+  File "C:\_Tmp\Python\saf\articulos\models.py", line 83, in Articulo
+    activo = models.CharField(max_length=5, choices=ACTIVO_CHOICES)
+                                                    ^^^^^^^^^^^^^^
+NameError: name 'ACTIVO_CHOICES' is not defined
 C:\_Tmp\Python\saf\articulos\models.py changed, reloading.
-Performing system checks...
-
 Watching for file changes with StatReloader
 ^C
