@@ -11,3 +11,10 @@ ACTIVO_CHOICES = [
   ('N', 'No')
 ]
 
+PRODELA_CHOICES = [
+    (1, "Prod. elaborado"),
+    (2, "Prod. elaborado intermedio"),
+    (3, "Insumo"),
+]
+
+

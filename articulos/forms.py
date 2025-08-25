@@ -1,9 +1,10 @@
 from django import forms
 from decimal import Decimal, ROUND_HALF_UP
-from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema 
+from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema   
 from .choices import UNIDADES 
 from .choices import ACTIVO_CHOICES
- 
+from .choices import PRODELA_CHOICES
+
 class LoginForm(forms.Form):
     username = forms.CharField(
         label="Usuario",
@@ -77,7 +78,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         max_length=14,
         required=False,
         widget=forms.TextInput(attrs={
-            'style': 'width: 200px ; text-transform: uppercase;',
+            'style': 'width: 200px ; text-transform: uppercase; border-color: rgb(175,238,238); background-color: #f0fcfc;',
             'class': 'form-control'
         })    
     )
@@ -86,7 +87,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         max_length=14,
         required=False,
         widget=forms.TextInput(attrs={
-            'style': 'width: 200px ; text-transform: uppercase;',
+            'style': 'width: 200px ; text-transform: uppercase; border-color: rgb(175,238,238); background-color: #f0fcfc;',
             'class': 'form-control'
         })  
     )
@@ -97,7 +98,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             self.fields['codart'].widget.attrs.update({
                 'readonly': True,
                 'class': 'form-control readonly-codart',
-                'title': 'Generado automáticamente por el Cianova 360'
+                'title': 'Generado automáticamente por el Cianova'
             })
 
         if 'rubro' in self.data and self.data['rubro']:
@@ -106,6 +107,19 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             self.fields['subrubro'].queryset = Subrubro.objects.filter(rubro_id=self.instance.rubro_id)
         else:
             self.fields['subrubro'].queryset = Subrubro.objects.none()
+        
+        produccion_activa = ParametroSistema.objects.get(clave="PRODUCCION").activo
+        if produccion_activa:
+            self.fields['prodela'].label = "Tipo elaboración" 
+            self.fields['prodela'].widget = forms.Select(
+                choices=PRODELA_CHOICES,
+                attrs={
+                    'class': 'form-control cianova-select',
+                    'style': 'width: 250px; border-color: rgb(175,238,238); background-color: #f0fcfc;',
+                }
+            )
+        else:
+            self.fields.pop('prodela')
 
     unimed = forms.ChoiceField(
         label="Unidad de medida",
@@ -120,8 +134,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
     
     class Meta:
         model = Articulo
-        fields = ['codart', 'descrip', 'marca', 'rubro', 'subrubro', 'subrubro_nueva', 'precosto', 'margen', 'prefinal', 
-        'modo_calculo', 'ncodalic', 'cantidad', 'unimed', 'codprovee', 'bajostock', 'deposito', 'ubicacion', 'obs', 'activo']
+        fields = '__all__'
         widgets = {
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
@@ -166,7 +179,13 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
                 'class': 'form-control input-cantidad',
                 'pattern': r'^\d{1,9}(\.\d{1,4})?$',
             }),
-            'activo': forms.RadioSelect(choices=ACTIVO_CHOICES)
+            'activo': forms.RadioSelect(choices=ACTIVO_CHOICES),
+            'prodela': forms.Select(
+                choices=PRODELA_CHOICES,
+                attrs={
+                    'class': 'form-control cianova-select',
+                    'style': 'border-color: rgb(175,238,238); background-color: #f0fcfc;',
+                })
         }
 
     def clean_precosto(self):

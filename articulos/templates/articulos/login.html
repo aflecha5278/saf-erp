@@ -6,10 +6,10 @@
 <div class="login-wrapper card shadow-sm border-0 mx-auto mt-5 p-4" style="max-width: 400px;">
   <h2 class="text-center mb-4">Iniciar Sesión</h2>
 
-  {% if error %}
-    <div class="alert alert-danger text-center">{{ error }}</div>
-  {% endif %}
-  
+	{% if error %}
+		<div class="alert alert-danger text-center">{{ error }}</div>
+	{% endif %}
+	
 	<!-- Modo Beta -->
 	{% if mensaje_beta %}
 		<div class="alert alert-warning" role="alert">

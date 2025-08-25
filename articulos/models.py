@@ -4,7 +4,7 @@ from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
 from .choices import UNIDADES
 from .choices import ACTIVO_CHOICES
-
+from .choices import PRODELA_CHOICES
 
 class UpperCaseMixin:
     def save(self, *args, **kwargs):
@@ -59,8 +59,8 @@ class Articulo(UpperCaseMixin, models.Model):
     margen = models.DecimalField("Margen %", max_digits=6, decimal_places=2, default=0)
     ncodalic = models.ForeignKey('Alicuota', verbose_name="Código Alícuota", on_delete=models.PROTECT)
     alic = models.DecimalField("% Alícuota", max_digits=5, decimal_places=2, editable=False, null=True, default=0)
-    costoiva = models.DecimalField("Costo con IVA", max_digits=12, decimal_places=2, null=True, default=0)
-    preventa = models.DecimalField("Precio Venta (sin IVA)", max_digits=12, decimal_places=2, null=True, default=0)
+    costoiva = models.DecimalField("Costo con IVA", max_digits=12, decimal_places=2, null=True, blank=True, default=0)
+    preventa = models.DecimalField("Precio Venta (sin IVA)", max_digits=12, decimal_places=2, null=True, blank=True, default=0)
     prefinal = models.DecimalField(
         "Precio Final (con IVA)",
         max_digits=12,
@@ -83,6 +83,7 @@ class Articulo(UpperCaseMixin, models.Model):
     ubicacion = models.CharField("Ubicación", max_length=14, blank=True, null=True)
     obs = models.TextField("Observaciones", blank=True, null=True)
     activo = models.CharField(max_length=1, choices=ACTIVO_CHOICES, blank=False, default='S') 
+    prodela = models.IntegerField(choices=PRODELA_CHOICES, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.codart = self.codart.upper().zfill(14)

@@ -129,8 +129,17 @@
 			<label class="grupo-label">Artículo activo:</label>
 			{{ form.activo }}
 		</div>
-
-		<!-- ✅ BOTONES -->
+		
+		{% if form.prodela %}
+			<div class="form-group">
+				{{ form.prodela.label_tag }}
+				{{ form.prodela }}
+			</div>
+		{% endif %}
+		
+		<!------------->
+		<!-- BOTONES -->
+		<!------------->
         <div class="d-flex justify-content-end gap-2 mt-4">
           <button type="submit" class="btn-aceptar">
             <i class="bi bi-check-circle"></i> Guardar
