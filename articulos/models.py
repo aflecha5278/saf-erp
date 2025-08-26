@@ -2,9 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
-from .choices import UNIDADES
-from .choices import ACTIVO_CHOICES
-from .choices import PRODELA_CHOICES
+from .choices import UNIDADES, ACTIVO_CHOICES, PRODELA_CHOICES, TIPOPESO_CHOICES
 
 class UpperCaseMixin:
     def save(self, *args, **kwargs):
@@ -84,6 +82,7 @@ class Articulo(UpperCaseMixin, models.Model):
     obs = models.TextField("Observaciones", blank=True, null=True)
     activo = models.CharField(max_length=1, choices=ACTIVO_CHOICES, blank=False, default='S') 
     prodela = models.IntegerField(choices=PRODELA_CHOICES, null=True, blank=True)
+    tipopeso = models.IntegerField(choices=TIPOPESO_CHOICES, null=True, blank=True) 
 
     def save(self, *args, **kwargs):
         self.codart = self.codart.upper().zfill(14)

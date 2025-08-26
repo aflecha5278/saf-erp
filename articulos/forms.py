@@ -1,9 +1,7 @@
 from django import forms
 from decimal import Decimal, ROUND_HALF_UP
 from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema   
-from .choices import UNIDADES 
-from .choices import ACTIVO_CHOICES
-from .choices import PRODELA_CHOICES
+from .choices import UNIDADES, ACTIVO_CHOICES, PRODELA_CHOICES, TIPOPESO_CHOICES, TIPOPESO_DEFAULT 
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -41,27 +39,33 @@ class MarcaForm(UpperCaseMixin, forms.ModelForm):
         model = Marca
         fields = ['nombre']
         widgets = {
-            'nombre': forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
+            'nombre': forms.TextInput(attrs={
+            'style': 'width: 200px',
+            'class': 'form-control cianova-input'
+        })
         }
-
+        
 class RubroForm(UpperCaseMixin, forms.ModelForm):
     class Meta:
         model = Rubro
         fields = ['nombre']
         widgets = {
-            'nombre': forms.TextInput(attrs={'style': 'text-transform: uppercase;'})
+            'nombre': forms.TextInput(attrs={
+            'style': 'width: 200px',
+            'class': 'form-control cianova-input'
+        })
         }
-
+        
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
     
     deposito = forms.ChoiceField(
-        label="Depósito",
-        choices=[('INTERNO', 'INTERNO')],
-        initial='INTERNO',
-        required=False,
-        widget=forms.Select(attrs={
-            'style': 'width: 200px;',
-            'class': 'form-control'
+        label = "Depósito",
+        choices = [('INTERNO', 'INTERNO')],
+        initial = 'INTERNO',
+        required = False,
+        widget = forms.Select(attrs={
+            'style': 'width: 200px',
+            'class': 'form-control cianova-input'
         })
     )
     marca_nueva = forms.CharField(
@@ -69,8 +73,8 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         max_length=14,
         required=False,
         widget=forms.TextInput(attrs={
-            'style': 'width: 200px ; text-transform: uppercase;',
-            'class': 'form-control'
+            'style': 'width: 200px',
+            'class': 'form-control cianova-input'
         })
     )
     rubro_nueva = forms.CharField(
@@ -78,8 +82,8 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         max_length=14,
         required=False,
         widget=forms.TextInput(attrs={
-            'style': 'width: 200px ; text-transform: uppercase; border-color: rgb(175,238,238); background-color: #f0fcfc;',
-            'class': 'form-control'
+            'style': 'width: 200px',
+            'class': 'form-control cianova-input'
         })    
     )
     subrubro_nueva = forms.CharField(
@@ -87,11 +91,14 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         max_length=14,
         required=False,
         widget=forms.TextInput(attrs={
-            'style': 'width: 200px ; text-transform: uppercase; border-color: rgb(175,238,238); background-color: #f0fcfc;',
-            'class': 'form-control'
+            'style': 'width: 200px',
+            'class': 'form-control cianova-input'
         })  
     )
     
+    #####################
+    #   INIT DEL FORM   #
+    #####################
     def __init__(self, *args, codart_auto_activo=False, **kwargs):
         super().__init__(*args, **kwargs)
         if codart_auto_activo:
@@ -108,18 +115,36 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
         else:
             self.fields['subrubro'].queryset = Subrubro.objects.none()
         
-        produccion_activa = ParametroSistema.objects.get(clave="PRODUCCION").activo
+        produccion_activa = ParametroSistema.objects.get(clave="PRODUCCION").valor == "S"
         if produccion_activa:
             self.fields['prodela'].label = "Tipo elaboración" 
             self.fields['prodela'].widget = forms.Select(
                 choices=PRODELA_CHOICES,
                 attrs={
-                    'class': 'form-control cianova-select',
-                    'style': 'width: 250px; border-color: rgb(175,238,238); background-color: #f0fcfc;',
+                    'class': 'form-select combo-cianova',
+                    'style': 'width: 250px',
                 }
             )
         else:
             self.fields.pop('prodela')
+        
+        art_pesable = ParametroSistema.objects.get(clave="ART_PESABLE").valor == "S"
+        if art_pesable:
+            self.fields['tipopeso'].label = "Tipo de peso"
+            self.fields['tipopeso'].initial = TIPOPESO_DEFAULT
+            self.fields['tipopeso'].widget = forms.Select(
+                choices=TIPOPESO_CHOICES,
+                attrs={
+                    'class': 'form-select combo-cianova',
+                    'style': 'width: 250px;',
+                }
+            )
+        else:
+            self.fields.pop('tipopeso')
+        
+        #############################    
+        #   FIN DEL INIT DEL FORM   #
+        #############################
 
     unimed = forms.ChoiceField(
         label="Unidad de medida",
@@ -131,6 +156,11 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             'class': 'form-control'
         })
     )
+    tipopeso = forms.ChoiceField(
+        choices=TIPOPESO_CHOICES,
+        initial=TIPOPESO_DEFAULT,
+        label="Tipo de pesabilidad"
+    )
     
     class Meta:
         model = Articulo
@@ -139,21 +169,22 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             'codart': forms.TextInput(attrs={
                 'maxlength': 14,
                 'style': 'width:200px; text-transform: uppercase;',
-                'class': 'form-control input-codart'
+                'class': 'form-control input-codart cianova-bg'
             }),
             'descrip': forms.TextInput(attrs={
                 'maxlength': 80,
                 'style': 'width:600px; text-transform: uppercase;',
-                'class': 'form-control input-descrip'
+                'class': 'form-control input-cianova'
             }),
             'precosto': forms.NumberInput(attrs={
-                'step': '0.01',
-                'min': '0',
+                'step': '0.01',  # permite decimales
+                'min': '0',      # evita valores negativos si no corresponden
                 'style': 'width:150px;',
-                'class': 'form-control input-importe'
+                'class': 'form-control cianova-bg'
             }),
             'margen': forms.NumberInput(attrs={
                 'step': '0.01',
+                'min': '0',      
                 'style': 'width:150px;',
                 'class': 'form-control input-importe'
             }),
@@ -169,7 +200,7 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
                 'step': '0.01',
                 'min': '0',
                 'style': 'width:150px;',
-                'class': 'form-control',
+                'class': 'form-control cianova-bg',
                 'pattern': '[0-9]+(\.[0-9]{0,2})?'
             }),
             'cantidad': forms.NumberInput(attrs={
@@ -185,7 +216,8 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
                 attrs={
                     'class': 'form-control cianova-select',
                     'style': 'border-color: rgb(175,238,238); background-color: #f0fcfc;',
-                })
+            }),
+            
         }
 
     def clean_precosto(self):

@@ -63,7 +63,7 @@ main {
     width: 100%;
     padding: 0.5rem 0.75rem;
     font-size: 1rem;
-    text-transform: uppercase;
+    text-trans: uppercase;
     border: 1px solid #ccc;
     border-radius: 6px;
     margin-bottom: 1rem;
@@ -259,7 +259,6 @@ form textarea:focus {
 }
 
 .input-cianova {
-  width: 100%;
   max-width: 100%;
   border-radius: 4px;
   font-size: 0.95rem;
@@ -326,7 +325,7 @@ input[name="codprovee"] {
 }
 
 .toggle-option input[type="radio"]:checked + .toggle-circle {
-  background-color: rgb(175, 238, 238); /* Cianova */
+  background-color: rgb(175, 238, 238); 
   border-color: #00a;
   color: #000;
 }
@@ -377,7 +376,7 @@ input[name="codprovee"] {
 }
 
 .toggle-switch input:checked + .slider {
-  background-color: rgb(175, 238, 238); /* institucional */
+  background-color: rgb(175, 238, 238); 
 }
 
 .toggle-switch input:checked + .slider::before {
@@ -483,6 +482,27 @@ input:checked + .slider::before {
 .toggle-switch.on .toggle-knob {
   left: 27px;
 }
+
+.cianova-bg {
+	text-transform: uppercase;
+    border-color: rgb(175,238,238);
+    background-color: #f0fcfc;
+}
+
+.cianova-select {
+  width: auto;
+  max-width: 250px;
+}
+
+.combo-cianova {
+  width: 250px !important;
+  background-color: rgb(175,238,238);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+
+
 
 
 

@@ -115,27 +115,40 @@
 		
 		<div class="row mb-3">
 			<div class="col-md-3">
-			{{ form.ubicacion.label_tag }}
-			{% render_field form.ubicacion class="form-select input-cianova w-100" %}
+				{{ form.ubicacion.label_tag }}
+				{% render_field form.ubicacion class="form-select input-cianova w-100" %}
 			</div>
 		</div>
 		
 		<div class="form-group">
 			{{ form.obs.label_tag }}
-			{% render_field form.obs class="form-control input-mayuscula" rows="4" placeholder="Notas internas, advertencias, detalles técnicos..." %}
+			{% render_field form.obs class="form-control input-cianova w-100" rows="4" placeholder="Notas internas, advertencias, detalles técnicos..." %}
 		</div>
 		
-		<div class="grupo-opciones">
-			<label class="grupo-label">Artículo activo:</label>
-			{{ form.activo }}
-		</div>
-		
-		{% if form.prodela %}
-			<div class="form-group">
-				{{ form.prodela.label_tag }}
-				{{ form.prodela }}
+		<div class="row mb-3">
+			<div class="col-md-3">
+				<div class="grupo-opciones">
+					<label class="grupo-label">Artículo activo:</label>
+					{{ form.activo }}
+				</div>
+			</div>	
+			<div class="col-md-3">
+				{% if form.prodela %}
+					<div class="form-group">
+						{{ form.prodela.label_tag }}
+						{% render_field form.prodela class="combo-cianova" %}
+					</div>
+				{% endif %}
 			</div>
-		{% endif %}
+			<div class="col-md-3">
+				{% if form.tipopeso %}
+					<div class="form-group">
+						{{ form.tipopeso.label_tag }}
+						{% render_field form.tipopeso class="combo-cianova" %}
+					</div>
+				{% endif %}
+			</div>	
+		</div>
 		
 		<!------------->
 		<!-- BOTONES -->

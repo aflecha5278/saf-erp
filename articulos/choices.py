@@ -16,5 +16,15 @@ PRODELA_CHOICES = [
     (2, "Prod. elaborado intermedio"),
     (3, "Insumo"),
 ]
+PRODELA_DEFAULT = 1 
+
+TIPOPESO_CHOICES = [
+    (1, "Pesable por precio"),
+    (2, "Pesable por peso"),
+    (3, "No aplica"),
+]
+TIPOPESO_DEFAULT = 3  
+
+
 
 
