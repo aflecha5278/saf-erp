@@ -32,18 +32,14 @@ def alta_moneda(request):
         "titulo": "Alta de Moneda",
     })
 
-# ✏️ Edición de moneda
 def editar_moneda(request, pk):
     moneda = get_object_or_404(Moneda, codmoneda=pk)
     form = MonedaForm(request.POST or None, instance=moneda)
-    if form.is_valid():
+    if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect("listado_monedas")
-    return render(request, "monedas/formulario.html", {
-        "form": form,
-        "modo": "edicion",
-        "titulo": f"Editar Moneda: {moneda.codmoneda}",
-    })
+        return redirect('listado_monedas')
+    return render(request, 'monedas/formulario.html', {'form': form})
+    
  
 def eliminar_moneda(request, codmoneda):
     moneda = get_object_or_404(Moneda, codmoneda=codmoneda)

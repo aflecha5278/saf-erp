@@ -2,7 +2,7 @@
    FUENTE GLOBAL
    =========================================== */
 body, input, button, label, textarea, select {
-    font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important;
+    font-family: 'Segoe UI', Inter, Helvetica, sans-serif !important;
 }
 
 /* ===========================================
