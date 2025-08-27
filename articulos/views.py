@@ -21,7 +21,7 @@ def login_view(request):
     else:
         form = LoginForm()
 
-    return render(request, 'articulos/login.html', {
+    return render(request, 'login.html', {
         'form': form,
         'error': error,
         'mensaje_beta': mensaje_beta

@@ -20,7 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'articulos',
-    'widget_tweaks'
+    'widget_tweaks',
+    'monedas'
 ]
 
 # Middlewares
@@ -40,11 +41,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'saf.urls'
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / 'articulos' / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',                # Para home.html, menu.html, base.html
+            BASE_DIR / 'articulos' / 'templates',  # Para templates específicos de articulos
+            BASE_DIR / 'monedas' / 'templates',    # Si querés templates propios de monedas
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -56,6 +60,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'saf.wsgi.application'
 

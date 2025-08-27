@@ -1,4 +1,4 @@
-{% extends "articulos/base.html" %}
+{% extends "base.html" %}
 {% load widget_tweaks %}
 {% block title %}
 {% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – Cianova 360
@@ -136,7 +136,7 @@
 				{% if form.prodela %}
 					<div class="form-group">
 						{{ form.prodela.label_tag }}
-						{% render_field form.prodela class="combo-cianova" %}
+						{% render_field form.prodela class="combo-neutral" %}
 					</div>
 				{% endif %}
 			</div>
@@ -144,7 +144,7 @@
 				{% if form.tipopeso %}
 					<div class="form-group">
 						{{ form.tipopeso.label_tag }}
-						{% render_field form.tipopeso class="combo-cianova" %}
+						{% render_field form.tipopeso class="combo-neutral" %}
 					</div>
 				{% endif %}
 			</div>	

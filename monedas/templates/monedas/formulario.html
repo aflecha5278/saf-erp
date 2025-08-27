@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+{% block title %}Agregar Moneda – Cianova{% endblock %}
+{% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{% static 'monedas/css/monedas.css' %}">
+
+<style>
+  body {
+    background: #f0f4f8;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  }
+
+  .form-card {
+    max-width: 480px;
+    margin: 5% auto;
+    border-radius: 12px;
+    padding: 24px;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+  }
+
+  .form-card h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .btn-cianova {
+    background-color: rgb(175,238,238);
+    color: #212529;
+    font-weight: 500;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-cianova:hover {
+    background-color: #a0dfe0;
+    color: #000;
+  }
+
+  .btn-secondary {
+    font-weight: 500;
+  }
+</style>
+
+<div class="form-card">
+  <h2><i class="bi bi-currency-exchange me-2"></i> Agregar Moneda</h2>
+  <form method="post">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      {{ form.codmoneda.label_tag }}
+      {{ form.codmoneda|add_class:"input-codmoneda" }}
+	</div>
+    <div class="mb-3">
+      {{ form.descrip.label_tag }}
+	  {{ form.descrip|add_class:"form-control" }}
+	  <style>
+		input[name="descrip"] {
+		width: 100%;
+		min-width: 480px;
+		text-transform: uppercase;
+		}
+	  </style>
+    </div>
+    <div class="mb-3">
+      {{ form.signoc.label_tag }}
+	  {{ form.signoc|add_class:"input-signoc" }}
+	</div>
+    <div class="mb-3">
+      {{ form.cotiz.label_tag }}
+      {{ form.cotiz }}
+    </div>
+		<div class="d-flex justify-content-end gap-2 mt-4">
+			<button type="submit" class="btn-aceptar">
+				<i class="bi bi-check-circle"></i> Guardar
+			</button>
+			<a href="{% url 'listado_monedas' %}" class="btn-cancelar">
+				<i class="bi bi-arrow-left-circle"></i> Volver a la lista
+			</a>
+		</div>
+	</form>
+</div>
+{% endblock %}
+
+

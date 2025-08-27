@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from articulos import views
+from monedas import views
+
 
 urlpatterns = [
     path('', views.home_view, name='home'),
@@ -24,6 +26,7 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("menu/", views.menu_principal, name="menu_principal"),
     path('articulos/', include('articulos.urls')),
+    path('monedas/', include('monedas.urls')),
 ]
 
 

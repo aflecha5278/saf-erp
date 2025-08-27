@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Menú Principal – Cianova{% endblock %}
+{% block content %}
+
+<style>
+  body {
+    background: #f0f4f8;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  }
+
+  .menu-card {
+    max-width: 480px;
+    margin: 6% auto;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background-color: rgb(175,238,238);
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .menu-btn {
+    background-color: rgb(175,238,238);
+    color: #212529;
+    border: none;
+    padding: 12px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    text-align: left;
+  }
+
+  .menu-btn:hover {
+    background-color: #a0dfe0;
+    color: #000;
+    transform: translateX(2px);
+  }
+
+  .menu-btn i {
+    margin-right: 8px;
+  }
+
+  .accordion-button {
+    background-color: rgb(175,238,238);
+    font-weight: 600;
+    color: #212529;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: #a0dfe0;
+    color: #000;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="menu-card card shadow-sm">
+    <div class="card-header text-center">
+      <i class="bi bi-grid-3x3-gap-fill me-2"></i> Menú Principal
+    </div>
+    <div class="card-body">
+      <div class="accordion" id="menuPrincipal">
+
+        <!-- Artículos -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingArticulos">
+            <button class="accordion-button collapsed" type="button" 
+				data-bs-toggle="collapse" 
+				data-bs-target="#collapseArticulos" 
+				aria-expanded="false" 
+				aria-controls="collapseArticulos">
+				<i class="bi bi-box-seam me-2"></i> Artículos
+            </button>
+          </h2>
+          <div id="collapseArticulos" class="accordion-collapse collapse" aria-labelledby="headingArticulos" data-bs-parent="#menuPrincipal">
+            <div class="accordion-body d-flex flex-column gap-2">
+              <a href="{% url 'agregar_articulo' %}" class="menu-btn">
+                <i class="bi bi-plus-circle"></i> Agregar
+              </a>
+              <a href="{% url 'lista_articulos' %}" class="menu-btn">
+                <i class="bi bi-pencil-square"></i> Modificar / Eliminar
+              </a>
+              <a href="{% url 'lista_articulos' %}?q=" class="menu-btn">
+                <i class="bi bi-search"></i> Consultar
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monedas -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingMonedas">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMonedas" aria-expanded="false" aria-controls="collapseMonedas">
+              <i class="bi bi-currency-exchange me-2"></i> Monedas
+            </button>
+          </h2>
+          <div id="collapseMonedas" class="accordion-collapse collapse" aria-labelledby="headingMonedas" data-bs-parent="#menuPrincipal">
+            <div class="accordion-body d-flex flex-column gap-2">
+              <a href="{% url 'alta_moneda' %}" class="menu-btn">
+                <i class="bi bi-plus-circle"></i> Agregar
+              </a>
+              <a href="{% url 'listado_monedas' %}" class="menu-btn">
+                <i class="bi bi-list-ul"></i> Listado
+              </a>
+              <a href="{% url 'editar_moneda' pk='demo' %}" class="menu-btn">
+                <i class="bi bi-pencil"></i> Editar (demo)
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parámetros del Sistema -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingParametros">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseParametros" aria-expanded="false" aria-controls="collapseParametros">
+              <i class="bi bi-sliders me-2"></i> Parámetros del Sistema
+            </button>
+          </h2>
+          <div id="collapseParametros" class="accordion-collapse collapse" aria-labelledby="headingParametros" data-bs-parent="#menuPrincipal">
+            <div class="accordion-body d-flex flex-column gap-2">
+              <a href="{% url 'listar_parametros' %}" class="menu-btn">
+                <i class="bi bi-gear"></i> Configurar
+              </a>
+              <a href="{% url 'listar_parametros' %}?modo=avanzado" class="menu-btn">
+                <i class="bi bi-sliders2-vertical"></i> Modo Avanzado
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

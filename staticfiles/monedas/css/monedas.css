@@ -1,0 +1,32 @@
+.table-header-cianova {
+  background-color: rgb(175, 238, 238);
+  color: #003344;
+}
+
+.form-cianova input {
+  border: 1px solid #aeeeee;
+  background-color: #f8ffff;
+}
+
+.input-corto {
+  width: 100px;
+}
+
+.input-codmoneda {
+  width: 80px !important;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+
+.input-signoc {
+  width: 80px !important;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+

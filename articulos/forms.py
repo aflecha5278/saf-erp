@@ -214,10 +214,9 @@ class ArticuloForm(UpperCaseMixin, forms.ModelForm):
             'prodela': forms.Select(
                 choices=PRODELA_CHOICES,
                 attrs={
-                    'class': 'form-control cianova-select',
-                    'style': 'border-color: rgb(175,238,238); background-color: #f0fcfc;',
+                    'class': 'combo-neutral w-100',
+                    'style': 'width:200px;',
             }),
-            
         }
 
     def clean_precosto(self):

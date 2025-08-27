@@ -72,8 +72,10 @@ class Articulo(UpperCaseMixin, models.Model):
     modo_calculo = models.CharField(
         max_length=1,
         choices=[('C', 'Costo → Final'), ('F', 'Final → Costo')],
-        default='C'
+        default='C',
+        verbose_name="Modo de cálculo"
     )
+    
     cantidad = models.DecimalField(max_digits=14, decimal_places=4, default=0)
     unimed = models.CharField(max_length=2, choices=UNIDADES, default='UN')
     codprovee = models.CharField("Código de proveedor", max_length=14, blank=True, null=True)
