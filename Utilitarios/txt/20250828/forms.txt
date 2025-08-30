@@ -21,6 +21,7 @@ class LoginForm(forms.Form):
             'class': 'form-control'
         })
     )
+
     def clean_username(self):
         username = self.cleaned_data.get('username', '').strip().upper()
         return username    
@@ -32,7 +33,6 @@ class UpperCaseMixin:
             if isinstance(value, str):
                 cleaned_data[field_name] = value.strip().upper()
         return cleaned_data
-        
 
 class MarcaForm(UpperCaseMixin, forms.ModelForm):
     class Meta:
@@ -57,6 +57,7 @@ class RubroForm(UpperCaseMixin, forms.ModelForm):
         }
         
 class ArticuloForm(UpperCaseMixin, forms.ModelForm):
+    
     deposito = forms.ChoiceField(
         label = "Depósito",
         choices = [('INTERNO', 'INTERNO')],
@@ -276,4 +277,3 @@ class ParametroSistemaForm(forms.ModelForm):
                 'placeholder': 'Ingrese descripción del parámetro'
             }),
         }
-

@@ -21,7 +21,9 @@
 <div class="row mb-3">
   <div class="col-md-3">
     <label class="form-label">Costo con IVA:</label>
-    {{ form.costoiva|add_class:"form-control input-cianova w-100"|attr:"id:costoiva"|attr:"readonly:readonly" }}
+    <!-- Ahora usamos el campo del form: tendrá name="costoiva" y viaja en el POST.
+         Lo mostramos editable (si preferís mantenerlo readonly, podés agregar attr:"readonly:readonly") -->
+    {{ form.costoiva|add_class:"form-control input-cianova w-100"|attr:"id:costoiva" }}
   </div>
   <div class="col-md-3">
     <label class="form-label">Precio Venta (sin IVA):</label>

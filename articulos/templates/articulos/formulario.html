@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 {% block title %}
-{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – Cianova 360
+{% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %} – Cianova 
 {% endblock %}
 {% block content %}
 <div class="container my-4">
@@ -10,8 +10,15 @@
       {% if form.instance.pk %}Modificar artículo{% else %}Agregar artículo{% endif %}
     </div>
     <div class="card-body">
-      <form method="post" id="articuloForm">
-        {% csrf_token %}
+		{% if messages %}
+			{% for message in messages %}
+				<div class="alert alert-danger">
+				{{ message }}
+				</div>
+			{% endfor %}
+		{% endif %}
+	  <form method="post" id="articuloForm">
+	    {% csrf_token %}
 		{% if form.errors %}
 		  <div class="alert alert-danger border-start border-4 border-danger-subtle p-3">
 			<strong>⚠️ Error al guardar el artículo:</strong>
@@ -83,15 +90,15 @@
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="page2-tab" data-bs-toggle="tab" data-bs-target="#page2" type="button" role="tab">Moneda extranj.</button>
           </li>
-        </ul>
+	    </ul>
 
         <div class="tab-content border border-top-0 p-3" id="articuloTabsContent">
           <div class="tab-pane fade show active" id="page1" role="tabpanel">
-            {% include "articulos/_form_precio.html" %}
+			{% include "articulos/_form_precio.html" %}
           </div>
           <div class="tab-pane fade" id="page2" role="tabpanel">
-            <p>Aquí van los campos de la página 2 (otros datos del artículo)</p>
-          </div>
+			{% include "monedas/form_moneda_ext.html" %}
+		  </div>
         </div>
 		
 		<div class="row mb-3">
@@ -149,22 +156,22 @@
 				{% endif %}
 			</div>	
 		</div>
-		
 		<!------------->
 		<!-- BOTONES -->
 		<!------------->
         <div class="d-flex justify-content-end gap-2 mt-4">
-          <button type="submit" class="btn-aceptar">
-            <i class="bi bi-check-circle"></i> Guardar
-          </button>
-          <a href="{% url 'lista_articulos' %}" class="btn-cancelar">
-            <i class="bi bi-arrow-left-circle"></i> Volver a la lista
-          </a>
+			<button type="submit" class="btn-aceptar">
+				<i class="bi bi-check-circle"></i> Guardar
+			</button>
+			 <a href="{% url 'lista_articulos' %}" class="btn-cancelar">
+				<i class="bi bi-arrow-left-circle"></i> Volver a la lista
+			</a>
         </div>
       </form>
     </div>
   </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modoCalculo   = document.querySelector('#id_modo_calculo');
@@ -220,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (prefinalInput) prefinalInput.style.display = 'inline';
             if (prefinalDisplay) prefinalDisplay.style.display = 'none';
         }
-    }
+    } 
 
     // Función de debounce
     function debounce(func, delay) {
@@ -254,8 +261,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 let prefinal = parseFloat(prefinalInput.value.replace(",", "."));
                 prefinalInput.value = (Math.round(prefinal * 100) / 100).toFixed(2);
             }
-        });
+			if (prefinalInput) {
+				prefinalInput.style.display = 'inline'; // ← aseguramos que se envíe
+			}
+		});
     }
 });
 </script>
 {% endblock %}
+
+

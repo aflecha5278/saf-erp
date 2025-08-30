@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
-from .views import agregar_parametro, listar_parametros
-
+from .views import agregar_parametro, listar_parametros 
+from articulos import views  
 
 urlpatterns = [
     path('', views.login_view, name='login'),  # Página inicial es el login
@@ -15,6 +15,7 @@ urlpatterns = [
     path('parametros/nuevo/', views.agregar_parametro, name='agregar_parametro'),
     path('parametros/<int:pk>/editar/', views.editar_parametro, name='editar_parametro'),
     path('parametros/<int:pk>/eliminar/', views.eliminar_parametro, name='eliminar_parametro'),
+    path('page2/<str:codart>/', views.page2_moneda_ext, name='page2_moneda_ext'),
 ]
 
 

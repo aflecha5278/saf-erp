@@ -16,9 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from articulos import views
-from monedas import views
-
+from articulos import views 
 
 urlpatterns = [
     path('', views.home_view, name='home'),

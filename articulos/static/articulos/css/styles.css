@@ -286,7 +286,7 @@ form textarea:focus {
   background-color: #f0fafa;
   border: 1px solid #aee;
   border-radius: 4px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', Inter;
   padding: 8px;
   resize: vertical;
 }
@@ -331,7 +331,7 @@ input[name="codprovee"] {
 }
 
 .toggle-label {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', Inter;
   font-size: 14px;
   color: #333;
   display: flex;
@@ -384,7 +384,7 @@ input[name="codprovee"] {
 }
 
 .switch-label {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', Inter;
   font-size: 14px;
   color: #333;
   margin-right: 10px;

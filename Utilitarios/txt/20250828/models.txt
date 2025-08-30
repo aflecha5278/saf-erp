@@ -92,70 +92,44 @@ class Articulo(UpperCaseMixin, models.Model):
     vtame = models.DecimalField(max_digits=11, decimal_places=2, null=True, blank=True, verbose_name="Prec. Venta de M.Ext.")
     finme = models.DecimalField(max_digits=11, decimal_places=2, null=True, blank=True, verbose_name="Prec. Final de M.Ext.")
 
-   
-def save(self, *args, **kwargs):
-    self.codart = self.codart.upper().zfill(14)
+    def save(self, *args, **kwargs):
+        self.codart = self.codart.upper().zfill(14)
 
-    alic = Decimal(str(self.ncodalic.nporc or "0"))
-    margen = Decimal(str(self.margen or "0"))
+        alic = Decimal(str(self.ncodalic.nporc or "0"))
+        margen = Decimal(str(self.margen or "0"))
+        precosto = Decimal(str(self.precosto or "0"))
 
-    # --- costo en pesos ---
-    precosto = Decimal(str(self.precosto or "0"))
-    ctome = Decimal(str(self.ctome or "0"))
-    cotiz = Decimal(str(self.cotiz or "0"))
+        self.alic = alic
+        self.costoiva = precosto * (Decimal("1") + alic / Decimal("100"))
 
-    # Si hay costo en moneda extranjera y cotización, recalculo precosto en pesos
-    if ctome > 0 and cotiz > 0:
-        precosto = ctome * cotiz
-        self.precosto = precosto
+        if self.modo_calculo == 'C':
+            self.preventa = precosto * (Decimal("1") + margen / Decimal("100"))
+            self.prefinal = self.preventa * (Decimal("1") + alic / Decimal("100"))
+        else:
+            prefinal = Decimal(str(self.prefinal or "0"))
+            self.preventa = prefinal / (Decimal("1") + alic / Decimal("100"))
+            self.precosto = self.preventa / (Decimal("1") + margen / Decimal("100"))
 
-    # Alícuota guardada
-    self.alic = alic
+        self.precosto = Decimal(str(self.precosto)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.preventa = Decimal(str(self.preventa)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.costoiva = Decimal(str(self.costoiva)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        self.prefinal = Decimal(str(self.prefinal)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
-    # --- cálculo en pesos según modo_calculo ---
-    if self.modo_calculo == 'C':  # Costo → Final
-        self.preventa = precosto * (Decimal("1") + margen / Decimal("100"))
-        self.prefinal = self.preventa * (Decimal("1") + alic / Decimal("100"))
-    else:  # Final → Costo
-        prefinal = Decimal(str(self.prefinal or "0"))
-        self.preventa = prefinal / (Decimal("1") + alic / Decimal("100"))
-        self.precosto = self.preventa / (Decimal("1") + margen / Decimal("100"))
-
-    # Costo con IVA
-    self.costoiva = self.precosto * (Decimal("1") + alic / Decimal("100"))
-
-    # --- cálculo en moneda extranjera ---
-    if ctome > 0:
-        self.vtame = ctome * (Decimal("1") + margen / Decimal("100"))
-        self.finme = self.vtame * (Decimal("1") + alic / Decimal("100"))
-    else:
-        self.vtame = Decimal("0")
-        self.finme = Decimal("0")
-
-    # --- redondeo a 2 decimales ---
-    self.precosto = self.precosto.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    self.preventa = self.preventa.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    self.costoiva = self.costoiva.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    self.prefinal = self.prefinal.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    self.vtame = self.vtame.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    self.finme = self.finme.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-    # --- fecha última modificación ---
-    if self.pk:
-        original = Articulo.objects.get(pk=self.pk)
-        if (
-            original.precosto != self.precosto or
-            original.margen != self.margen or
-            original.prefinal != self.prefinal or
-            original.ctome != self.ctome or
-            original.cotiz != self.cotiz
-        ):
+        if self.pk:
+            original = Articulo.objects.get(pk=self.pk)
+            if (
+                original.precosto != self.precosto or
+                original.margen != self.margen or
+                original.prefinal != self.prefinal
+            ):
+                self.fecultmod = timezone.now().date()
+        else:
             self.fecultmod = timezone.now().date()
-    else:
-        self.fecultmod = timezone.now().date()
 
-    super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
+    def __str__(self):
+        return f"{self.codart} - {self.descrip}"
 
 class Marca(UpperCaseMixin, models.Model):
     nombre = models.CharField(max_length=14, unique=True)

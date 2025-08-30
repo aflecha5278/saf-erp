@@ -1,0 +1,12 @@
+2025-08-30 15:23:51,985 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 15:35:37,024 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 15:35:49,090 [INFO] 🔵 Vista: modificar_articulo – POST recibido
+2025-08-30 15:35:49,111 [INFO] ✅ Formulario válido – aplicando cambios
+2025-08-30 15:35:49,112 [DEBUG] 📊 Valores numéricos normalizados
+2025-08-30 15:35:49,249 [INFO] 💾 Artículo guardado correctamente: Articulo object (20)
+2025-08-30 15:42:06,687 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 15:42:25,673 [INFO] 🔵 Vista: modificar_articulo – POST recibido
+2025-08-30 15:42:25,692 [INFO] ✅ Formulario válido – aplicando cambios
+2025-08-30 15:42:25,692 [DEBUG] 📊 Valores numéricos normalizados
+2025-08-30 15:42:25,900 [INFO] 💾 Artículo guardado correctamente: Articulo object (23)
+2025-08-30 15:42:43,503 [INFO] 📝 Vista: modificar_articulo – cargando formulario

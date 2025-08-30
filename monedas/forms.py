@@ -5,6 +5,11 @@ class MonedaForm(forms.ModelForm):
     class Meta:
         model = Moneda
         fields = "__all__"
+        
+        def clean_codmoneda(self):
+            cod = self.cleaned_data.get('codmoneda')
+            return cod.upper() if cod else cod
+        
         widgets = {
             "codmoneda": forms.TextInput(attrs={
                 "class": "form-control input-corto",

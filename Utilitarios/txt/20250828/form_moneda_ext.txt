@@ -1,0 +1,101 @@
+{% load widget_tweaks %}>
+<div class="form-card">
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="container-fluid">
+      <div class="row g-3">
+	  
+	    <div class="col-md-3">
+		  <label for="codmoneda" class="form-label">Moneda</label>
+		  <select name="codmoneda" id="codmoneda" class="form-select input-cianova-sm">
+			{% for m in monedas %}
+			  <option value="{{ m.id }}" {% if form.instance.codmoneda.id == m.id %}selected{% endif %}>
+				{{ m.codmoneda }} – {{ m.descrip }}
+			  </option>
+			{% endfor %}
+		  </select>
+		</div>
+		
+		<div class="col-md-3">
+			<label for="cotiz" class="form-label">Cotización</label>
+			<input type="text" name="cotiz" id="cotiz" class="form-control input-cianova-sm" value="{{ form.instance.cotiz }}" readonly>
+		</div>
+
+		<!-- Costo M.Ext. -->
+        <div class="col-md-3">
+          {{ form.ctome.label_tag }}
+          {{ form.ctome|add_class:"form-control input-cianova-sm" }}
+        </div>
+
+        <!-- Venta M.Ext. -->
+        <div class="col-md-3">
+          {{ form.vtame.label_tag }}
+          {{ form.vtame|add_class:"form-control input-cianova-sm" }}
+        </div>
+
+        <!-- Final M.Ext. -->
+        <div class="col-md-3">
+          {{ form.finme.label_tag }}
+          {{ form.finme|add_class:"form-control input-cianova-sm" }}
+        </div>
+
+        <!-- Alícuota -->
+        <div class="col-md-3">
+          <label class="form-label">Alícuota:</label>
+          <input type="text" class="form-control input-cianova-sm" value="{{ articulo.alicuota }}" readonly>
+        </div>
+
+        <!-- Margen -->
+        <div class="col-md-3">
+          <label class="form-label">Margen %</label>
+          <input type="text" class="form-control input-cianova-sm" value="{{ articulo.margen }}" readonly>
+        </div>
+
+      </div>
+    </div>
+	</form>
+</div>
+
+<script>
+  // Cálculos automáticos
+  const cotizInput = document.querySelector('input[name="cotiz"]');
+  const ctomeInput = document.querySelector('input[name="ctome"]');
+  const vtameInput = document.querySelector('input[name="vtame"]');
+  const finmeInput = document.querySelector('input[name="finme"]');
+  const alicuota = parseFloat("{{ articulo.alicuota|default:0 }}");
+  const margen = parseFloat("{{ articulo.margen|default:0 }}");
+
+  function recalcular() {
+    const cotiz = parseFloat(cotizInput.value) || 0;
+    const ctome = parseFloat(ctomeInput.value) || 0;
+
+    const vtame = ctome * (1 + margen / 100);
+    const finme = vtame * (1 + alicuota / 100);
+
+    vtameInput.value = vtame.toFixed(2);
+    finmeInput.value = finme.toFixed(2);
+  }
+
+  cotizInput.addEventListener('input', recalcular);
+  ctomeInput.addEventListener('input', recalcular);
+</script>
+
+<script>
+  const monedaSelect = document.querySelector('select[name="codmoneda"]');
+  const cotizInput = document.getElementById('cotiz');
+
+  const cotizaciones = {
+    {% for m in monedas %}
+      "{{ m.id }}": {{ m.cotiz }},
+    {% endfor %}
+  };
+
+  monedaSelect.addEventListener('change', function () {
+    const selectedId = monedaSelect.value;
+    const nuevaCotiz = cotizaciones[selectedId] || 0;
+    cotizInput.value = nuevaCotiz.toFixed(5);
+  });
+</script>
+
+
