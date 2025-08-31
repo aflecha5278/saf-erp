@@ -5,6 +5,7 @@ from .forms import ArticuloForm, LoginForm, ParametroSistemaForm
 from django.contrib import messages
 from monedas.models import Moneda
 import logging
+from helpers.parametros import parametro_activo
 
 # Configuración simple de logging (archivo en la raíz del proyecto)
 logger = logging.getLogger(__name__)
@@ -48,16 +49,27 @@ def menu_principal(request):
         return redirect('login')
     return render(request, 'menu.html')    
     
+
 def lista_articulos(request):
+    query = request.GET.get('q', '').strip().upper()
+    mostrar_moneda = parametro_activo("MONEDA_EXT")
+
     articulos = Articulo.objects.all().order_by('codart')
 
-    q = request.GET.get('q', '')
-    if q:
+    if query:
         articulos = articulos.filter(
-            Q(codart__icontains=q) |
-            Q(descrip__icontains=q)
+            Q(codart__icontains=query) |
+            Q(descrip__icontains=query)
         )
-    return render(request, 'articulos/lista.html', {'articulos': articulos})
+
+    context = {
+        "articulos": articulos,
+        "mostrar_moneda": mostrar_moneda,
+        "query": query
+    }
+
+    return render(request, "articulos/lista.html", context )
+    
 
 def agregar_articulo(request):
     codart_auto = ParametroSistema.objects.filter(clave='CODART_AUTO').first()

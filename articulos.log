@@ -10,3 +10,27 @@
 2025-08-30 15:42:25,692 [DEBUG] 📊 Valores numéricos normalizados
 2025-08-30 15:42:25,900 [INFO] 💾 Artículo guardado correctamente: Articulo object (23)
 2025-08-30 15:42:43,503 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 17:50:37,404 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 17:51:04,425 [INFO] 🔵 Vista: modificar_articulo – POST recibido
+2025-08-30 17:51:04,445 [INFO] ✅ Formulario válido – aplicando cambios
+2025-08-30 17:51:04,445 [DEBUG] 📊 Valores numéricos normalizados
+2025-08-30 17:51:04,600 [INFO] 💾 Artículo guardado correctamente: Articulo object (20)
+2025-08-30 17:51:07,504 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 17:51:27,942 [INFO] 🔵 Vista: modificar_articulo – POST recibido
+2025-08-30 17:51:27,967 [INFO] ✅ Formulario válido – aplicando cambios
+2025-08-30 17:51:27,968 [DEBUG] 📊 Valores numéricos normalizados
+2025-08-30 17:51:28,123 [INFO] 💾 Artículo guardado correctamente: Articulo object (20)
+2025-08-30 17:51:30,563 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 18:00:15,304 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 18:01:19,780 [INFO] 🔵 Vista: modificar_articulo – POST recibido
+2025-08-30 18:01:19,802 [INFO] ✅ Formulario válido – aplicando cambios
+2025-08-30 18:01:19,803 [DEBUG] 📊 Valores numéricos normalizados
+2025-08-30 18:01:19,951 [INFO] 💾 Artículo guardado correctamente: Articulo object (20)
+2025-08-30 18:01:23,786 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-30 18:01:33,450 [INFO] 🔵 Vista: modificar_articulo – POST recibido
+2025-08-30 18:01:33,477 [INFO] ✅ Formulario válido – aplicando cambios
+2025-08-30 18:01:33,477 [DEBUG] 📊 Valores numéricos normalizados
+2025-08-30 18:01:33,617 [INFO] 💾 Artículo guardado correctamente: Articulo object (20)
+2025-08-30 18:01:39,529 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-31 00:06:49,940 [INFO] 📝 Vista: modificar_articulo – cargando formulario
+2025-08-31 00:35:57,303 [INFO] 📝 Vista: modificar_articulo – cargando formulario

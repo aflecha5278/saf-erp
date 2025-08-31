@@ -52,6 +52,13 @@
 	  <th class="text-end">Art. activo</th>
 	  <th class="text-end">Tipo elaboración</th>
 	  <th class="text-end">Tipo peso</th>
+	  {% if mostrar_moneda %}
+		<th class="text-end">Cotización</th>
+		<th class="text-end">Prec.Costo ME</th>
+		<th class="text-end">Prec.Venta ME</th>
+		<th class="text-end">Prec.Final ME</th>
+		<th class="text-end">Moneda</th>
+	  {% endif %}
 	  <th style="width: 150px;">Acciones</th>
     </tr>
   </thead>
@@ -87,6 +94,13 @@
 	<td>{{ articulo.activo }}</td>
 	<td>{{ articulo.get_prodela_display }}</td>
 	<td>{{ articulo.get_tipopeso_display }}</td>
+	{% if mostrar_moneda %}
+	  <td class="text-end">{{ articulo.cotiz|floatformat:2 }}</td>
+	  <td class="text-end">{{ articulo.ctome|floatformat:2 }}</td>
+	  <td class="text-end">{{ articulo.vtame|floatformat:2 }}</td>
+	  <td class="text-end">{{ articulo.finme|floatformat:2 }}</td>
+	  <td>{{ articulo.codmoneda }}</td>
+	{% endif %}
 	<td>
       <div class="btn-group" role="group">
         <a href="{% url 'modificar_articulo' articulo.id %}" class="btn btn-sm btn-institucional">

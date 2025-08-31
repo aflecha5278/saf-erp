@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'articulos',
     'widget_tweaks',
-    'monedas'
+    'monedas',
 ]
 
 # Middlewares
