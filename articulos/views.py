@@ -80,7 +80,6 @@ def agregar_articulo(request):
     if request.method == 'POST':
         form = ArticuloForm(request.POST, codart_auto_activo=codart_auto_activo)
         if form.is_valid():
-            print("✅ Formulario válido → guardando...")
             articulo = form.save(commit=False) 
             if codart_auto_activo:
                 articulo.codart = codigo_sugerido
@@ -108,14 +107,29 @@ def agregar_articulo(request):
             articulo.activo = form.cleaned_data['activo']
             articulo.prodela = form.cleaned_data['prodela']
             articulo.tipopeso = form.cleaned_data['tipopeso']
+            articulo.cotiz = round(float(form.cleaned_data.get('cotiz') or 0), 2)
+            articulo.ctome = round(float(form.cleaned_data.get('ctome') or 0), 2)
+            articulo.finme = round(float(form.cleaned_data.get('finme') or 0), 2)
+            articulo.vtame = round(float(form.cleaned_data.get('vtame') or 0), 2)
+            articulo.codmoneda = request.POST.get("codmoneda")
+            # Calcular preventa
+            articulo.preventa = round(articulo.precosto * (1 + articulo.margen / 100), 2)
+            # Asignar alícuota desde la relación
+            articulo.alic = articulo.ncodalic.nporc if articulo.ncodalic_id else 0
             articulo.save()
             messages.success(request, 'Artículo guardado.')
             return redirect('lista_articulos')
         else:
             print("❌ Errores:", form.errors)  # <-- Muestra errores
     else:
-        form = ArticuloForm(initial={'codart': codigo_sugerido})
-    
+        form = ArticuloForm(
+            initial={
+            'codart': codigo_sugerido,
+            'codmoneda': 'ARS',
+            'cotiz': 1
+            },
+            codart_auto_activo=codart_auto_activo
+        )
     contexto = {
         'form': form,
         'codart_auto': codart_auto_activo,
@@ -129,36 +143,27 @@ def modificar_articulo(request, pk):
 
     articulo = get_object_or_404(Articulo, pk=pk)
     monedas = Moneda.objects.all()
-    print("🟢 Método recibido:", request.method)
-
+    
     if request.method == 'POST':
-        logger.info("🔵 Vista: modificar_articulo – POST recibido")
         form = ArticuloForm(request.POST, instance=articulo)
-
         if form.is_valid():
-            logger.info("✅ Formulario válido – aplicando cambios")
-            articulo = form.save(commit=False)  # ← aplica los datos del formulario
-
+            articulo.codmoneda = request.POST.get("codmoneda")
+            articulo = form.save()  # ← aplica los datos del formulario
             try:
                 articulo.precosto = round(float(articulo.precosto or 0), 2)
                 articulo.margen = round(float(articulo.margen or 0), 2)
                 articulo.prefinal = round(float(articulo.prefinal or 0), 2) if articulo.prefinal else None
-                logger.debug("📊 Valores numéricos normalizados")
             except Exception as e:
                 logger.exception("⚠️ Error al convertir campos numéricos: %s", e)
 
             try:
                 articulo.save()
-                logger.info("💾 Artículo guardado correctamente: %s", articulo)
                 return redirect('lista_articulos')
             except Exception as e:
-                logger.exception("❌ Error al guardar el artículo: %s", e)
                 messages.error(request, "Error interno al guardar el artículo.")
         else:
-            logger.warning("❌ Formulario inválido – errores: %s", form.errors.as_text())
             messages.error(request, f"Errores al guardar: {form.errors.as_text()}")
     else:
-        logger.info("📝 Vista: modificar_articulo – cargando formulario")
         form = ArticuloForm(instance=articulo)
 
     return render(request, 'articulos/formulario.html', {

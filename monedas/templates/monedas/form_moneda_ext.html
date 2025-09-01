@@ -1,132 +1,67 @@
 {% load widget_tweaks l10n %}
 <div class="form-card">
     <div class="container-fluid">
-      <div class="row g-3">
-		<!-- Moneda -->
-        <div class="col-md-3">
-          <label for="codmoneda" class="form-label">Moneda:</label>
-          <select name="codmoneda" id="codmoneda" class="form-select input-cianova-sm">
-            {% for m in monedas %}
-              <option value="{{ m.id }}" 
-                      data-cotiz="{{ m.cotiz|default:"0"|unlocalize }}"
-                      {% if form.instance.codmoneda and form.instance.codmoneda.id == m.id %}selected{% endif %}>
-                {{ m.codmoneda }} – {{ m.descrip }}
-              </option>
-            {% endfor %}
-          </select>
-        </div>
-		
-		<!-- Cotización -->
-        <div class="col-md-3">
-          <label for="cotiz" class="form-label">Cotización:</label>
-          <input type="text" name="cotiz" id="cotiz" class="form-control input-cianova-sm" value="{{ form.instance.cotiz|default_if_none:"0"|floatformat:5 }}" readonly>
+		<div class="row g-3">
+			<div class="col-md-3">
+			    <label for="codmoneda" class="form-label">Moneda:</label>
+				<select name="codmoneda" id="codmoneda" class="form-select input-cianova-sm">
+					{% for m in monedas %}
+					<option value="{{ m.codmoneda }}"
+						data-cotiz="{{ m.cotiz|default:"0"|unlocalize }}"
+						{% if form.initial.codmoneda == m.codmoneda %}selected{% endif %}>
+						{{ m.codmoneda }} – {{ m.descrip }}
+					</option>
+					{% endfor %}
+				</select>
+			</div>	
+			
+			<!-- Cotización -->
+			<div class="col-md-3">
+			  <label for="cotiz" class="form-label">Cotización:</label>
+			  <input type="text" name="cotiz" id="cotiz" class="form-control input-cianova-sm" value="{{ form.instance.cotiz|default_if_none:"0"|floatformat:5 }}" readonly>
+			</div>
+
+			<!-- Costo M.Ext. -->
+			<div class="col-md-3">
+			  {{ form.ctome.label_tag }}
+			  {{ form.ctome|add_class:"form-control input-cianova-sm" }}
+			</div>
+
+			<!-- Venta M.Ext. -->
+			<div class="col-md-3">
+			  {{ form.vtame.label_tag }}
+			  {{ form.vtame|add_class:"form-control input-cianova-sm" }}
+			</div>
+
+			<!-- Final M.Ext. -->
+			<div class="col-md-3">
+			  {{ form.finme.label_tag }}
+			  {{ form.finme|add_class:"form-control input-cianova-sm" }}
+			</div>
+			<!-- Margen oculto desde page1 -->
+			<input type="hidden" id="margen-hidden" value="{{ articulo.margen|default:0 }}">
+			<!-- Alícuota oculta desde page1 -->
+			<input type="hidden" id="alic-hidden" value="{{ articulo.alic|default:0 }}">
 		</div>
-
-        <!-- Costo M.Ext. -->
-        <div class="col-md-3">
-          {{ form.ctome.label_tag }}
-          {{ form.ctome|add_class:"form-control input-cianova-sm" }}
-        </div>
-
-        <!-- Venta M.Ext. -->
-        <div class="col-md-3">
-          {{ form.vtame.label_tag }}
-          {{ form.vtame|add_class:"form-control input-cianova-sm" }}
-        </div>
-
-        <!-- Final M.Ext. -->
-        <div class="col-md-3">
-          {{ form.finme.label_tag }}
-          {{ form.finme|add_class:"form-control input-cianova-sm" }}
-        </div>
-	  </div>
     </div>
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
   const monedaSelect = document.getElementById('codmoneda');
   const cotizInput   = document.querySelector('input[name="cotiz"]');
 
-  monedaSelect?.addEventListener('change', function () {
-    const selectedOption = monedaSelect.options[monedaSelect.selectedIndex];
-    const nuevaCotiz = parseFloat(selectedOption.dataset.cotiz) || 0;
-    cotizInput.value = nuevaCotiz.toFixed(5);
-    calcularPreciosME();
-  });
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const selectedOption = monedaSelect.options[monedaSelect.selectedIndex];
-    if (selectedOption) {
-      const cotizInicial = parseFloat(selectedOption.dataset.cotiz || 0);
-      cotizInput.value = cotizInicial.toFixed(5);
-      calcularPreciosME();
-    }
-  });
-</script>
-
-<script>
-function calcularPreciosME() {
-  const ctomeInput  = document.querySelector('input[name="ctome"]');
-  const vtameInput  = document.querySelector('input[name="vtame"]');
-  const finmeInput  = document.querySelector('input[name="finme"]');
-  const cotizInput  = document.querySelector('input[name="cotiz"]');
-  const codalicME   = document.getElementById('codalicme');
-
-  const cotizME     = parseFloat(cotizInput?.value) || 0;
-  const lnPreCostoME= parseFloat(ctomeInput?.value) || 0;
-  const lnMargenME  = parseFloat("{{ articulo.margen|default:0 }}") || 0;
-  let lnPorAlicME = parseFloat("{{ articulo.alic|default:0 }}") || 0;
-  // Si viene en decimal (ej 0.21), lo convertimos a porcentaje
-  if (lnPorAlicME > 0 && lnPorAlicME < 1) {
-	lnPorAlicME = lnPorAlicME * 100;
+  function actualizarCotizacion() {
+    const selected = monedaSelect?.options[monedaSelect.selectedIndex];
+    const cotiz = parseFloat(selected?.dataset.cotiz) || 0;
+    if (cotizInput) cotizInput.value = cotiz.toFixed(5);
   }
-	
-  // --- cálculos en moneda extranjera ---
-  const lnPreVentaME = lnPreCostoME * (1 + lnMargenME / 100);
-  const lnPreFinalME = lnPreVentaME * (1 + lnPorAlicME / 100);
-  
-  if (vtameInput) vtameInput.value = lnPreVentaME.toFixed(2);
-  if (finmeInput) finmeInput.value = lnPreFinalME.toFixed(2);
 
-  // --- actualización en pesos (page1) ---
-  const precostoPesos  = lnPreCostoME * cotizME;
-  const preventaPesos  = lnPreVentaME * cotizME;
-  const prefinalPesos  = lnPreFinalME * cotizME;
-  const costoivaPesos  = precostoPesos * (1 + lnPorAlicME / 100);
+  monedaSelect?.addEventListener('change', actualizarCotizacion);
 
-  const precostoInput  = document.getElementById('id_precosto');
-  precostoInput?.dispatchEvent(new Event('input', { bubbles: true }));
-  
-  const margenInput    = document.getElementById('id_margen');
-  const preventaInput  = document.getElementById('preventa');
-  const prefinalInput  = document.getElementById('prefinal-input');
-  const prefinalDisp   = document.getElementById('prefinal-display');
-  const costoivaInput  = document.getElementById('costoiva');
-
-  if (precostoInput) precostoInput.value = precostoPesos.toFixed(2);
-  if (margenInput)   margenInput.value   = lnMargenME.toFixed(2);
-  if (preventaInput) preventaInput.value = preventaPesos.toFixed(2);
-  if (prefinalInput) prefinalInput.value = prefinalPesos.toFixed(2);
-  if (prefinalDisp)  prefinalDisp.textContent = prefinalPesos.toFixed(2);
-  if (costoivaInput) costoivaInput.value = costoivaPesos.toFixed(2);
-
-  // --- selección de alícuota ---
-  const ncodalicSelect = document.getElementById('id_ncodalic');
-  if (codalicME && ncodalicSelect) {
-    for (let option of ncodalicSelect.options) {
-      if (option.value === codalicME.value) {
-        option.selected = true;
-        break;
-      }
-    }
-  }
-}
-
-// recalcular cuando cambia costo ME o cotización
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelector('input[name="ctome"]')?.addEventListener('input', calcularPreciosME);
-  document.querySelector('input[name="cotiz"]')?.addEventListener('input', calcularPreciosME);
-  // primera ejecución
-  calcularPreciosME();
+  // Inicializar cotización al cargar
+  actualizarCotizacion();
 });
 </script>
+
+

@@ -173,63 +173,78 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modoCalculo   = document.querySelector('#id_modo_calculo');
-    const precostoInput = document.querySelector('#id_precosto');
-    const margenInput   = document.querySelector('#id_margen');
-    const ncodalicSelect= document.querySelector('#id_ncodalic');
-    const prefinalInput = document.querySelector('#prefinal-input');
-    const prefinalDisplay = document.querySelector('#prefinal-display');
-    const costoivaSpan  = document.querySelector('#costoiva');
-    const preventaSpan  = document.querySelector('#preventa');
-    const form          = document.querySelector('#articuloForm');
+document.addEventListener('DOMContentLoaded', function () {
+    const precostoInput     = document.querySelector('#id_precosto');
+    const margenInput       = document.querySelector('#id_margen');
+    const ncodalicSelect    = document.querySelector('#id_ncodalic');
+    const prefinalInput     = document.querySelector('#prefinal-input');
+    const prefinalDisplay   = document.querySelector('#prefinal-display');
+    const costoivaInput     = document.querySelector('#costoiva');
+    const preventaInput     = document.querySelector('#preventa');
+    const modoCalculo       = document.querySelector('#id_modo_calculo');
+    const ctomeInput        = document.querySelector('input[name="ctome"]');
+    const cotizInput        = document.querySelector('input[name="cotiz"]');
+    const form              = document.querySelector('#articuloForm');
 
     let debounceTimeout;
 
-    function calculateValues() {
-        const precosto = parseFloat(precostoInput?.value) || 0;
-        const margen   = parseFloat(margenInput?.value) || 0;
-
+    function getAlicuota() {
         const selectedOption = ncodalicSelect?.options[ncodalicSelect.selectedIndex];
-        const alicMatch = selectedOption ? selectedOption.textContent.match(/\((\d+\.?\d*)%\)/) : null;
-        const alic = alicMatch ? parseFloat(alicMatch[1]) || 0 : 0;
+        const match = selectedOption?.textContent.match(/\((\d+\.?\d*)%\)/);
+        const alic = match ? parseFloat(match[1]) : 0;
+        return alic < 1 ? alic * 100 : alic;
+    }
 
+    function calcularDesdeCosto(costo) {
+        const margen = parseFloat(margenInput?.value) || 0;
+        const alic = getAlicuota();
+
+        const preventa = costo * (1 + margen / 100);
+        const prefinal = preventa * (1 + alic / 100);
+        const costoiva = costo * (1 + alic / 100);
+
+        return { preventa, prefinal, costoiva };
+    }
+
+    function actualizarCampos(costo) {
         const modo = ['C', 'F'].includes(modoCalculo?.value) ? modoCalculo.value : 'C';
-
-		// Costo con IVA
-        const costoiva = precosto * (1 + alic / 100);
-        if (costoivaSpan) costoivaSpan.value = (Math.round(costoiva * 100) / 100).toFixed(2);
-
-        // Precio venta sin IVA
-        const preventa = precosto * (1 + margen / 100);
-        if (preventaSpan) preventaSpan.value = (Math.round(preventa * 100) / 100).toFixed(2);
+        const { preventa, prefinal, costoiva } = calcularDesdeCosto(costo);
 
         if (modo === 'C') {
-            // Costo → Final
-            const prefinal = preventa * (1 + alic / 100);
-            const roundedPrefinal = Math.round(prefinal * 100) / 100;
-            if (prefinalDisplay) prefinalDisplay.textContent = roundedPrefinal.toFixed(2);
-            if (prefinalInput) {
-                prefinalInput.value = roundedPrefinal.toFixed(2);
-                prefinalInput.style.display = 'none';
-            }
-            if (prefinalDisplay) prefinalDisplay.style.display = 'inline';
+            preventaInput.value = preventa.toFixed(2);
+            prefinalInput.value = prefinal.toFixed(2);
+            prefinalDisplay.textContent = prefinal.toFixed(2);
+            prefinalInput.style.display = 'none';
+            prefinalDisplay.style.display = 'inline';
         } else {
-            // Final → Costo
-            let prefinal = parseFloat(prefinalInput?.value) || 0;
-            if (!isNaN(prefinal)) {
-                const calculatedPreventa = prefinal / (1 + alic / 100);
-                if (preventaSpan) preventaSpan.textContent = (Math.round(calculatedPreventa * 100) / 100).toFixed(2);
+            const prefinalManual = parseFloat(prefinalInput?.value) || 0;
+            const alic = getAlicuota();
+            const preventaCalc = prefinalManual / (1 + alic / 100);
+            const margen = parseFloat(margenInput?.value) || 0;
+            const precostoCalc = preventaCalc / (1 + margen / 100);
 
-                const calculatedPrecosto = calculatedPreventa / (1 + margen / 100);
-                if (precostoInput) precostoInput.value = (Math.round(calculatedPrecosto * 100) / 100).toFixed(2);
-            }
-            if (prefinalInput) prefinalInput.style.display = 'inline';
-            if (prefinalDisplay) prefinalDisplay.style.display = 'none';
+            preventaInput.value = preventaCalc.toFixed(2);
+            precostoInput.value = precostoCalc.toFixed(2);
+            prefinalInput.style.display = 'inline';
+            prefinalDisplay.style.display = 'none';
         }
-    } 
 
-    // Función de debounce
+        if (costoivaInput) costoivaInput.value = costoiva.toFixed(2);
+    }
+
+    function calcularDesdeME() {
+        const costoME = parseFloat(ctomeInput?.value) || 0;
+        const cotiz = parseFloat(cotizInput?.value) || 0;
+        const costoLocal = costoME * cotiz;
+
+        if (precostoInput) {
+            precostoInput.value = costoLocal.toFixed(2);
+            precostoInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        actualizarCampos(costoLocal);
+    }
+
     function debounce(func, delay) {
         return function (...args) {
             clearTimeout(debounceTimeout);
@@ -237,35 +252,34 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Conectar todos los inputs/selects
-    [precostoInput, margenInput, ncodalicSelect, prefinalInput, modoCalculo].forEach(element => {
-        if (element) {
-            element.addEventListener('input', debounce(calculateValues, 300));
-            element.addEventListener('change', calculateValues);
-        }
+    // Disparadores
+    [precostoInput, margenInput, ncodalicSelect, prefinalInput, modoCalculo].forEach(el => {
+        el?.addEventListener('input', debounce(() => {
+            const costo = parseFloat(precostoInput?.value) || 0;
+            actualizarCampos(costo);
+        }, 300));
+        el?.addEventListener('change', () => {
+            const costo = parseFloat(precostoInput?.value) || 0;
+            actualizarCampos(costo);
+        });
     });
 
-    // Recalcular al inicio
-    calculateValues();
+    ctomeInput?.addEventListener('input', debounce(calcularDesdeME, 300));
+    cotizInput?.addEventListener('input', debounce(calcularDesdeME, 300));
 
-    // Antes de enviar, normalizar a 2 decimales
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            if (precostoInput && precostoInput.value) {
-                precostoInput.value = (Math.round(parseFloat(precostoInput.value) * 100) / 100).toFixed(2);
+    // Inicial
+    const costoInicial = parseFloat(precostoInput?.value) || 0;
+    actualizarCampos(costoInicial);
+
+    // Normalización antes de enviar
+    form?.addEventListener('submit', function () {
+        [precostoInput, margenInput, prefinalInput].forEach(input => {
+            if (input && input.value) {
+                input.value = (Math.round(parseFloat(input.value.replace(",", ".")) * 100) / 100).toFixed(2);
             }
-            if (margenInput && margenInput.value) {
-                margenInput.value = (Math.round(parseFloat(margenInput.value) * 100) / 100).toFixed(2);
-            }
-            if (prefinalInput && prefinalInput.value) {
-                let prefinal = parseFloat(prefinalInput.value.replace(",", "."));
-                prefinalInput.value = (Math.round(prefinal * 100) / 100).toFixed(2);
-            }
-			if (prefinalInput) {
-				prefinalInput.style.display = 'inline'; // ← aseguramos que se envíe
-			}
-		});
-    }
+        });
+        prefinalInput.style.display = 'inline';
+    });
 });
 </script>
 {% endblock %}

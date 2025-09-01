@@ -86,7 +86,7 @@ class Articulo(UpperCaseMixin, models.Model):
     activo = models.CharField(max_length=1, choices=ACTIVO_CHOICES, blank=False, default='S') 
     prodela = models.IntegerField(choices=PRODELA_CHOICES, null=True, blank=True)
     tipopeso = models.IntegerField(choices=TIPOPESO_CHOICES, null=True, blank=True)
-    codmoneda = models.ForeignKey(Moneda, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Moneda:")
+    codmoneda = models.CharField(max_length=3, null=True, blank=True, verbose_name="Moneda")
     cotiz = models.DecimalField(max_digits=15, decimal_places=5, null=True, blank=True, verbose_name="Cotización:")
     ctome = models.DecimalField(max_digits=11, decimal_places=2, null=True, blank=True, verbose_name="Prec. Costo de M.Ext.")
     vtame = models.DecimalField(max_digits=11, decimal_places=2, null=True, blank=True, verbose_name="Prec. Venta de M.Ext.")

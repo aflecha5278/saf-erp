@@ -55,11 +55,10 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
   File "C:\_Tmp\Python\saf\saf\urls.py", line 19, in <module>
     from articulos import views
-  File "C:\_Tmp\Python\saf\articulos\views.py", line 8, in <module>
-    from helpers.parametros import parametro_activo
-  File "C:\_Tmp\Python\saf\helpers\parametros.py", line 2, in <module>
-    from configuracion.models import Parametro
-ModuleNotFoundError: No module named 'configuracion'
+  File "C:\_Tmp\Python\saf\articulos\views.py", line 87
+    articulo.codart = form.cleaned_data['codart']
+    ^^^^^^^^
+IndentationError: expected an indented block after 'else' statement on line 86
 Traceback (most recent call last):
   File "C:\_Tmp\Python\saf\manage.py", line 22, in <module>
     main()
@@ -120,11 +119,10 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
   File "C:\_Tmp\Python\saf\saf\urls.py", line 19, in <module>
     from articulos import views
-  File "C:\_Tmp\Python\saf\articulos\views.py", line 8, in <module>
-    from helpers.parametros import parametro_activo
-  File "C:\_Tmp\Python\saf\helpers\parametros.py", line 2, in <module>
-    from configuracion.models import Parametro
-ModuleNotFoundError: No module named 'configuracion'
+  File "C:\_Tmp\Python\saf\articulos\views.py", line 87
+    articulo.codart = form.cleaned_data['codart']
+    ^^^^^^^^
+IndentationError: expected an indented block after 'else' statement on line 86
 Watching for file changes with StatReloader
 Exception in thread django-main-thread:
 Traceback (most recent call last):
@@ -177,9 +175,12 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
   File "C:\_Tmp\Python\saf\saf\urls.py", line 19, in <module>
     from articulos import views
-  File "C:\_Tmp\Python\saf\articulos\views.py", line 8, in <module>
-    from helpers.parametros import parametro_activo
-  File "C:\_Tmp\Python\saf\helpers\parametros.py", line 2, in <module>
-    from configuracion.models import Parametro
-ModuleNotFoundError: No module named 'configuracion'
+  File "C:\_Tmp\Python\saf\articulos\views.py", line 87
+    articulo.codart = form.cleaned_data['codart']
+    ^^^^^^^^
+IndentationError: expected an indented block after 'else' statement on line 86
+C:\_Tmp\Python\saf\articulos\views.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
 ^C
