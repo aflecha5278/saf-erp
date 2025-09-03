@@ -89,9 +89,8 @@ USE_TZ = True
 # Archivos estáticos
 STATIC_URL = '/static/'
 
-# Directorio de estáticos en desarrollo
 STATICFILES_DIRS = [
-    BASE_DIR / 'articulos' / 'static',
+    BASE_DIR / 'static',
 ]
 
 # Carpeta donde collectstatic copiará archivos para producción

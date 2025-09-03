@@ -117,7 +117,6 @@ def agregar_articulo(request):
             # Asignar alícuota desde la relación
             articulo.alic = articulo.ncodalic.nporc if articulo.ncodalic_id else 0
             articulo.save()
-            messages.success(request, 'Artículo guardado.')
             return redirect('lista_articulos')
         else:
             print("❌ Errores:", form.errors)  # <-- Muestra errores

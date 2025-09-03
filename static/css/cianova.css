@@ -1,0 +1,187 @@
+/* === Inputs institucionales === */
+.input-cianova {
+  max-width: 100%;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  background-color: #fff;
+  color: #212529;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  text-transform: uppercase;
+}
+
+/* === Combos institucionales === */
+.combo-cianova {
+  max-width: 100%;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  background-color: #fff;
+  color: #212529;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  text-transform: uppercase;
+}
+
+/* === Botones institucionales === */
+.btn-cianova {
+  background-color: rgb(175,238,238);
+  border: none;
+  color: #000;
+  font-weight: bold;
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-cianova:hover {
+  background-color: rgb(160,230,230);
+}
+
+/* === Alertas institucionales === */
+.alerta-cianova {
+  background-color: rgb(175,238,238);
+  color: #000;
+  border: 1px solid #a0dede;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* === Etiquetas y títulos === */
+.label-cianova {
+  font-weight: bold;
+  color: #212529;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+/* === Separadores visuales === */
+.separador-cianova {
+  border-top: 2px solid rgb(175,238,238);
+  margin: 1rem 0;
+}
+
+.marco-superior-cianova {
+  background-color: rgb(175,238,238);
+  padding: 0.75rem 1.5rem;
+  border-bottom: 2px solid #a0dede;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titulo-cianova {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.menu-cianova {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.acceso-cianova {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Ícono alineado con texto */
+.acceso-cianova {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.1rem;
+  text-decoration: none;
+  color: #333;
+}
+
+.icono-cianova {
+  width: 20px;
+  height: 20px;
+}
+
+/* Tipografía institucional */
+.fuente-institucional {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.texto-segoe {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  font-size: 2rem !important;
+  text-transform: none !important;
+}
+
+.boton-guardar {
+  background-color: rgb(175, 238, 238); /* color institucional */
+  color: #000;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease;
+}
+
+.boton-guardar:hover {
+  background-color: rgb(150, 220, 220);
+}
+
+.boton-volver {
+  background-color: rgb(60, 160, 160); /* verde agua oscuro institucional */
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.boton-volver:hover {
+  background-color: rgb(45, 130, 130); /* tono más profundo al pasar el mouse */
+}
+
+.btn-institucional {
+  background-color: rgb(175, 238, 238) !important; /* Cianova */
+  color: #000 !important;
+  border: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.btn-institucional:hover,
+.btn-institucional:focus {
+  background-color: rgb(160, 230, 230) !important;
+  color: #000 !important;
+}
+
+.btn-institucional-danger {
+  background-color: #008B8B !important; /* Verde agua oscuro */
+  color: #fff !important;
+  border: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.btn-institucional-danger:hover,
+.btn-institucional-danger:focus {
+  background-color: #006f6f !important;
+  color: #fff !important;
+}
+
+
+
+
+
+
+
+

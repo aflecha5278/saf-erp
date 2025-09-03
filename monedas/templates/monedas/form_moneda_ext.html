@@ -38,10 +38,6 @@
 			  {{ form.finme.label_tag }}
 			  {{ form.finme|add_class:"form-control input-cianova-sm" }}
 			</div>
-			<!-- Margen oculto desde page1 -->
-			<input type="hidden" id="margen-hidden" value="{{ articulo.margen|default:0 }}">
-			<!-- Alícuota oculta desde page1 -->
-			<input type="hidden" id="alic-hidden" value="{{ articulo.alic|default:0 }}">
 		</div>
     </div>
 </div>
@@ -63,5 +59,33 @@ document.addEventListener('DOMContentLoaded', function () {
   actualizarCotizacion();
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const ctomeInput   = document.querySelector('input[name="ctome"]');
+  const vtameInput   = document.querySelector('input[name="vtame"]');
+  const finmeInput   = document.querySelector('input[name="finme"]');
+  const margenHidden = document.getElementById('margen-hidden');
+  const alicHidden   = document.getElementById('alic-hidden');
+
+  function calcularDesdeCostoME() {
+    const ctome = parseFloat(ctomeInput?.value) || 0;
+    const margen = parseFloat(margenHidden?.value) || 0;
+    const alic = parseFloat(alicHidden?.value) || 0;
+
+    const ventaME = ctome * (1 + margen / 100);
+    const finalME = ventaME * (1 + alic / 100);
+
+    if (vtameInput) vtameInput.value = ventaME.toFixed(2);
+    if (finmeInput) finmeInput.value = finalME.toFixed(2);
+  }
+
+  ctomeInput?.addEventListener('input', calcularDesdeCostoME);
+  calcularDesdeCostoME(); // inicializa si hay valor precargado
+});
+</script>
+
+
+
 
 

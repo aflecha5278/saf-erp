@@ -160,13 +160,15 @@
 		<!-- BOTONES -->
 		<!------------->
         <div class="d-flex justify-content-end gap-2 mt-4">
-			<button type="submit" class="btn-aceptar">
+			<button type="submit" class="boton-guardar">
 				<i class="bi bi-check-circle"></i> Guardar
 			</button>
-			 <a href="{% url 'lista_articulos' %}" class="btn-cancelar">
-				<i class="bi bi-arrow-left-circle"></i> Volver a la lista
-			</a>
-        </div>
+				<a href="{% url 'lista_articulos' %}" class="boton-volver">
+					<i class="bi bi-arrow-left-circle"></i> Volver a la lista
+				</a>
+		</div>
+      <input type="hidden" id="margen-hidden" value="{{ form.instance.margen|default:0 }}">
+	  <input type="hidden" id="alic-hidden" value="{{ form.instance.alic|default:0 }}">		
       </form>
     </div>
   </div>
@@ -174,112 +176,124 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const precostoInput     = document.querySelector('#id_precosto');
-    const margenInput       = document.querySelector('#id_margen');
-    const ncodalicSelect    = document.querySelector('#id_ncodalic');
-    const prefinalInput     = document.querySelector('#prefinal-input');
-    const prefinalDisplay   = document.querySelector('#prefinal-display');
-    const costoivaInput     = document.querySelector('#costoiva');
-    const preventaInput     = document.querySelector('#preventa');
-    const modoCalculo       = document.querySelector('#id_modo_calculo');
-    const ctomeInput        = document.querySelector('input[name="ctome"]');
-    const cotizInput        = document.querySelector('input[name="cotiz"]');
-    const form              = document.querySelector('#articuloForm');
+  const precostoInput     = document.querySelector('#id_precosto');
+  const margenInput       = document.querySelector('#id_margen');
+  const ncodalicSelect    = document.querySelector('#id_ncodalic');
+  const prefinalInput     = document.querySelector('#prefinal-input');
+  const prefinalDisplay   = document.querySelector('#prefinal-display');
+  const costoivaInput     = document.querySelector('#costoiva');
+  const preventaInput     = document.querySelector('#preventa');
+  const modoCalculo       = document.querySelector('#id_modo_calculo');
+  const ctomeInput        = document.querySelector('input[name="ctome"]');
+  const cotizInput        = document.querySelector('input[name="cotiz"]');
+  const preventaMEInput   = document.querySelector('input[name="vtame"]');
+  const prefinalMEInput   = document.querySelector('input[name="finme"]');
+  const form              = document.querySelector('#articuloForm');
 
-    let debounceTimeout;
+  let debounceTimeout;
 
-    function getAlicuota() {
-        const selectedOption = ncodalicSelect?.options[ncodalicSelect.selectedIndex];
-        const match = selectedOption?.textContent.match(/\((\d+\.?\d*)%\)/);
-        const alic = match ? parseFloat(match[1]) : 0;
-        return alic < 1 ? alic * 100 : alic;
+  function getAlicuota() {
+    const selectedOption = ncodalicSelect?.options[ncodalicSelect.selectedIndex];
+    const match = selectedOption?.textContent.match(/\((\d+\.?\d*)%\)/);
+    const alic = match ? parseFloat(match[1]) : 0;
+    return alic < 1 ? alic * 100 : alic;
+  }
+
+  function calcularDesdeCosto(costo) {
+    const margen = parseFloat(margenInput?.value) || 0;
+    const alic = getAlicuota();
+
+    const preventa = costo * (1 + margen / 100);
+    const prefinal = preventa * (1 + alic / 100);
+    const costoiva = costo * (1 + alic / 100);
+
+    return { preventa, prefinal, costoiva };
+  }
+
+  function actualizarCampos(costo) {
+    const modo = ['C', 'F'].includes(modoCalculo?.value) ? modoCalculo.value : 'C';
+    const { preventa, prefinal, costoiva } = calcularDesdeCosto(costo);
+
+    if (modo === 'C') {
+      preventaInput.value = preventa.toFixed(2);
+      prefinalInput.value = prefinal.toFixed(2);
+      prefinalDisplay.textContent = prefinal.toFixed(2);
+      prefinalInput.style.display = 'none';
+      prefinalDisplay.style.display = 'inline';
+    } else {
+      const prefinalManual = parseFloat(prefinalInput?.value) || 0;
+      const alic = getAlicuota();
+      const preventaCalc = prefinalManual / (1 + alic / 100);
+      const margen = parseFloat(margenInput?.value) || 0;
+      const precostoCalc = preventaCalc / (1 + margen / 100);
+
+      preventaInput.value = preventaCalc.toFixed(2);
+      precostoInput.value = precostoCalc.toFixed(2);
+      prefinalInput.style.display = 'inline';
+      prefinalDisplay.style.display = 'none';
     }
 
-    function calcularDesdeCosto(costo) {
-        const margen = parseFloat(margenInput?.value) || 0;
-        const alic = getAlicuota();
+    if (costoivaInput) costoivaInput.value = costoiva.toFixed(2);
+  }
+  
+  function calcularDesdeMonedaExtranjera() {
+  const ctome = parseFloat(ctomeInput?.value) || 0;
+  const margen = parseFloat(document.getElementById('margen-hidden')?.value) || 0;
+  const alic = getAlicuota();
+  const cotiz = parseFloat(cotizInput?.value) || 1;
 
-        const preventa = costo * (1 + margen / 100);
-        const prefinal = preventa * (1 + alic / 100);
-        const costoiva = costo * (1 + alic / 100);
+  const ventaME = ctome * (1 + margen / 100);
+  const finalME = ventaME * (1 + alic / 100);
 
-        return { preventa, prefinal, costoiva };
-    }
+  // Actualiza campos de page2
+  if (preventaMEInput) preventaMEInput.value = ventaME.toFixed(2);
+  if (prefinalMEInput) prefinalMEInput.value = finalME.toFixed(2);
 
-    function actualizarCampos(costo) {
-        const modo = ['C', 'F'].includes(modoCalculo?.value) ? modoCalculo.value : 'C';
-        const { preventa, prefinal, costoiva } = calcularDesdeCosto(costo);
+  // Actualiza campos de page1 (convertidos a moneda local)
+  const costoLocal = ctome * cotiz;
+  const ventaLocal = ventaME * cotiz;
+  const finalLocal = finalME * cotiz;
 
-        if (modo === 'C') {
-            preventaInput.value = preventa.toFixed(2);
-            prefinalInput.value = prefinal.toFixed(2);
-            prefinalDisplay.textContent = prefinal.toFixed(2);
-            prefinalInput.style.display = 'none';
-            prefinalDisplay.style.display = 'inline';
-        } else {
-            const prefinalManual = parseFloat(prefinalInput?.value) || 0;
-            const alic = getAlicuota();
-            const preventaCalc = prefinalManual / (1 + alic / 100);
-            const margen = parseFloat(margenInput?.value) || 0;
-            const precostoCalc = preventaCalc / (1 + margen / 100);
+  if (precostoInput) precostoInput.value = costoLocal.toFixed(2);
+  if (preventaInput) preventaInput.value = ventaLocal.toFixed(2);
+  if (prefinalInput) prefinalInput.value = finalLocal.toFixed(2);
+  if (prefinalDisplay) prefinalDisplay.textContent = finalLocal.toFixed(2);
+  }
+  
+  
+  function debounce(func, delay) {
+    return function (...args) {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
 
-            preventaInput.value = preventaCalc.toFixed(2);
-            precostoInput.value = precostoCalc.toFixed(2);
-            prefinalInput.style.display = 'inline';
-            prefinalDisplay.style.display = 'none';
-        }
-
-        if (costoivaInput) costoivaInput.value = costoiva.toFixed(2);
-    }
-
-    function calcularDesdeME() {
-        const costoME = parseFloat(ctomeInput?.value) || 0;
-        const cotiz = parseFloat(cotizInput?.value) || 0;
-        const costoLocal = costoME * cotiz;
-
-        if (precostoInput) {
-            precostoInput.value = costoLocal.toFixed(2);
-            precostoInput.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-
-        actualizarCampos(costoLocal);
-    }
-
-    function debounce(func, delay) {
-        return function (...args) {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => func.apply(this, args), delay);
-        };
-    }
-
-    // Disparadores
-    [precostoInput, margenInput, ncodalicSelect, prefinalInput, modoCalculo].forEach(el => {
-        el?.addEventListener('input', debounce(() => {
-            const costo = parseFloat(precostoInput?.value) || 0;
-            actualizarCampos(costo);
-        }, 300));
-        el?.addEventListener('change', () => {
-            const costo = parseFloat(precostoInput?.value) || 0;
-            actualizarCampos(costo);
-        });
+  const disparadores = [precostoInput, margenInput, ncodalicSelect, prefinalInput, modoCalculo];
+  disparadores.forEach(el => {
+    el?.addEventListener('input', debounce(() => {
+      const costo = parseFloat(precostoInput?.value) || 0;
+      actualizarCampos(costo);
+    }, 300));
+    el?.addEventListener('change', () => {
+      const costo = parseFloat(precostoInput?.value) || 0;
+      actualizarCampos(costo);
     });
+  });
 
-    ctomeInput?.addEventListener('input', debounce(calcularDesdeME, 300));
-    cotizInput?.addEventListener('input', debounce(calcularDesdeME, 300));
+  ctomeInput?.addEventListener('input', debounce(calcularDesdeMonedaExtranjera, 300));
+  cotizInput?.addEventListener('input', debounce(calcularDesdeMonedaExtranjera, 300));
 
-    // Inicial
-    const costoInicial = parseFloat(precostoInput?.value) || 0;
-    actualizarCampos(costoInicial);
+  const costoInicial = parseFloat(precostoInput?.value) || 0;
+  actualizarCampos(costoInicial);
 
-    // Normalización antes de enviar
-    form?.addEventListener('submit', function () {
-        [precostoInput, margenInput, prefinalInput].forEach(input => {
-            if (input && input.value) {
-                input.value = (Math.round(parseFloat(input.value.replace(",", ".")) * 100) / 100).toFixed(2);
-            }
-        });
-        prefinalInput.style.display = 'inline';
+  form?.addEventListener('submit', function () {
+    [precostoInput, margenInput, prefinalInput].forEach(input => {
+      if (input && input.value) {
+        input.value = (Math.round(parseFloat(input.value.replace(",", ".")) * 100) / 100).toFixed(2);
+      }
     });
+    prefinalInput.style.display = 'inline';
+  });
 });
 </script>
 {% endblock %}

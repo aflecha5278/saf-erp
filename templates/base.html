@@ -15,26 +15,29 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   
   <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="{% static 'articulos/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'css/cianova.css' %}">
 
 </head>
 
 <body>
-  <header class="bg-marca text-dark py-3 shadow-sm">
-    <div class="container d-flex justify-content-between align-items-center">
-	  <h1 class="text-institucional">Cianova 360</h1>
-	  <nav>
-        <a href="{% url 'menu_principal' %}" class="btn-aceptar btn-sm">
-          <i class="bi bi-house-door"></i> Menú Principal
-        </a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container my-4">
-    {% block content %}
-    {% endblock %}
-  </main>
+	<header class="marco-superior-cianova">
+		<p class="texto-segoe">
+			Cianova 360
+		</p>
+		<nav>
+		<ul class="menu-cianova">
+		<li>
+			<a class="acceso-cianova fuente-institucional" href="{% url 'menu_principal' %}">
+				<i class="bi bi-house-door-fill"></i> Menú principal
+			</a>
+		</li>
+		</ul>
+		</nav>
+	</header>
+	<main class="container my-4">
+		{% block content %}
+		{% endblock %}
+	</main>
 </body>
 </html>
 
