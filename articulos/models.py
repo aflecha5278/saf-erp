@@ -192,3 +192,14 @@ class ParametroSistema(models.Model):
     def save(self, *args, **kwargs):
         self.clave = self.clave.strip().upper()
         super().save(*args, **kwargs)
+        
+
+class ListaPrecio(models.Model):
+    codlista = models.CharField("Código de lista", max_length=10, primary_key=True)
+    nomlista = models.CharField("Nombre de lista", max_length=20)
+    dtolista = models.DecimalField("Descuento (%)", max_digits=6, decimal_places=2, default=0)
+    reclista = models.DecimalField("Recargo (%)", max_digits=6, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.codlista} - {self.nomlista}"
+        

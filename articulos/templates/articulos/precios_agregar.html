@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Agregar Lista de Precios – Cianova{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header" style="background-color: rgb(175,238,238); color: #212529;">
+      <i class="bi bi-tags me-2"></i> Alta de Lista de Precios
+    </div>
+    <div class="card-body">
+      <form method="post" class="form-inst">
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.codlista.label_tag }}
+          {{ form.codlista }}
+        </div>
+        <div class="mb-3">
+          {{ form.nomlista.label_tag }}
+          {{ form.nomlista }}
+        </div>
+        <div class="mb-3">
+          {{ form.dtolista.label_tag }}
+          {{ form.dtolista }}
+        </div>
+        <div class="mb-3">
+          {{ form.reclista.label_tag }}
+          {{ form.reclista }}
+        </div>
+        <div class="text-start mt-4">
+		  <button type="submit" class="boton-guardar">
+              <i class="bi bi-check-circle"></i> Guardar				
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post" class="form-inst">
+  {% csrf_token %}
+  <div class="mb-3">
+    {{ form.codlista.label_tag }}
+    {{ form.codlista }}
+  </div>
+  <div class="mb-3">
+    {{ form.nomlista.label_tag }}
+    {{ form.nomlista }}
+  </div>
+  <div class="mb-3">
+    {{ form.dtolista.label_tag }}
+    {{ form.dtolista }}
+  </div>
+  <div class="mb-3">
+    {{ form.reclista.label_tag }}
+    {{ form.reclista }}
+  </div>
+  <div class="text-left mt-4">
+    <button type="submit" class="boton-guardar">
+      <i class="bi bi-check-circle"></i> Guardar
+    </button>
+  </div>
+</form>
+{% endblock %}

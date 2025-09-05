@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Consultar Listas de Precios – Cianova{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header" style="background-color: rgb(175,238,238); color: #212529;">
+	  <i class="bi bi-search me-2"></i> Consulta de Listas de Precios
+    </div>
+    <div class="card-body">
+      <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+          <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o código" value="{{ request.GET.q }}">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-search"></i> Buscar
+          </button>
+        </div>
+      </form>
+
+      {% if listas %}
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Dto</th>
+              <th>Recargo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lista in listas %}
+              <tr>
+                <td>{{ lista.codlista }}</td>
+                <td>{{ lista.nomlista }}</td>
+                <td>{{ lista.dtolista }}%</td>
+                <td>{{ lista.reclista }}%</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="alert alert-warning text-center">
+          No se encontraron listas de precios que coincidan con la búsqueda.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

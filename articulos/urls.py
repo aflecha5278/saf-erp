@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 from .views import agregar_parametro, listar_parametros 
-from articulos import views  
 
 urlpatterns = [
     path('', views.login_view, name='login'),  # Página inicial es el login
@@ -16,6 +15,18 @@ urlpatterns = [
     path('parametros/<int:pk>/editar/', views.editar_parametro, name='editar_parametro'),
     path('parametros/<int:pk>/eliminar/', views.eliminar_parametro, name='eliminar_parametro'),
     path('page2/<str:codart>/', views.page2_moneda_ext, name='page2_moneda_ext'),
+    # Submenú: Precios (dentro de Artículos)
+    path('precios/agregar/', views.agregar_precio, name='agregar_precio'),
+    path('precios/modificar/', views.modificar_precio, name='modificar_precio'),
+    path('precios/consultar/', views.consultar_precio, name='consultar_precio'),
+    # Acciones individuales (opcional)
+    path('precios/editar/<str:codlista>/', views.editar_precio, name='editar_precio'),
+    path('precios/eliminar/<str:codlista>/', views.eliminar_precio, name='eliminar_precio'),
 ]
+
+    
+
+
+
 
 

@@ -25,6 +25,7 @@ urlpatterns = [
     path("menu/", views.menu_principal, name="menu_principal"),
     path('articulos/', include('articulos.urls')),
     path('monedas/', include('monedas.urls')),
+    path('articulos/lista_precios/', views.lista_precios_view, name='lista_precios')
 ]
 
 

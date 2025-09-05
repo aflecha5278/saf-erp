@@ -74,18 +74,44 @@
 				<i class="bi bi-box-seam me-2"></i> Artículos
             </button>
           </h2>
-          <div id="collapseArticulos" class="accordion-collapse collapse" aria-labelledby="headingArticulos" data-bs-parent="#menuPrincipal">
-            <div class="accordion-body d-flex flex-column gap-2">
-              <a href="{% url 'agregar_articulo' %}" class="menu-btn">
-                <i class="bi bi-plus-circle"></i> Agregar
-              </a>
-              <a href="{% url 'lista_articulos' %}" class="menu-btn">
-                <i class="bi bi-pencil-square"></i> Modificar / Eliminar
-              </a>
-              <a href="{% url 'lista_articulos' %}?q=" class="menu-btn">
-                <i class="bi bi-search"></i> Consultar
-              </a>
-            </div>
+			<div id="collapseArticulos" class="accordion-collapse collapse" aria-labelledby="headingArticulos" data-bs-parent="#menuPrincipal">
+				<div class="accordion-body d-flex flex-column gap-2">
+				  <a href="{% url 'agregar_articulo' %}" class="menu-btn">
+					<i class="bi bi-plus-circle"></i> Agregar
+				  </a>
+				  <a href="{% url 'lista_articulos' %}" class="menu-btn">
+					<i class="bi bi-pencil-square"></i> Modificar / Eliminar
+				  </a>
+				  <a href="{% url 'lista_articulos' %}?q=" class="menu-btn">
+					<i class="bi bi-search"></i> Consultar
+				  </a>
+				<!-- Submenú: Precios -->
+				<div class="accordion-item">
+				  <h2 class="accordion-header" id="headingPrecios">
+					<button class="accordion-button collapsed" type="button" 
+					  data-bs-toggle="collapse" 
+					  data-bs-target="#collapsePrecios" 
+					  aria-expanded="false" 
+					  aria-controls="collapsePrecios">
+					  <i class="bi bi-tags me-2"></i> Lista de precios
+					</button>
+				  </h2>
+				  <div id="collapsePrecios" class="accordion-collapse collapse" aria-labelledby="headingPrecios" data-bs-parent="#collapseArticulos">
+					<div class="accordion-body d-flex flex-column gap-2">
+						<!-- Submenú: Lista de Precios -->
+						<a href="{% url 'agregar_precio' %}" class="menu-btn">
+						  <i class="bi bi-plus-circle"></i> Agregar
+						</a>
+						<a href="{% url 'modificar_precio' %}" class="menu-btn">
+						  <i class="bi bi-pencil-square"></i> Modificar / Eliminar
+						</a>
+						<a href="{% url 'consultar_precio' %}?q=" class="menu-btn">
+						  <i class="bi bi-search"></i> Consultar
+						</a>
+					/div>
+				  </div>
+				</div>
+			</div>
           </div>
         </div>
 

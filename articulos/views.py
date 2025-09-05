@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .models import Articulo, ParametroSistema
-from .forms import ArticuloForm, LoginForm, ParametroSistemaForm 
+from .models import Articulo, ParametroSistema, ListaPrecio
+from .forms import ArticuloForm, LoginForm, ParametroSistemaForm, ListaPrecioForm 
 from django.contrib import messages
 from monedas.models import Moneda
 import logging
@@ -262,4 +262,47 @@ def page2_moneda_ext(request, codart):
         'alicuota': articulo.ncodalic.nporc if articulo.ncodalic_id else 0,
     })
 
+    
+def agregar_precio(request):
+    if request.method == 'POST':
+        form = ListaPrecioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('modificar_precio')  # o donde quieras redirigir
+    else:
+        form = ListaPrecioForm()
+    return render(request, 'articulos/precios_agregar.html', {'form': form})
+    
 
+def modificar_precio(request):
+    listas = ListaPrecio.objects.all()
+    return render(request, 'articulos/precios_modificar.html', {'listas': listas})
+
+def consultar_precio(request):
+    query = request.GET.get('q', '')
+    listas = ListaPrecio.objects.filter(
+        Q(codlista__icontains=query) | Q(nomlista__icontains=query)
+    )
+    return render(request, 'articulos/precios_consultar.html', {'listas': listas})
+
+def lista_precios_view(request):
+    listas = ListaPrecio.objects.all()
+    return render(request, 'articulos/precios_consultar.html', {'listas': listas})
+
+
+def editar_precio(request, codlista):
+    lista = get_object_or_404(ListaPrecio, codlista=codlista)
+    if request.method == 'POST':
+        form = ListaPrecioForm(request.POST, instance=lista)
+        if form.is_valid():
+            form.save()
+            return redirect('modificar_precio')  # o donde quieras redirigir
+    else:
+        form = ListaPrecioForm(instance=lista)
+    return render(request, 'articulos/precios_agregar.html', {'form': form})
+
+
+def eliminar_precio(request, codlista):
+    lista = get_object_or_404(ListaPrecio, codlista=codlista)
+    lista.delete()
+    return redirect('modificar_precio')

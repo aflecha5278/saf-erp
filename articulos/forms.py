@@ -1,6 +1,6 @@
 from django import forms
 from decimal import Decimal, ROUND_HALF_UP
-from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema   
+from .models import Articulo, Marca, Rubro, Subrubro, UpperCaseMixin, ParametroSistema, ListaPrecio   
 from .choices import UNIDADES, ACTIVO_CHOICES, PRODELA_CHOICES, TIPOPESO_CHOICES, TIPOPESO_DEFAULT 
 
 class LoginForm(forms.Form):
@@ -277,3 +277,15 @@ class ParametroSistemaForm(forms.ModelForm):
             }),
         }
 
+
+
+class ListaPrecioForm(forms.ModelForm):
+    class Meta:
+        model = ListaPrecio
+        fields = ['codlista', 'nomlista', 'dtolista', 'reclista']
+        widgets = {
+            'codlista': forms.TextInput(attrs={'class': 'input-cianova', 'maxlength': 10}),
+            'nomlista': forms.TextInput(attrs={'class': 'input-cianova', 'maxlength': 20}),
+            'dtolista': forms.NumberInput(attrs={'class': 'input-cianova', 'step': '0.01'}),
+            'reclista': forms.NumberInput(attrs={'class': 'input-cianova', 'step': '0.01'}),
+        }
